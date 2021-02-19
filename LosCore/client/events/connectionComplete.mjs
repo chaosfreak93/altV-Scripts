@@ -69,12 +69,30 @@ function connectionComplete() {
               }, 1000);
         }, 2000);
     }
+
+    //Disable Idle Cam
     alt.setInterval(() => {
-        native.invalidateIdleCam(); // Disable player idle camera
-        native._0x9E4CFFF989258472(); // Disable vehicle idle camera
+        native.invalidateIdleCam();
+        native._0x9E4CFFF989258472();
     }, 20000);
+    
     alt.emitServer('register', alt.Discord.currentUser);
+
+    //Weather and Time Sync
     native.pauseClock(true);
     alt.setWeatherSyncActive(true);
-    native.setPedConfigFlag(alt.Player.local.scriptID,429,true);
+
+    //Vehicle System
+    native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+
+    // Ambient Sounds
+    native.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
+    native.cancelCurrentPoliceReport();
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_GENERAL", 1, 0);
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_WARNING", 1, 0);
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_ALARM", 1, 0);
+    native.setAmbientZoneState(0, 0, 0);
+    native.clearAmbientZoneState("AZ_DISTANT_SASQUATCH", 0, 0);
+    native.setAudioFlag("LoadMPData", true);
+    native.setAudioFlag("DisableFlightMusic", true);
 }

@@ -11,7 +11,7 @@ alt.setTimeout(async () => {
 
 function getRobPlaces() {
 
-    let url = "http://5.181.151.36/altv/rob_list.json";
+    let url = "http://127.0.0.1/altv/rob_list.json";
 
     http.get(url,(res) => {
         let body = "";

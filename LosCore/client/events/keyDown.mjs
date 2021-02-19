@@ -18,7 +18,7 @@ function keydown(key) {
         switch (key) {
             case 17:
                 native.disableControlAction(0, 36, true);
-                if (!native.isPlayerDead(alt.Player.local) && !native.isPedSittingInAnyVehicle(alt.Player.local.scriptID)) {
+                if (!native.isPlayerDead(alt.Player.local.scriptID) && !native.isPedInAnyVehicle(alt.Player.local.scriptID)) {
                     if (!native.isPauseMenuActive()) {
                         native.requestAnimSet("move_ped_crouched");
                         if (crouched) {
@@ -26,6 +26,7 @@ function keydown(key) {
                             alt.setTimeout(() => {
                                 native.resetPedMovementClipset(alt.Player.local.scriptID, 0.45);
                                 crouched = false;
+                                pointing = false;
                             }, 200);
                         } else {
                             native.setPedMovementClipset(alt.Player.local.scriptID, "move_ped_crouched", 0.45);
@@ -34,7 +35,8 @@ function keydown(key) {
                     }
                 }
                 break;
-            case 90 || 89:
+            case 89:
+            case 90:
                 if (!pointing) {
                     pointing = true;
     
