@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 import money from 'LosMoney';
-import * as https from 'https';
+import * as http from 'http';
 
 let rob_list;
 
@@ -13,7 +13,7 @@ function getRobPlaces() {
 
     let url = "http://5.181.151.36/altv/rob_list.json";
 
-    https.get(url,(res) => {
+    http.get(url,(res) => {
         let body = "";
 
         res.on("data", (chunk) => {

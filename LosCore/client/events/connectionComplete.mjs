@@ -61,12 +61,11 @@ function connectionComplete() {
                             alt.setTimeout(() => {
                                 native.doScreenFadeIn(1000);
                                 native.newLoadSceneStop();
+                                alt.toggleGameControls(true);
                             }, 2000);
                         }, 2000);
                     }, 8_000);
                 }, 22_000);
-                
-                alt.toggleGameControls(true);
               }, 1000);
         }, 2000);
     }
