@@ -45,13 +45,12 @@ function buyCar(player, carName) {
         );
         player.setMeta('lastVehicle', vehicle);
 
-        vehicle.deleteSyncedMeta('tank');
         alt.emit('setTank', vehicle, 100);
         vehicle.setSyncedMeta('engine', true);
         vehicle.setSyncedMeta('toggleVehicleLock', false);
         vehicle.lockState = 1;
         vehicle.numberPlateText = makeNumberPlate(8);
-        //alt.emitClient(player, 'setPedIntoVehicle', vehicle);
+        alt.emitClient(player, 'setPedIntoVehicle', vehicle);
     } catch(err) {
         console.log(err);
     }
