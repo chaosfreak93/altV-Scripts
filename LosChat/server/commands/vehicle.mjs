@@ -1,3 +1,4 @@
+/// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 import { registerCmd } from '../systems/chat.mjs';
 import { getForwardVectorServer } from '../utility/vector';

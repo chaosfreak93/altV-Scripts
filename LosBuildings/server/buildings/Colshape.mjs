@@ -1,4 +1,5 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 
 let FIBLobby = new alt.ColshapeCylinder(
     136.15383911132812,

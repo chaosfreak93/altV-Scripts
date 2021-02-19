@@ -1,4 +1,6 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
+import * as alt from 'alt-client';
 
 let webView;
 let localData;

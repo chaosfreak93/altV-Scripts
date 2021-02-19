@@ -1,4 +1,5 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 import radioList from './config.mjs';
 
 alt.on('playerEnteredVehicle', (player, vehicle, seat) => {

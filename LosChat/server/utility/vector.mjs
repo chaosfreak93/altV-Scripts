@@ -1,4 +1,5 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 
 /**
  * Get all players in a certain range of a position.

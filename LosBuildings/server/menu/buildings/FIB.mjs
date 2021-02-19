@@ -1,4 +1,5 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 
 alt.onClient('fib:Lobby', fibLobby);
 alt.onClient('fib:Floor49', fibFloor49);

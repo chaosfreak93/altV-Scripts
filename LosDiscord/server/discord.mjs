@@ -1,6 +1,6 @@
-'use strict';
+/// <reference types="@altv/types-server" />
 import { Client, MessageEmbed } from 'discord.js';
-import * as alt from 'alt';
+import * as alt from 'alt-server';
 const client = new Client({
     restRequestTimeout: 5000,
     presence: { status: 'online', activity: { name: 'LosSantos-Paradise', type: 'WATCHING' } },

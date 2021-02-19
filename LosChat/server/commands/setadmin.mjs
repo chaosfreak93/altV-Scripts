@@ -3,9 +3,9 @@ import mysql from 'mysql2';
 
 let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: '',
-    password: '',
-    database: '',
+    user: 'keiner',
+    password: 'qS*qD7tc@cv#aJtu',
+    database: 'altv',
     waitForConnections: true,
     connectionLimit: 150,
     queueLimit: 0,

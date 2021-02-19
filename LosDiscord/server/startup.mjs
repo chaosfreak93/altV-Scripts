@@ -1,8 +1,6 @@
 // API
 import { logCommand } from './discord';
 
-// 
-
 // Events
 import './events/playerConnect';
 import './events/playerDeath';

@@ -1,5 +1,7 @@
-import * as alt from 'alt';
-import * as game from 'natives';
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
+import * as alt from 'alt-client';
+import * as native from 'natives';
 import * as NativeUI from '../../includes/NativeUI/NativeUI';
 
 const menu = new NativeUI.Menu('Elevator', 'Select a Floor', new NativeUI.Point(50, 50));

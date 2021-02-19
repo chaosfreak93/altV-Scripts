@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+import * as alt from 'alt-server';
 
 alt.Player.prototype.send = function send(msg) {
     alt.emitClient(this, 'chat:Send', msg);

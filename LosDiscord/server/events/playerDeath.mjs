@@ -1,4 +1,5 @@
-import * as alt from 'alt';
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 import { logDeath } from '../discord';
 import { WEAPON_BY_HASH } from '../gamedata/weapons';
 

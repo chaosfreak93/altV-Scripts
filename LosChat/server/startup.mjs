@@ -5,9 +5,6 @@ import './commands/vehicle';
 import './commands/weapon';
 import './commands/repair';
 
-// Events
-import './events/playerDisconnect';
-
 // Prototypes
 import './prototypes/player';
 
