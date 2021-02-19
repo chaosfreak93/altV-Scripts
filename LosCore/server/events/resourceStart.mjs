@@ -19,7 +19,7 @@ function resourceStart(errored) {
         pool.getConnection(function (err, conn) {
             if (err) throw err;
             conn.execute(
-                'CREATE TABLE IF NOT EXISTS `account` (id int auto_increment primary key,discord text,admin boolean,whitelist boolean)',
+                'CREATE TABLE IF NOT EXISTS `account` (id int auto_increment primary key,discord text,admin boolean)',
                 function (err, data, fields) {
                     if (err) throw err;
                 }
@@ -39,5 +39,6 @@ function resourceStart(errored) {
 
             pool.releaseConnection(conn);
         });
+        pool.destroy;
     }
 }

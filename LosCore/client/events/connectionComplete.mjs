@@ -53,7 +53,6 @@ function connectionComplete() {
                 alt.setTimeout(() => native.newLoadSceneStartSphere(airportCoord.x, airportCoord.y, airportCoord.z, 1000, 0), 20_000);
     
                 alt.setTimeout(() =>  {
-                    
                     alt.setTimeout(() => {
                         native.doScreenFadeOut(1000);
                         alt.setTimeout(() => {
@@ -66,8 +65,7 @@ function connectionComplete() {
                         }, 2000);
                     }, 8_000);
                 }, 22_000);
-    
-    
+                
                 alt.toggleGameControls(true);
               }, 1000);
         }, 2000);

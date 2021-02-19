@@ -11,7 +11,7 @@ alt.setTimeout(async () => {
 
 function getRobPlaces() {
 
-    let url = "https://beyonddark.de/altv/rob_list.json";
+    let url = "http://5.181.151.36/altv/rob_list.json";
 
     https.get(url,(res) => {
         let body = "";
@@ -30,11 +30,14 @@ function getRobPlaces() {
     return rob_list;
 }
 
-alt.onClient('getRobPlaces', async (player) => {
+alt.onClient('getRobPlaces', (player) => {
     alt.emitClient(player, 'getRobPlaces', rob_list);
 });
 
-alt.setTimeout(() => {
+alt.setTimeout(async () => {
+    if (rob_list === undefined || rob_list === null) {
+        await getRobPlaces();
+    }
     for (let i = 0; i < rob_list.length; i++) {
         let Bank = new alt.ColshapeCylinder(
             rob_list[i].x,

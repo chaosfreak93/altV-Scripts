@@ -27,8 +27,8 @@ function register(player, discordData) {
             if (e) throw e;
             if (res === undefined) {
                 conn.execute(
-                    'INSERT INTO `account` SET discord=?, admin=?, whitelist=?',
-                    [discordData.id, false, false],
+                    'INSERT INTO `account` SET discord=?, admin=?',
+                    [discordData.id, false],
                     function (err, res, fields) {
                         if (err) throw err;
                         getChar(player, res.id);
@@ -44,8 +44,8 @@ function register(player, discordData) {
 
             if (!account) {
                 conn.execute(
-                    'INSERT INTO `account` SET discord=?, admin=?, whitelist=?',
-                    [discordData.id, false, false],
+                    'INSERT INTO `account` SET discord=?, admin=?',
+                    [discordData.id, false],
                     function (err, res, fields) {
                         if (err) throw err;
                         getChar(player, res.insertId);
@@ -77,8 +77,8 @@ function getChar(player, id) {
             }
 
             conn.execute(
-                'INSERT INTO `character` SET guid=?, money_bank=?, money_hand=?, job=?',
-                [`${id}`, 0, 5000, 1],
+                'INSERT INTO `character` SET guid=?, money_bank=?, money_hand=?, job=?, garage=?',
+                [`${id}`, 0, 5000, 1, "[]"],
                 function (err, res, fields) {
                     if (err) throw err;
                     getChar(player, res.insertId);
@@ -91,28 +91,14 @@ function getChar(player, id) {
 }
 
 function finishLogin(player, data) {
-    pool.getConnection(function (err, conn) {
-        if (err) throw err;
-        conn.execute('SELECT whitelist FROM `account` WHERE id=?', [data.id], function (
-            e,
-            res,
-            fields
-        ) {
-            if (res[0].whitelist === 0) {
-                player.kick('Du bist nicht gewhitelisted! Bitte gehe im TS in den Verify Channel.');
-            }
-            pool.releaseConnection(conn);
-            return;
-        });
-    });
-    player.data = data;
+    player.setMeta('data', data);
     player.setMeta('id', data.id);
     player.model = 'mp_m_freemode_01';
 
-    if (!player.data.position) {
+    if (!player.getMeta('data').position) {
         player.spawn(212.7032928466797, -906.8043823242188, 30.6783447265625);
     } else {
-        const pos = JSON.parse(player.data.position);
+        const pos = JSON.parse(player.getMeta('data').position);
         player.spawn(pos.x, pos.y, pos.z, 0);
     }
 
