@@ -5,17 +5,17 @@ import * as native from 'natives';
 
 let noclip = false;
 let muted = false;
-let lastVehicle = null;
+let lastVehicle;
 
 alt.everyTick(() => {
   alt.emitServer('getLastVehicle');
-})
+});
 
 alt.on('keyup', (key) => {
   if (alt.gameControlsEnabled()) {
     switch (key) {
       case 77:
-        if (alt.Player.local.vehicle !== undefined && alt.Player.local.vehicle !== null) {
+        if (alt.Player.local.vehicle && alt.Player.local.vehicle.valid) {
           if (native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, false)) {
             let driver = native.getPedInVehicleSeat(alt.Player.local.vehicle.scriptID, -1, false);
             if (alt.Player.local.scriptID === driver) {
@@ -41,7 +41,7 @@ alt.on('keyup', (key) => {
         }
         break;
       case 18:
-        if (alt.Player.local.vehicle !== undefined && alt.Player.local.vehicle !== null) {
+        if (alt.Player.local.vehicle && alt.Player.local.vehicle.valid) {
           if (native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, false)) {
             let driver = native.getPedInVehicleSeat(alt.Player.local.vehicle.scriptID, -1, false);
             if (alt.Player.local.scriptID === driver) {
@@ -102,7 +102,7 @@ function getDistanceToOwnVehicle(radius, vehicle) {
   let playerCoord = native.getEntityCoords(playerPed, true);
   let tempCoord;
 
-  if (vehicle !== null && vehicle !== undefined && vehicle.valid) {
+  if (vehicle && vehicle.valid) {
       tempCoord = native.getDistanceBetweenCoords(playerCoord.x, playerCoord.y, playerCoord.z, vehicle.pos.x, vehicle.pos.y, vehicle.pos.z, true);
       if (tempCoord <= radius) {
         return true;
