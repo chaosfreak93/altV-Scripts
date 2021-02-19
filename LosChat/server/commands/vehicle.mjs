@@ -39,24 +39,13 @@ function handleAddVehicle(player, args) {
         );
         player.setMeta('lastVehicle', vehicle); 
 
-        vehicle.deleteSyncedMeta('tank');
         alt.emit('setTank', vehicle, 100);
         vehicle.setSyncedMeta('engine', true);
         vehicle.setSyncedMeta('toggleVehicleLock', false);
         vehicle.lockState = 1;
-        vehicle.numberPlateText = makeNumberPlate(8); 
+        vehicle.numberPlateText = "ADMIN"; 
         player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);
     } catch (err) {
         player.send(`{FF0000}${vehicleName} ist kein gültiger Fahrzeug Name.`);
     }
 }
-
-function makeNumberPlate(length) {
-    let result           = '';
-    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
- }
