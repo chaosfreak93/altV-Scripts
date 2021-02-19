@@ -1,13 +1,13 @@
 import * as alt from 'alt';
 import mysql from 'mysql2';
 
-var pool = mysql.createPool({
+let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: 'root',
+    user: '',
     password: '',
-    database: 'altv',
+    database: '',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 150,
     queueLimit: 0,
 });
 

@@ -1,20 +1,20 @@
 import * as alt from 'alt';
 import mysql from 'mysql2';
 
-var pool = mysql.createPool({
+let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: 'root',
+    user: '',
     password: '',
-    database: 'altv',
+    database: '',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 150,
     queueLimit: 0,
 });
 
 alt.onClient('joinMoney', joinMoney);
 
 function joinMoney(player) {
-    var id = player.getMeta('id');
+    let id = player.getMeta('id');
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_hand, money_bank FROM `character` WHERE guid=?', [id], function (

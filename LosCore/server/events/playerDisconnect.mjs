@@ -1,13 +1,13 @@
 import * as alt from 'alt';
 import mysql from 'mysql2';
 
-var pool = mysql.createPool({
+let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: 'root',
+    user: '',
     password: '',
-    database: 'altv',
+    database: '',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 150,
     queueLimit: 0,
 });
 
@@ -22,6 +22,10 @@ function playerDisconnect(player) {
         return;
     }
 
+    if (player.getMeta('lastVehicle') !== null && player.getMeta('lastVehicle') !== undefined) {
+        player.getMeta('lastVehicle').destroy();
+    }
+
     pool.execute(
         'UPDATE `character` SET position=? WHERE guid=?',
         [JSON.stringify(player.pos), player.data.id],
@@ -29,4 +33,6 @@ function playerDisconnect(player) {
             if (err) throw err;
         }
     );
+
+    alt.log(player.name + " hat den Staat verlassen!");
 }

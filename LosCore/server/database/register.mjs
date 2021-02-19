@@ -1,13 +1,13 @@
 import * as alt from 'alt';
 import mysql from 'mysql2';
 
-var pool = mysql.createPool({
+let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: 'root',
+    user: '',
     password: '',
-    database: 'altv',
+    database: '',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 150,
     queueLimit: 0,
 });
 
@@ -109,7 +109,7 @@ function finishLogin(player, data) {
     player.model = 'mp_m_freemode_01';
 
     if (!player.data.position) {
-        player.spawn(222.38241577148438, -801.6131591796875, 30.6614990234375);
+        player.spawn(212.7032928466797, -906.8043823242188, 30.6783447265625);
     } else {
         const pos = JSON.parse(player.data.position);
         player.spawn(pos.x, pos.y, pos.z, 0);

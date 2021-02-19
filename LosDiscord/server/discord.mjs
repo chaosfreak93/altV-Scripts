@@ -43,13 +43,13 @@ function message(msg) {
 }
 
 function getTime(second) {
-    var seconds = second / 1000;
+    let seconds = second / 1000;
     function pad(s) {
         return (s < 10 ? '0' : '') + s;
     }
-    var hours = Math.floor(seconds / (60 * 60));
-    var minutes = Math.floor((seconds % (60 * 60)) / 60);
-    var seconds = Math.floor(seconds % 60);
+    let hours = Math.floor(seconds / (60 * 60));
+    let minutes = Math.floor((seconds % (60 * 60)) / 60);
+    let seconds = Math.floor(seconds % 60);
     return pad(hours) + 'Stunden, ' + pad(minutes) + 'Minuten, ' + pad(seconds) + 'Sekunden';
 }
 

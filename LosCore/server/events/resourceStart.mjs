@@ -1,13 +1,13 @@
 import * as alt from 'alt';
 import mysql from 'mysql2';
 
-var pool = mysql.createPool({
+let pool = mysql.createPool({
     host: '127.0.0.1',
-    user: 'root',
+    user: '',
     password: '',
-    database: 'altv',
+    database: '',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 150,
     queueLimit: 0,
 });
 
@@ -24,13 +24,13 @@ function resourceStart(errored) {
                 }
             );
             conn.execute(
-                'CREATE TABLE IF NOT EXISTS `character` (id int auto_increment primary key,guid int not null,position text,money_bank int,money_hand int,job int)',
+                'CREATE TABLE IF NOT EXISTS `character` (id int auto_increment primary key,guid int not null,position text,money_bank int,money_hand int,job int,garage text)',
                 function (err, data, fields) {
                     if (err) throw err;
                 }
             );
             conn.execute(
-                'CREATE TABLE IF NOT EXISTS `jobs` (id int auto_increment primary key,name text,salary float)',
+                'CREATE TABLE IF NOT EXISTS `jobs` (id int,name text,salary float)',
                 function (err, data, fields) {
                     if (err) throw err;
                 }

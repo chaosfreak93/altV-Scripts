@@ -7,5 +7,5 @@ function playerDeath(victim, killer, weaponHash) {
         return;
     }
 
-    victim.spawn(215.11648559570312, -799.3450317382812, 30.813232421875);
+    victim.spawn(-436.1406555175781, -326.5714416503906, 34.90771484375);
 }

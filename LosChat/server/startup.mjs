@@ -3,6 +3,7 @@ import './commands/respawn';
 import './commands/utility';
 import './commands/vehicle';
 import './commands/weapon';
+import './commands/repair';
 
 // Events
 import './events/playerDisconnect';
@@ -11,8 +12,10 @@ import './events/playerDisconnect';
 import './prototypes/player';
 
 // Systems
-import './systems/chat';
+import * as chat from './systems/chat';
 
 // Utilitys
 import './utility/array';
 import './utility/vector';
+
+export default { chat };
