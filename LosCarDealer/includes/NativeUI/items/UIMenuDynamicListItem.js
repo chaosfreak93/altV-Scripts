@@ -15,10 +15,10 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         this._precaptionText = '';
         this._selectedStartValueHandler = null;
         this.SelectionChangeHandler = null;
-        if (!this.isletiableFunction(selectionChangeHandler)) {
+        if (!this.isVariableFunction(selectionChangeHandler)) {
             alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectionChangeHandler, needs to be function. Please see docs.`);
         }
-        if (!this.isletiableFunction(selectedStartValueHandler)) {
+        if (!this.isVariableFunction(selectedStartValueHandler)) {
             alt.logError(`[UIMenuDynamicListItem] ${text} is not created with a valid selectedStartValueHandler, needs to be function. Please see docs.`);
         }
         this.SelectionChangeHandler = selectionChangeHandler;
@@ -104,7 +104,7 @@ export default class UIMenuDynamicListItem extends UIMenuItem {
         }
         this._itemText.Draw();
     }
-    isletiableFunction(functionToCheck) {
+    isVariableFunction(functionToCheck) {
         return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
     }
 }
