@@ -1,7 +1,7 @@
 'use strict';
-import Discord from 'discord.js';
+import { Client, MessageEmbed } from 'discord.js';
 import * as alt from 'alt';
-const client = new Discord.Client({
+const client = new Client({
     restRequestTimeout: 5000,
     presence: { status: 'online', activity: { name: 'LosSantos-Paradise', type: 'WATCHING' } },
 });
@@ -12,7 +12,7 @@ client.on('message', message);
 function ready() {
     console.log(`Logged in as ${client.user.tag}!`);
     client.channels.fetch('LOG-CHANNEL').then((channel) => {
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
             .setTitle('LosSantos-Paradise.de')
             .setColor([204, 126, 0])
             .setDescription('LosSantos-Paradise wird gestartet. Bitte habe noch etwas Geduld!');
@@ -24,7 +24,7 @@ function ready() {
 function message(msg) {
     if (msg.channel.id === 'LOG-CHANNEL') {
         if (msg.content === '/status') {
-            const embed = new Discord.MessageEmbed()
+            const embed = new MessageEmbed()
                 .setTitle('Aktueller Status')
                 .setColor([23, 194, 4])
                 .setDescription(
@@ -67,7 +67,7 @@ export function playerLeft(name) {
 
 export function stop() {
     client.channels.fetch('LOG-CHANNEL').then((channel) => {
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
             .setTitle('LosSantos-Paradise.de')
             .setColor([255, 0, 0])
             .setDescription('LosSantos-Paradise wurde gestoppt!');
