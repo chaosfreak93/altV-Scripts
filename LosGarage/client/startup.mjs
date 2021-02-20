@@ -21,24 +21,21 @@ mainMenu.AddItem(new NativeUI.UIMenuItem (
 
 mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 
-alt.setTimeout(async () => {
+alt.onServer('Garage:enter', CarDealerEnter);
+alt.onServer('Garage:leave', CarDealerLeave);
+
+function CarDealerEnter(player) {
+    mainMenu.Open();
     if (garageContent === null || garageContent === undefined) {
         alt.emitServer('getGarage', alt.Discord.currentUser.id);
     }
+    garageMenu.Clear();
     for (let i = 0; i < garageContent.length; i++) {
         garageMenu.AddItem(new NativeUI.UIMenuItem (
             garageContent[i].name + " | " + garageContent[i].numberplate,
             "Tank: " + garageContent[i].tank
         ));
     }
-}, 1500);
-
-alt.onServer('Garage:enter', CarDealerEnter);
-alt.onServer('Garage:leave', CarDealerLeave);
-
-function CarDealerEnter(player) {
-    alt.emitServer('getGarage', alt.Discord.currentUser.id);
-    mainMenu.Open();
 }
 
 function CarDealerLeave() {
@@ -52,7 +49,9 @@ mainMenu.ItemSelect.on((item, index) => {
 });
 
 garageMenu.ItemSelect.on((item) => {
-    let data = item.Text.replace(" ", "").split("|");
+    alt.log(item.Text);
+    let data = item.Text.replaceAll(" ", "").split("|");
+    alt.log(data[1]);
     alt.emitServer('garage:SpawnVehicle', data[0], data[1]);
     mainMenu.Close();
     garageMenu.Close();

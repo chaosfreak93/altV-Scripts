@@ -15,7 +15,7 @@ let pool = mysql.createPool({
 let Garage = new alt.ColshapeCircle(
     100.27252960205078,
     -1073.3670654296875,
-    1.5
+    1.25
 );
 
 Garage.name = 'Garage';
