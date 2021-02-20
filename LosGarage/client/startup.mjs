@@ -2,59 +2,42 @@
 /// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
 import * as native from 'natives';
-
-alt.everyTick(() =>{
-    native.drawMarker(
-        1,
-        213.60000610351562,
-        -809.3934326171875,
-        29.99853515625,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1.5,
-        1.5,
-        1.5,
-        0,
-        0,
-        255,
-        100,
-        false,
-        false,
-        2,
-        true,
-        undefined,
-        undefined,
-        false
-    );
-});
-
 import * as NativeUI from '../includes/NativeUI/NativeUI';
 
-const mainMenu = new NativeUI.Menu('Garage', 'Select your action', new NativeUI.Point(50, 50));
-const garageMenu = new NativeUI.Menu('Garage', 'Select a vehicle', new NativeUI.Point(50, 50));
+let garageContent = null;
+alt.emitServer('getGarage', alt.Discord.currentUser.id);
+
+const mainMenu = new NativeUI.Menu('Garage', 'Was willst du tun?', new NativeUI.Point(50, 50));
+const garageMenu = new NativeUI.Menu('Garage', 'Wähle ein Auto aus.', new NativeUI.Point(50, 50));
 const getOutVehicel = new NativeUI.UIMenuItem (
-    "Out",
-    "Get a car out of the garage"
+    "Ausparken",
+    "Parke ein Auto aus"
 );
 mainMenu.AddItem(getOutVehicel);
 mainMenu.AddItem(new NativeUI.UIMenuItem (
-    "In",
-    "Park a car in the garage"
+    "Einparken",
+    "Park dein aktuelles Auto in der Garage"
 ));
+
 mainMenu.AddSubMenu(garageMenu, getOutVehicel);
-garageMenu.AddItem(new NativeUI.UIMenuItem (
-    "Test",
-    "Test"
-));
+
+alt.setTimeout(async () => {
+    if (garageContent === null || garageContent === undefined) {
+        alt.emitServer('getGarage', alt.Discord.currentUser.id);
+    }
+    for (let i = 0; i < garageContent.length; i++) {
+        garageMenu.AddItem(new NativeUI.UIMenuItem (
+            garageContent[i].name + " | " + garageContent[i].numberplate,
+            "Tank: " + garageContent[i].tank
+        ));
+    }
+}, 1500);
 
 alt.onServer('Garage:enter', CarDealerEnter);
 alt.onServer('Garage:leave', CarDealerLeave);
 
 function CarDealerEnter(player) {
+    alt.emitServer('getGarage', alt.Discord.currentUser.id);
     mainMenu.Open();
 }
 
@@ -62,8 +45,17 @@ function CarDealerLeave() {
     mainMenu.Close();
 }
 
-mainMenu.ItemSelect.on((item) => {
-    
+mainMenu.ItemSelect.on((item, index) => {
+    if (index === 1) {
+        alt.emitServer('garage:RemoveVehicle');
+    }
+});
+
+garageMenu.ItemSelect.on((item) => {
+    let data = item.Text.replace(" ", "").split("|");
+    alt.emitServer('garage:SpawnVehicle', data[0], data[1]);
+    mainMenu.Close();
+    garageMenu.Close();
 });
 
 function promisify(callback) {
@@ -84,3 +76,7 @@ alt.onServer('setPedIntoVehicle', async (vehicle) => {
         native.setPedIntoVehicle(player.scriptID, vehicle.scriptID, -1);
     });
 });
+
+alt.onServer('getGarage', (garage) => {
+    garageContent = garage;
+})
