@@ -65,5 +65,7 @@ alt.on('playerLeftVehicle', (player) => {
 });
 
 alt.onClient('getLastVehicle', (player) => {
-    alt.emitClient(player, 'getLastVehicle', player.getMeta('lastVehicle'));
+    if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
+        alt.emitClient(player, 'getLastVehicle', player.getMeta('lastVehicle'));
+    }
 });

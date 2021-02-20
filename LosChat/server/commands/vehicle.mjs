@@ -9,7 +9,7 @@ registerCmd(
     handleAddVehicle
 );
 
-function handleAddVehicle(player, args) {
+async function handleAddVehicle(player, args) {
     if (!args || !args[0]) {
         player.send(`/vehicle <name>`);
         return;
@@ -17,6 +17,7 @@ function handleAddVehicle(player, args) {
 
     if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
         player.getMeta('lastVehicle').destroy();
+        player.deleteMeta('lastVehicle');
     }
 
     const vehicleName = args[0];
@@ -28,7 +29,7 @@ function handleAddVehicle(player, args) {
     };
 
     try {
-        let vehicle = new alt.Vehicle(
+        let vehicle = await new alt.Vehicle(
             vehicleName,
             positionInFront.x,
             positionInFront.y,

@@ -4,10 +4,7 @@ import money from 'LosMoney';
 import * as http from 'http';
 
 let rob_list;
-
-alt.setTimeout(async () => {
-    await getRobPlaces();
-}, 1);
+getRobPlaces();
 
 function getRobPlaces() {
 
@@ -21,13 +18,13 @@ function getRobPlaces() {
         });
 
         res.on("end", () => {
-            rob_list = JSON.parse(body);
+            return rob_list = JSON.parse(body);
         });
 
     }).on("error", (error) => {
         console.error(error.message);
+        return null;
     });
-    return rob_list;
 }
 
 alt.onClient('getRobPlaces', (player) => {

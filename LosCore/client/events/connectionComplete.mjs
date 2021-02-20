@@ -12,7 +12,7 @@ alt.on('connectionComplete', connectionComplete);
 
 function connectionComplete() {
 
-    if (!view) {
+    /**if (!view) {
         native.requestCutsceneWithPlaybackList("mp_intro_concat", 31, 8);
         native.setCutsceneEntityStreamingFlags('MP_Male_Character', 0, 1);
         native.prepareMusicEvent('GLOBAL_KILL_MUSIC');
@@ -68,7 +68,7 @@ function connectionComplete() {
                 }, 22_000);
               }, 1000);
         }, 2000);
-    }
+    }**/
 
     //Disable Idle Cam
     alt.setInterval(() => {

@@ -1,5 +1,16 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
+import mysql from 'mysql2';
+
+let pool = mysql.createPool({
+    host: '127.0.0.1',
+    user: 'keiner',
+    password: 'qS*qD7tc@cv#aJtu',
+    database: 'altv',
+    waitForConnections: true,
+    connectionLimit: 150,
+    queueLimit: 0,
+});
 
 let CarDealer = new alt.ColshapeCylinder(
     -35.235164642333984,
@@ -28,13 +39,14 @@ function entityLeaveColshape(colshape, entity) {
 
 alt.onClient('CarDealer:buyCar', buyCar);
 
-function buyCar(player, carName) {
+async function buyCar(player, carName) {
     try {
         if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
             player.getMeta('lastVehicle').destroy();
+            player.deleteMeta('lastVehicle');
         }
 
-        let vehicle = new alt.Vehicle(
+        let vehicle = await new alt.Vehicle(
             carName,
             -31.094505310058594,
             -1089.20654296875,
@@ -49,7 +61,28 @@ function buyCar(player, carName) {
         vehicle.setSyncedMeta('engine', true);
         vehicle.setSyncedMeta('toggleVehicleLock', false);
         vehicle.lockState = 1;
-        vehicle.numberPlateText = makeNumberPlate(8);
+        let numberPlate = makeNumberPlate(8);
+        vehicle.numberPlateText = numberPlate;
+        pool.getConnection(function (err, conn) {
+            if (err) throw err;
+            conn.execute(
+                'SELECT garage FROM `character` WHERE guid=?',
+                [player.getMeta('data').id],
+                function (err, data, fields) {
+                    if (err) throw err;
+                    let garage = JSON.parse(data[0]["garage"]);
+                    garage.push({ name: carName, tank: 100, numberplate: numberPlate, parking: true });
+                    conn.execute(
+                        'UPDATE `character` SET garage=? WHERE guid=?',
+                        [JSON.stringify(garage), player.getMeta('data').id],
+                        function (err, data, fields) {
+                            if (err) throw err;
+                        }
+                    );
+                }
+            );
+            pool.releaseConnection(conn);
+        });
         alt.emitClient(player, 'setPedIntoVehicle', vehicle);
     } catch(err) {
         console.log(err);
