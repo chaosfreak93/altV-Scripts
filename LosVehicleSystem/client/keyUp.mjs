@@ -104,6 +104,8 @@ function getDistanceToOwnVehicle(radius, vehicle) {
   let tempCoord;
 
   alt.log('Calculating distance');
+  alt.log('Vehicle valid: ' + vehicle.valid);
+  alt.log('Vehicle: ' + vehicle);
   if (vehicle && vehicle.valid) {
     alt.log('Vehicle exist');
       tempCoord = native.getDistanceBetweenCoords(playerCoord.x, playerCoord.y, playerCoord.z, vehicle.pos.x, vehicle.pos.y, vehicle.pos.z, true);
