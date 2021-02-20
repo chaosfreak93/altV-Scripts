@@ -49,9 +49,7 @@ mainMenu.ItemSelect.on((item, index) => {
 });
 
 garageMenu.ItemSelect.on((item) => {
-    alt.log(item.Text);
     let data = item.Text.replaceAll(" ", "").split("|");
-    alt.log(data[1]);
     alt.emitServer('garage:SpawnVehicle', data[0], data[1]);
     mainMenu.Close();
     garageMenu.Close();
