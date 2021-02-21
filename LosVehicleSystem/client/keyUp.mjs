@@ -7,10 +7,6 @@ let noclip = false;
 let muted = false;
 let lastVehicle;
 
-alt.everyTick(() => {
-  alt.emitServer('getLastVehicle');
-});
-
 alt.on('keyup', (key) => {
   if (alt.gameControlsEnabled()) {
     switch (key) {
@@ -27,8 +23,8 @@ alt.on('keyup', (key) => {
         }
         break;
       case 85:
-        alt.log('Key pressed');
         if (getDistanceToOwnVehicle(15, lastVehicle)) {
+          alt.emitServer('getLastVehicle');
           alt.emitServer('toggleVehicleLock');
         }
         break;
@@ -98,22 +94,18 @@ alt.onServer('getLastVehicle', (vehicle) => {
   lastVehicle = vehicle;
 });
 
-function getDistanceToOwnVehicle(radius, vehicle) {
+async function getDistanceToOwnVehicle(radius, vehicle) {
   let playerPed = alt.Player.local.scriptID;
   let playerCoord = native.getEntityCoords(playerPed, true);
   let tempCoord;
 
-  alt.log('Calculating distance');
-  alt.log('Vehicle valid: ' + vehicle.valid);
-  alt.log('Vehicle: ' + vehicle);
+  await alt.emitServer('getLastVehicle');
+
   if (vehicle && vehicle.valid) {
-    alt.log('Vehicle exist');
       tempCoord = native.getDistanceBetweenCoords(playerCoord.x, playerCoord.y, playerCoord.z, vehicle.pos.x, vehicle.pos.y, vehicle.pos.z, true);
       if (tempCoord <= radius) {
-        alt.log('true');
         return true;
       } else {
-        alt.log('false');
         return false;
       }
     }
