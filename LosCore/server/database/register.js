@@ -20,13 +20,13 @@ function register(player) {
             if (err) throw err;
             conn.execute(
                 'SELECT * FROM `account` WHERE socialclub=?',
-                [player.socialID],
+                [player.socialId],
                 function (err, res, fields) {
                     if (err) throw err;
                     if (res === undefined || res === null || res.length < 1) {
                         conn.execute(
                             'INSERT INTO `account` SET name=?, socialclub=?, admin=?',
-                            [player.name, player.socialID, false],
+                            [player.name, player.socialId, false],
                             function (err, res, fields) {
                                 if (err) throw err;
                                 register(player);
@@ -49,13 +49,13 @@ function getChar(player) {
             if (err) throw err;
             conn.execute(
                 'SELECT * FROM `character` WHERE socialId=?',
-                [player.socialID],
+                [player.socialId],
                 function (err, res, fields) {
                     if (err) throw err;
                     if (res === undefined || res === null || res.length < 1) {
                         conn.execute(
                             'INSERT INTO `character` SET socialId=?, money_bank=?, money_hand=?, job=?, garage=?',
-                            [player.socialID, 0, 5000, 1, "[]"],
+                            [player.socialId, 0, 5000, 1, "[]"],
                             function (err, res, fields) {
                                 if (err) throw err;
                                 getChar(player);

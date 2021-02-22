@@ -130,7 +130,7 @@ alt.onClient('getGarage', (player) => {
         if (err) throw err;
         conn.execute(
             'SELECT garage FROM `character` WHERE socialId=?',
-            [player.socialID],
+            [player.socialId],
             function (err, data, fields) {
                 if (err) throw err;
                 let garage = JSON.parse(data[0]["garage"]);

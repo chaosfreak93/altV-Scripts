@@ -29,7 +29,7 @@ function playerDisconnect(player) {
 
     pool.execute(
         'UPDATE `character` SET position=? WHERE socialId=?',
-        [JSON.stringify(player.pos), player.socialID],
+        [JSON.stringify(player.pos), player.socialId],
         function (err, res, fields) {
             if (err) throw err;
         }

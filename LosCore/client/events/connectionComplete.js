@@ -45,7 +45,7 @@ function connectionComplete() {
                 view.destroy();
                 view = null;
     
-                native.setWeatherTypeNow("EXTRASUNNY");
+                //native.setWeatherTypeNow("EXTRASUNNY");
                 native.startCutscene(4);
     
                 native.registerEntityForCutscene(0, "MP_Male_Character", 0, 0, 0);

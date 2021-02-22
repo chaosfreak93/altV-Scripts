@@ -11,7 +11,7 @@ let pool = mysql.createPool({
 });
 
 export function setJob(player, jobid) {
-    let id = player.socialID;
+    let id = player.socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT job FROM `character` WHERE socialId=?', [id], function (err, res, fields) {

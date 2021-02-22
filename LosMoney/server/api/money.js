@@ -12,7 +12,7 @@ let pool = mysql.createPool({
 });
 
 export function addMoneyToBank(player, amount) {
-    let id = player.socialID;
+    let id = player.socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_bank FROM `character` WHERE socialId=?', [id], function (
@@ -36,7 +36,7 @@ export function addMoneyToBank(player, amount) {
 }
 
 export function addMoneyToHand(player, amount) {
-    let id = player.socialID;
+    let id = player.socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_hand FROM `character` WHERE socialId=?', [id], function (
@@ -60,7 +60,7 @@ export function addMoneyToHand(player, amount) {
 }
 
 export function removeMoneyFromBank(player, amount) {
-    let id = player.socialID;
+    let id = player.socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_bank FROM `character` WHERE socialId=?', [id], function (
@@ -89,7 +89,7 @@ export function removeMoneyFromBank(player, amount) {
 }
 
 export function removeMoneyFromHand(player, amount) {
-    let id = player.socialID;
+    let id = player.socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_hand FROM `character` WHERE socialId=?', [id], function (
