@@ -1,4 +1,4 @@
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 
 registerCmd('respawn', '/respawn | Respawn the player at spawn.', handleRespawn);
 registerCmd('spawn', '/spawn | Respawn the player at spawn.', handleRespawn);

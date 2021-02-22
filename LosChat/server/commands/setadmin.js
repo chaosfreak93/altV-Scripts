@@ -1,4 +1,4 @@
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 import mysql from 'mysql2';
 
 let pool = mysql.createPool({

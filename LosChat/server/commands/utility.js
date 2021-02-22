@@ -1,4 +1,4 @@
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 
 registerCmd('pos', '/pos | Returns current coordinates to chat and console.', (player) => {
     const coords = player.pos;

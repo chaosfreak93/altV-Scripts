@@ -1,6 +1,6 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import radioList from './config.mjs';
+import radioList from './config.js';
 
 alt.on('playerEnteredVehicle', (player, vehicle, seat) => {
     alt.emitClient(player, 'playerEnteredVehicle', vehicle, seat);

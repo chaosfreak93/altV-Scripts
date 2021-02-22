@@ -1,4 +1,4 @@
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 
 registerCmd('repair', '/repair | Repair your vehicle.', handleRepair);
 

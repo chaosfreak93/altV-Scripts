@@ -1,6 +1,6 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 import {getForwardVectorServer} from '../utility/vector';
 
 registerCmd(

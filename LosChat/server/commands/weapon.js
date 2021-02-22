@@ -1,4 +1,4 @@
-import {registerCmd} from '../systems/chat.mjs';
+import {registerCmd} from '../systems/chat.js';
 import {HASH_BY_NAME} from '../gamedata/weapons';
 
 registerCmd('weapon', '/weapon <name> | Summon a weapon by name.', summonWeapon);
