@@ -15,7 +15,7 @@ let pool = mysql.createPool({
 alt.onClient('joinMoney', joinMoney);
 
 function joinMoney(player) {
-    let id = player.getMeta('data').socialId;
+    let id = player.socialID;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute('SELECT money_hand, money_bank FROM `character` WHERE socialId=?', [id], function (

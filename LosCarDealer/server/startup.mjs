@@ -65,7 +65,7 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
             if (err) throw err;
             conn.execute(
                 'SELECT garage FROM `character` WHERE socialId=?',
-                [player.socialId],
+                [player.socialID],
                 function (err, garageData, fields) {
                     if (err) throw err;
                     let garage = JSON.parse(garageData[0]["garage"]);
@@ -109,7 +109,7 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
                     });
                     conn.execute(
                         'UPDATE `character` SET garage=? WHERE socialId=?',
-                        [JSON.stringify(garage), player.socialId],
+                        [JSON.stringify(garage), player.socialID],
                         function (err, res, fields) {
                             if (err) throw err;
                         }
