@@ -13,7 +13,7 @@ alt.onServer('getRobPlaces', (robs) => {
 
 let ready = false;
 
-alt.everyTick(() =>{
+alt.everyTick(() => {
     if (rob_list === undefined) {
         rob_list = alt.emitServer('getRobPlaces');
         return;
@@ -76,7 +76,7 @@ function bankRobLeave() {
 }
 
 alt.on("HackingGame:Result", (result) => {
-	ready = false;
+    ready = false;
     if (result) {
         for (let i = 0; i < rob_list.length; i++) {
             if (rob_list[i].door != null) {

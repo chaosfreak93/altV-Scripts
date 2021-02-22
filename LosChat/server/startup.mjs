@@ -15,4 +15,4 @@ import * as chat from './systems/chat';
 import './utility/array';
 import './utility/vector';
 
-export default { chat };
+export default {chat};

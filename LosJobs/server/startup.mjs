@@ -8,4 +8,4 @@ import './database/salary';
 // Prototypes
 import './prototypes/player';
 
-export default { api };
+export default {api};

@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import { registerCmd } from '../systems/chat.mjs';
-import { getForwardVectorServer } from '../utility/vector';
+import {registerCmd} from '../systems/chat.mjs';
+import {getForwardVectorServer} from '../utility/vector';
 
 registerCmd(
     'vehicle',
@@ -38,13 +38,13 @@ async function handleAddVehicle(player, args) {
             0,
             0
         );
-        player.setMeta('lastVehicle', vehicle); 
+        player.setMeta('lastVehicle', vehicle);
 
         alt.emit('setTank', vehicle, 100);
         vehicle.setSyncedMeta('engine', true);
         vehicle.setSyncedMeta('toggleVehicleLock', false);
         vehicle.lockState = 1;
-        vehicle.numberPlateText = "ADMIN"; 
+        vehicle.numberPlateText = "ADMIN";
         player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);
     } catch (err) {
         player.send(`{FF0000}${vehicleName} ist kein gültiger Fahrzeug Name.`);

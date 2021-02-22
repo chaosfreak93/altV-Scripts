@@ -2,14 +2,17 @@ import game from 'natives';
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
 import Screen from "../utils/Screen";
+
 export default class Container extends Rectangle {
     constructor(pos, size, color) {
         super(pos, size, color);
         this.Items = [];
     }
+
     addItem(item) {
         this.Items.push(item);
     }
+
     Draw(offset) {
         if (!this.Enabled)
             return;

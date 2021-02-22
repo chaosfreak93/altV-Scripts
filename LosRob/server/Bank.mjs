@@ -10,7 +10,7 @@ function getRobPlaces() {
 
     let url = "http://127.0.0.1/altv/rob_list.json";
 
-    http.get(url,(res) => {
+    http.get(url, (res) => {
         let body = "";
 
         res.on("data", (chunk) => {
@@ -43,7 +43,7 @@ alt.setTimeout(async () => {
             1.5,
             3
         );
-        
+
         Bank.name = 'Bank';
     }
 }, 2500);

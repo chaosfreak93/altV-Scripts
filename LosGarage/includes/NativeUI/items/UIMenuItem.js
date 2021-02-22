@@ -9,6 +9,7 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UUIDV4 from "../utils/UUIDV4";
+
 export default class UIMenuItem {
     constructor(text, description = "", data = null) {
         this.Id = UUIDV4();
@@ -29,21 +30,26 @@ export default class UIMenuItem {
         this._badgeRight = new Sprite("commonmenu", "", new Point(0, 0), new Size(40, 40));
         this._labelText = new ResText("", new Point(0, 0), 0.35, Color.White, 0, Alignment.Right);
     }
+
     get Text() {
         return this._text.Caption;
     }
+
     set Text(text) {
         this._text.Caption = text;
     }
+
     get Description() {
         return this._description;
     }
+
     set Description(text) {
         this._description = text;
         if (this.hasOwnProperty('Parent')) {
             this.Parent.UpdateDescriptionCaption();
         }
     }
+
     SetVerticalPosition(y) {
         this._rectangle.Pos = new Point(this.Offset.X, y + 144 + this.Offset.Y);
         this._selectedSprite.Pos = new Point(0 + this.Offset.X, y + 144 + this.Offset.Y);
@@ -52,14 +58,17 @@ export default class UIMenuItem {
         this._badgeRight.Pos = new Point(385 + this.Offset.X, y + 142 + this.Offset.Y);
         this._labelText.Pos = new Point(420 + this.Offset.X, y + 148 + this.Offset.Y);
     }
+
     addEvent(event, ...args) {
-        this._event = { event: event, args: args };
+        this._event = {event: event, args: args};
     }
+
     fireEvent() {
         if (this._event) {
             alt.emit(this._event.event, ...this._event.args);
         }
     }
+
     Draw() {
         this._rectangle.Size = new Size(431 + this.Parent.WidthOffset, 38);
         this._selectedSprite.Size = new Size(431 + this.Parent.WidthOffset, 38);
@@ -88,8 +97,7 @@ export default class UIMenuItem {
                     : new Color(163, 159, 148)
                 : Color.White;
             this._badgeLeft.Draw();
-        }
-        else {
+        } else {
             this._text.Pos = new Point(8 + this.Offset.X, this._text.Pos.Y);
         }
         if (this.RightBadge != BadgeStyle.None) {
@@ -117,15 +125,19 @@ export default class UIMenuItem {
         }
         this._text.Draw();
     }
+
     SetLeftBadge(badge) {
         this.LeftBadge = badge;
     }
+
     SetRightBadge(badge) {
         this.RightBadge = badge;
     }
+
     SetRightLabel(text) {
         this.RightLabel = text;
     }
+
     BadgeToSpriteLib(badge) {
         switch (badge) {
             case BadgeStyle.Sale:
@@ -140,6 +152,7 @@ export default class UIMenuItem {
                 return "commonmenu";
         }
     }
+
     BadgeToSpriteName(badge, selected) {
         switch (badge) {
             case BadgeStyle.None:
@@ -208,6 +221,7 @@ export default class UIMenuItem {
                 return "";
         }
     }
+
     IsBagdeWhiteSprite(badge) {
         switch (badge) {
             case BadgeStyle.Lock:
@@ -218,6 +232,7 @@ export default class UIMenuItem {
                 return false;
         }
     }
+
     BadgeToColor(badge, selected) {
         switch (badge) {
             case BadgeStyle.Lock:

@@ -6,6 +6,7 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Text from "./Text";
 import Screen from "../utils/Screen";
+
 export default class ResText extends Text {
     constructor(caption, pos, scale, color, font, centered) {
         super(caption, pos, scale, color || new Color(255, 255, 255), font || 0, false);
@@ -14,12 +15,15 @@ export default class ResText extends Text {
         if (centered)
             this.TextAlignment = centered;
     }
+
     get WordWrap() {
         return new Size(this.Wrap, 0);
     }
+
     set WordWrap(value) {
         this.Wrap = value.Width;
     }
+
     Draw(arg1, pos, scale, color, font, arg2, dropShadow, outline, wordWrap) {
         let caption = arg1;
         let centered = arg2;
@@ -35,8 +39,7 @@ export default class ResText extends Text {
             font = this.Font;
             if (centered == true || centered == false) {
                 centered = this.Centered;
-            }
-            else {
+            } else {
                 centered = undefined;
                 dropShadow = this.DropShadow;
                 outline = this.Outline;
@@ -55,8 +58,7 @@ export default class ResText extends Text {
         game.setTextColour(color.R, color.G, color.B, color.A);
         if (centered !== undefined) {
             game.setTextCentre(centered);
-        }
-        else {
+        } else {
             if (dropShadow)
                 game.setTextDropshadow(2, 0, 0, 0, 0);
             if (outline)

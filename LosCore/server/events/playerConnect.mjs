@@ -20,14 +20,14 @@ function playerConnect(player) {
     const currentDate = new Date();
 
     setDate(player, currentDate);
-    
+
     alt.log(player.name + " hat den Staat beitreten!");
 }
 
-alt.setInterval(()=> {
-    if(alt.Player.all.length !== 0){
+alt.setInterval(() => {
+    if (alt.Player.all.length !== 0) {
         const currentDate = new Date();
-        alt.Player.all.forEach((player)=>{
+        alt.Player.all.forEach((player) => {
             setDate(player, currentDate);
         });
     }

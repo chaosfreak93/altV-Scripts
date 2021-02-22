@@ -1,5 +1,3 @@
-
-
 // Database
 import './database/register';
 

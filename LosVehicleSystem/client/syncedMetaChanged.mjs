@@ -8,8 +8,8 @@ alt.on('syncedMetaChange', (player, key, value) => {
     if (player.type !== 1) return;
     if (key !== 'engine') return;
     if (value) {
-      native.setVehicleEngineOn(player.scriptID, value, false, true);
+        native.setVehicleEngineOn(player.scriptID, value, false, true);
     } else {
-      native.setVehicleEngineOn(player.scriptID, value, true, true);
+        native.setVehicleEngineOn(player.scriptID, value, true, true);
     }
-  });
+});

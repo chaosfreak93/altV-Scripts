@@ -7,4 +7,4 @@ import './database/joinMoney';
 // Prototypes
 import './prototypes/player';
 
-export default { api };
+export default {api};

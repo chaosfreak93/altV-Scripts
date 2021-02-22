@@ -2,8 +2,9 @@
 /// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
 import * as native from 'natives';
+import * as NativeUI from '../includes/NativeUI/NativeUI';
 
-alt.everyTick(() =>{
+alt.everyTick(() => {
     native.drawMarker(
         36,
         -35.235164642333984,
@@ -32,13 +33,11 @@ alt.everyTick(() =>{
     );
 });
 
-import * as NativeUI from '../includes/NativeUI/NativeUI';
-
 const menu = new NativeUI.Menu('Car Dealer', 'Select a Car', new NativeUI.Point(50, 50));
 menu.AddItem(new NativeUI.UIMenuListItem(
     "Compacts",
     "Compact Category",
-    new NativeUI.ItemsCollection(["Asbo", "Blista" , "Brioso", "Brioso2", "Club", "Dilettante", "Kanjo", "Issi2", "Issi3", "Panto", "Prairie", "Rhapsody", "Weevil"])
+    new NativeUI.ItemsCollection(["Asbo", "Blista", "Brioso", "Brioso2", "Club", "Dilettante", "Kanjo", "Issi2", "Issi3", "Panto", "Prairie", "Rhapsody", "Weevil"])
 ));
 menu.AddItem(new NativeUI.UIMenuListItem(
     "Coupes",

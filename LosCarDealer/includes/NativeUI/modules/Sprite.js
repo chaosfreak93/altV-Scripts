@@ -2,6 +2,7 @@ import * as alt from 'alt';
 import game from 'natives';
 import Color from "../utils/Color";
 import Screen from "../utils/Screen";
+
 export default class Sprite {
     constructor(textureDict, textureName, pos, size, heading = 0, color = new Color(255, 255, 255)) {
         this.TextureDict = textureDict;
@@ -12,9 +13,26 @@ export default class Sprite {
         this.Color = color;
         this.Visible = true;
     }
-    LoadTextureDictionary() {
-        this.requestTextureDictPromise(this._textureDict).then((succ) => { });
+
+    get TextureDict() {
+        return this._textureDict;
     }
+
+    set TextureDict(v) {
+        this._textureDict = v;
+        if (!this.IsTextureDictionaryLoaded)
+            this.LoadTextureDictionary();
+    }
+
+    get IsTextureDictionaryLoaded() {
+        return game.hasStreamedTextureDictLoaded(this._textureDict);
+    }
+
+    LoadTextureDictionary() {
+        this.requestTextureDictPromise(this._textureDict).then((succ) => {
+        });
+    }
+
     requestTextureDictPromise(textureDict) {
         return new Promise((resolve, reject) => {
             game.requestStreamedTextureDict(textureDict, true);
@@ -26,17 +44,7 @@ export default class Sprite {
             }, 10);
         });
     }
-    set TextureDict(v) {
-        this._textureDict = v;
-        if (!this.IsTextureDictionaryLoaded)
-            this.LoadTextureDictionary();
-    }
-    get TextureDict() {
-        return this._textureDict;
-    }
-    get IsTextureDictionaryLoaded() {
-        return game.hasStreamedTextureDictLoaded(this._textureDict);
-    }
+
     Draw(textureDictionary, textureName, pos, size, heading, color, loadTexture) {
         textureDictionary = textureDictionary || this.TextureDict;
         textureName = textureName || this.TextureName;

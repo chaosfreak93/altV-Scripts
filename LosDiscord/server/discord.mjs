@@ -1,9 +1,10 @@
 /// <reference types="@altv/types-server" />
-import { Client, MessageEmbed } from 'discord.js';
+import {Client, MessageEmbed} from 'discord.js';
 import * as alt from 'alt-server';
+
 const client = new Client({
     restRequestTimeout: 5000,
-    presence: { status: 'online', activity: { name: 'LosSantos-Paradise', type: 'WATCHING' } },
+    presence: {status: 'online', activity: {name: 'LosSantos-Paradise', type: 'WATCHING'}},
 });
 
 client.on('ready', ready);
@@ -29,12 +30,12 @@ function message(msg) {
                 .setColor([23, 194, 4])
                 .setDescription(
                     'Status: ' +
-                        'Online\n' +
-                        'Players: ' +
-                        alt.Player.all.length +
-                        '\n' +
-                        'Uptime: ' +
-                        getTime(alt.getNetTime())
+                    'Online\n' +
+                    'Players: ' +
+                    alt.Player.all.length +
+                    '\n' +
+                    'Uptime: ' +
+                    getTime(alt.getNetTime())
                 );
 
             msg.channel.send(embed);
@@ -42,14 +43,16 @@ function message(msg) {
     }
 }
 
-function getTime(second) {
-    let seconds = second / 1000;
+function getTime(millisecond) {
+    let milliseconds = millisecond / 1000;
+
     function pad(s) {
         return (s < 10 ? '0' : '') + s;
     }
-    let hours = Math.floor(seconds / (60 * 60));
-    let minutes = Math.floor((seconds % (60 * 60)) / 60);
-    let seconds = Math.floor(seconds % 60);
+
+    let hours = Math.floor(milliseconds / (60 * 60));
+    let minutes = Math.floor((milliseconds % (60 * 60)) / 60);
+    let seconds = Math.floor(milliseconds % 60);
     return pad(hours) + 'Stunden, ' + pad(minutes) + 'Minuten, ' + pad(seconds) + 'Sekunden';
 }
 
@@ -93,6 +96,6 @@ export function logDeath(victim, killer, weapon) {
     });
 }
 
-export default { playerJoin, playerLeft, stop, logCommand, logDeath };
+export default {playerJoin, playerLeft, stop, logCommand, logDeath};
 
 client.login('TOKEN');

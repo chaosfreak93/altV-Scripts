@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link type="text/css" rel="stylesheet" href="http://resource/ui/css/radio.css" />
-    </head>
-    <body>
-        <div id="app" v-show="focused">
-            <div class="container">
-                <div class="radio">
-                    <div class="station">
-                        <img v-bind:src="radioList[currentRadio].image" />
-                    </div>
-                </div>
+<head>
+    <link href="http://resource/ui/css/radio.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="app" v-show="focused">
+    <div class="container">
+        <div class="radio">
+            <div class="station">
+                <img v-bind:src="radioList[currentRadio].image"/>
             </div>
         </div>
+    </div>
+</div>
 
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-    </body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</body>
 </html>
 
 <script>
@@ -102,7 +102,7 @@
 
                 this.focused = true;
                 this.play();
-                
+
                 let timeout = setTimeout(() => {
                     this.focused = false;
                 }, 2000);
@@ -127,7 +127,7 @@
                 if (event.keyCode === 81) {
                     this.focused = true;
                 } else {
-                    return;
+
                 }
             });
 
@@ -135,7 +135,7 @@
                 if (event.keyCode === 81) {
                     this.focused = false;
                 } else {
-                    return;
+
                 }
             });
 

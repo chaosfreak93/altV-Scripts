@@ -9,8 +9,10 @@ let msgInputLine = null;
 
 if (window.alt === undefined) {
     window.alt = {
-        emit: () => {},
-        on: () => {},
+        emit: () => {
+        },
+        on: () => {
+        },
     };
 }
 

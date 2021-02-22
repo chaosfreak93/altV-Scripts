@@ -39,27 +39,29 @@ function keydown(key) {
             case 90:
                 if (!pointing) {
                     pointing = true;
-    
-                    requestAnimDictPromise("anim@mp_point").then(()=>{
+
+                    requestAnimDictPromise("anim@mp_point").then(() => {
                         native.setPedCurrentWeaponVisible(alt.Player.local.scriptID, false, true, true, true);
                         native.setPedConfigFlag(alt.Player.local.scriptID, 36, true);
-                        native.taskMoveNetworkByName(alt.Player.local.scriptID,"task_mp_pointing", 0.5, false, "anim@mp_point", 24);
+                        native.taskMoveNetworkByName(alt.Player.local.scriptID, "task_mp_pointing", 0.5, false, "anim@mp_point", 24);
                         native.removeAnimDict("anim@mp_point");
                         cleanStart = true;
                         interval = alt.setInterval(process.bind(this), 0);
-                    }).catch(()=>{alt.log('Promise returned reject Pointing')});
+                    }).catch(() => {
+                        alt.log('Promise returned reject Pointing')
+                    });
                 } else {
-                    if(interval){
+                    if (interval) {
                         alt.clearInterval(interval);
                     }
                     interval = null;
-    
+
                     pointing = false;
-    
-                    if(cleanStart){
+
+                    if (cleanStart) {
                         cleanStart = false;
                         native.requestTaskMoveNetworkStateTransition(alt.Player.local.scriptID, "Stop");
-    
+
                         if (!native.isPedInjured(alt.Player.local.scriptID)) {
                             native.clearPedSecondaryTask(alt.Player.local.scriptID);
                         }
@@ -75,12 +77,12 @@ function keydown(key) {
     }
 }
 
-function getRelativePitch () {
+function getRelativePitch() {
     let camRot = native.getGameplayCamRot(2);
     return camRot.x - native.getEntityPitch(alt.Player.local.scriptID);
 }
 
-function process () {
+function process() {
     if (pointing) {
 
         native.isTaskMoveNetworkActive(alt.Player.local.scriptID);
@@ -89,8 +91,7 @@ function process () {
 
         if (camPitch < -70.0) {
             camPitch = -70.0;
-        }
-        else if (camPitch > 42.0) {
+        } else if (camPitch > 42.0) {
             camPitch = 42.0;
         }
         camPitch = (camPitch + 70.0) / 112.0;
@@ -102,14 +103,13 @@ function process () {
 
         if (camHeading < -180.0) {
             camHeading = -180.0;
-        }
-        else if (camHeading > 180.0) {
+        } else if (camHeading > 180.0) {
             camHeading = 180.0;
         }
         camHeading = (camHeading + 180.0) / 360.0;
 
         let coords = native.getOffsetFromEntityInWorldCoords(alt.Player.local.scriptID, (cosCamHeading * -0.2) - (sinCamHeading *
-        (0.4 * camHeading + 0.3)), (sinCamHeading * -0.2) + (cosCamHeading * (0.4 * camHeading + 0.3)), 0.6);
+            (0.4 * camHeading + 0.3)), (sinCamHeading * -0.2) + (cosCamHeading * (0.4 * camHeading + 0.3)), 0.6);
 
         let ray = native.startShapeTestCapsule(coords.x, coords.y, coords.z - 0.2, coords.x, coords.y, coords.z + 0.2, 1.0, 95, alt.Player.local.scriptID, 7);
         let [_, blocked, coords1, coords2, entity] = native.getShapeTestResult(ray, false, null, null, null);
@@ -128,11 +128,11 @@ function requestAnimDictPromise(dict) {
     return new Promise((resolve, reject) => {
         let check = alt.setInterval(() => {
 
-            if(native.hasAnimDictLoaded(dict)) {
+            if (native.hasAnimDictLoaded(dict)) {
                 alt.clearInterval(check);
                 resolve(true);
             }
 
-        },(5));
+        }, (5));
     });
 }

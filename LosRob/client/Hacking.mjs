@@ -17,14 +17,14 @@ alt.on("HackingGame:Result", StopHackingGame);
 
 /**
  * Trigger a new hacking Game if none is runnning
- * @param {string} word 8 Char string that will be the Solution 
- * @param {number} lives [OPTIONAL] Number of lives. Default 3 
+ * @param {string} word 8 Char string that will be the Solution
+ * @param {number} lives [OPTIONAL] Number of lives. Default 3
  * @param {number} minSpeed [OPTIONAL] minimum Rotation Speed of column - Default 10
  * @param {number} maxSpeed [OPTIONAL] maximum Rotation Speed of column. Default 100
  * @returns {boolean} false if game is already running
  */
 function StartHackingGame(word, lives = 3, minSpeed = 10, maxSpeed = 100) {
-    if(ActualHackingGame !== null) return false;
+    if (ActualHackingGame !== null) return false;
     ActualHackingGame = new HackingGame(word, lives, minSpeed, maxSpeed);
     ActualHackingGame.Start();
     return true;
@@ -35,30 +35,30 @@ function StartHackingGame(word, lives = 3, minSpeed = 10, maxSpeed = 100) {
  */
 function StopHackingGame(result) {
     ActualHackingGame = null;
-    alt.log("Result of Hacking Game => Successfull: "+result);
+    alt.log("Result of Hacking Game => Successfull: " + result);
 }
 
 class HackingGame {
     /**
      * Init The Hacking Game
-     * @param {string} word 8 Char string that will be the Solution 
-     * @param {number} lives [OPTIONAL] Number of lives. Default 3 
+     * @param {string} word 8 Char string that will be the Solution
+     * @param {number} lives [OPTIONAL] Number of lives. Default 3
      * @param {number} minSpeed [OPTIONAL] minimum Rotation Speed of column - Default 10
      * @param {number} maxSpeed [OPTIONAL] maximum Rotation Speed of column. Default 100
      */
     constructor(word, lives = 3, minSpeed = 10, maxSpeed = 100) {
         this.Setup = false;
-        if(typeof(word) !== "string" || word.length != 8) {
+        if (typeof (word) !== "string" || word.length != 8) {
             this._LogError("Constructor word is not word or length != 8");
             return;
         }
-        
-        if(lives < 1 || lives > 10) {
+
+        if (lives < 1 || lives > 10) {
             this._LogError("Lives must be > 0 and <= 10");
             return;
         }
 
-        if(minSpeed < 10 || maxSpeed > 200 || minSpeed > maxSpeed) {
+        if (minSpeed < 10 || maxSpeed > 200 || minSpeed > maxSpeed) {
             this._LogError("Invalid Speed Parameter has to be: 10 <= minSpeed <= maxSpeed <= 200");
             return;
         }
@@ -78,17 +78,17 @@ class HackingGame {
     }
 
     Start() {
-        if(!this.Setup) {
+        if (!this.Setup) {
             this._LogError("Not Setup! Check class constructor");
             return;
         }
 
-        if(this.Word === null) {
+        if (this.Word === null) {
             this._LogError("Word was null - Did you Setup Correct?");
             return;
         }
 
-        if(this.EveryTick !== undefined) {
+        if (this.EveryTick !== undefined) {
             this._LogError("Game is already running!");
             return;
         }
@@ -102,10 +102,10 @@ class HackingGame {
         this.Lives = this.LivesStart;
     }
 
-/**
- * 
- * @param {boolean} outcome 
- */
+    /**
+     *
+     * @param {boolean} outcome
+     */
     _Stop(outcome) {
         this._ScaleformRemove();
         natives.setPlayerControl(alt.Player.local.scriptID, true, 0);
@@ -115,16 +115,16 @@ class HackingGame {
     }
 
     _StartInternal(tryNumber = 0) {
-        if(!natives.hasScaleformMovieLoaded(this.ScaleForm)) {
+        if (!natives.hasScaleformMovieLoaded(this.ScaleForm)) {
             // 2.5 Seconds should be enough?
-            if(tryNumber > 100) { 
+            if (tryNumber > 100) {
                 this._LogError("Could Not Load Scaleform. Aborting");
                 return;
             }
 
             alt.setTimeout(() => {
                 this._StartInternal(++tryNumber);
-            },25)
+            }, 25)
             return;
         }
 
@@ -141,7 +141,7 @@ class HackingGame {
         this._ScaleformPushString(this.Word);
         natives.endScaleformMovieMethod();
 
-        for(let i = 0; i < 8; i++) {
+        for (let i = 0; i < 8; i++) {
             natives.beginScaleformMovieMethod(this.ScaleForm, "SET_COLUMN_SPEED");
             natives.scaleformMovieMethodAddParamInt(i);
             natives.scaleformMovieMethodAddParamFloat(Math.random() * (this.maxSpeed - this.minSpeed) + this.minSpeed);
@@ -155,24 +155,24 @@ class HackingGame {
 
     _UpdateGame() {
         natives.drawScaleformMovieFullscreen(this.ScaleForm, 255, 255, 255, 255, 0);
-        if(this.Action === TimerAction.None) {
+        if (this.Action === TimerAction.None) {
             this._ScaleformCheckInput(32, 172, 8);
             this._ScaleformCheckInput(33, 173, 9);
             this._ScaleformCheckInput(34, 174, 10);
             this._ScaleformCheckInput(35, 175, 11);
 
-            if(natives.isControlJustPressed(2, 201)) {
+            if (natives.isControlJustPressed(2, 201)) {
                 natives.beginScaleformMovieMethod(this.ScaleForm, "SET_INPUT_EVENT_SELECT");
                 this.InputReturn = natives.endScaleformMovieMethodReturnValue();
             }
         }
 
-        if(this.InputReturn !== 0) {
-            if(natives.isScaleformMovieMethodReturnValueReady(this.InputReturn)) {
-                switch(natives.getScaleformMovieMethodReturnValueInt(this.InputReturn)) {
-                    
+        if (this.InputReturn !== 0) {
+            if (natives.isScaleformMovieMethodReturnValueReady(this.InputReturn)) {
+                switch (natives.getScaleformMovieMethodReturnValueInt(this.InputReturn)) {
+
                     // Player succeeded in hack
-                    case 86: 
+                    case 86:
                         this.Timer = natives.getGameTimer() + 2000;
                         this.Action = TimerAction.Remove;
                         natives.playSoundFrontend(-1, "HACKING_SUCCESS", 0, 1);
@@ -180,13 +180,13 @@ class HackingGame {
                         natives.scaleformMovieMethodAddParamBool(true);
                         this._ScaleformPushString("Successful Hacked");
                         natives.endScaleformMovieMethod();
-                    break;
+                        break;
 
                     // Player failed one of the columns (our job to find if they completely failed)
-                    case 87: 
+                    case 87:
                         natives.playSoundFrontend(-1, "HACKING_CLICK_BAD", 0, 1);
                         this.Lives--;
-                        if(this.Lives <= 0) {
+                        if (this.Lives <= 0) {
                             this.Timer = natives.getGameTimer() + 2000;
                             this.Action = TimerAction.Kill;
                             this._ScaleformRemove();
@@ -197,32 +197,32 @@ class HackingGame {
                             natives.callScaleformMovieMethod(this.ScaleForm, "STOP_ROULETTE");
                             this._ScaleformUpdateLives();
                         }
-                    break;
+                        break;
 
                     // Properly hit character
                     case 92:
                         natives.playSoundFrontend(-1, "HACKING_CLICK", 0, 1);
-                    break;
+                        break;
 
                 }
                 this.InputReturn = 0;
             }
         }
 
-        if(this.Action !== TimerAction.None && natives.getGameTimer() >= this.Timer) {
-            switch(this.Action) {
-                
+        if (this.Action !== TimerAction.None && natives.getGameTimer() >= this.Timer) {
+            switch (this.Action) {
+
                 case TimerAction.Remove:
                     this._Stop(true);
-                break;
+                    break;
 
                 case TimerAction.Reset:
                     this._ScaleformReset();
-                break;
+                    break;
 
                 case TimerAction.Kill:
                     this._Stop(false);
-                break;
+                    break;
             }
 
             this.Timer = 0;
@@ -231,16 +231,16 @@ class HackingGame {
     }
 
     /**
-     * 
-     * @param {string} msg 
+     *
+     * @param {string} msg
      */
     _LogError(msg) {
         alt.logError(`[HackingGame] ${msg}`);
     }
 
     /**
-     * 
-     * @param {string} text 
+     *
+     * @param {string} text
      */
     _ScaleformPushString(text) {
         natives.beginTextCommandScaleformString("STRING");
@@ -265,13 +265,13 @@ class HackingGame {
     }
 
     /**
-     * 
-     * @param {number} first 
-     * @param {number} second 
-     * @param {number} input 
+     *
+     * @param {number} first
+     * @param {number} second
+     * @param {number} input
      */
     _ScaleformCheckInput(first, second, input) {
-        if(natives.isControlJustPressed(2, first) || natives.isControlJustPressed(2, second)) {
+        if (natives.isControlJustPressed(2, first) || natives.isControlJustPressed(2, second)) {
             natives.playSoundFrontend(-1, "HACKING_MOVE_CURSOR", 0, 1);
             natives.beginScaleformMovieMethod(this.ScaleForm, "SET_INPUT_EVENT");
             natives.scaleformMovieMethodAddParamInt(input);

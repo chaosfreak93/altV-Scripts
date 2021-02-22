@@ -2,6 +2,7 @@ import game from 'natives';
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import IElement from "./IElement";
+
 export default class Rectangle extends IElement {
     constructor(pos, size, color) {
         super();
@@ -10,6 +11,7 @@ export default class Rectangle extends IElement {
         this.Size = size;
         this.Color = color;
     }
+
     Draw(pos, size, color) {
         if (!pos)
             pos = new Size(0, 0);

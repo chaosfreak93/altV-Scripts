@@ -23,9 +23,9 @@ body {
     width: 70vw;
     height: 70vh;
     background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(255, 255, 255, 0) 70%
+            ellipse at center,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(255, 255, 255, 0) 70%
     );
     position: absolute;
     top: -35vh;
@@ -49,6 +49,7 @@ body {
     opacity: 0.7;
     transition: all 0.5s;
 }
+
 .chatbox.active {
     opacity: 1;
 }
@@ -77,10 +78,10 @@ body {
 
 .overflowed {
     -webkit-mask-image: -webkit-linear-gradient(
-        top,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 20%,
-        rgba(0, 0, 0, 1) 100%
+            top,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) 20%,
+            rgba(0, 0, 0, 1) 100%
     );
 }
 
@@ -139,23 +140,28 @@ body {
     body {
         font-size: 20px;
     }
+
     .chatbox {
         width: 600px;
         height: 400px;
     }
+
     .msginput input {
         width: 580px;
         margin-top: 20px;
     }
 }
+
 @media screen and (max-width: 1440px) {
     body {
         font-size: 16px;
     }
+
     .chatbox {
         width: 400px;
         height: 300px;
     }
+
     .msginput input {
         width: 380px;
         margin-top: 10px;
@@ -166,10 +172,12 @@ body {
     body {
         font-size: 14px;
     }
+
     .chatbox {
         width: 400px;
         height: 300px;
     }
+
     .msginput input {
         width: 380px;
         margin-top: 10px;
@@ -181,9 +189,11 @@ body {
         width: 350px;
         height: 200px;
     }
+
     .chatbox p {
         line-height: 16px;
     }
+
     .msginput input {
         width: 330px;
         height: 15px;

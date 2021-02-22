@@ -4,6 +4,7 @@ import Color from "../utils/Color";
 import Point from "../utils/Point";
 import Size from "../utils/Size";
 import UIMenuItem from "./UIMenuItem";
+
 export default class UIMenuSliderItem extends UIMenuItem {
     constructor(text, items, index, description = "", divider = false, data = null) {
         super(text, description, data);
@@ -15,18 +16,20 @@ export default class UIMenuSliderItem extends UIMenuItem {
         this._rectangleSlider = new ResRectangle(new Point(0, 0), new Size(75, 9), new Color(57, 116, 200, 255));
         if (divider) {
             this._rectangleDivider = new ResRectangle(new Point(0, 0), new Size(2.5, 20), Color.WhiteSmoke);
-        }
-        else {
+        } else {
             this._rectangleDivider = new ResRectangle(new Point(0, 0), new Size(2.5, 20), Color.Transparent);
         }
         this.Index = index;
     }
+
     get Index() {
         return this._index % this._items.length;
     }
+
     set Index(value) {
         this._index = 100000000 - (100000000 % this._items.length) + value;
     }
+
     SetVerticalPosition(y) {
         this._rectangleBackground.Pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
         this._rectangleSlider.Pos = new Point(250 + this.Offset.X + this.Parent.WidthOffset, y + 158.5 + this.Offset.Y);
@@ -35,9 +38,11 @@ export default class UIMenuSliderItem extends UIMenuItem {
         this._arrowRight.Pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 155.5 + y + this.Offset.Y);
         super.SetVerticalPosition(y);
     }
+
     IndexToItem(index) {
         return this._items[index];
     }
+
     Draw() {
         super.Draw();
         this._arrowLeft.Color = this.Enabled
@@ -60,6 +65,10 @@ export default class UIMenuSliderItem extends UIMenuItem {
         this._rectangleSlider.Draw();
         this._rectangleDivider.Draw();
     }
-    SetRightBadge(badge) { }
-    SetRightLabel(text) { }
+
+    SetRightBadge(badge) {
+    }
+
+    SetRightLabel(text) {
+    }
 }

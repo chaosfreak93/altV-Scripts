@@ -2,6 +2,7 @@ import * as alt from 'alt';
 import game from 'natives';
 import Size from "./Size";
 import Text from '../modules/Text';
+
 const gameScreen = game.getActiveScreenResolution(0, 0);
 export default class Screen {
     static get ResolutionMaintainRatio() {
@@ -9,6 +10,7 @@ export default class Screen {
         const width = 1080.0 * ratio;
         return new Size(width, 1080.0);
     }
+
     static MousePosition(relative = false) {
         const res = Screen.ResolutionMaintainRatio;
         const cursor = alt.getCursorPos();
@@ -20,12 +22,14 @@ export default class Screen {
             Y: mouseY
         };
     }
+
     static IsMouseInBounds(topLeft, boxSize) {
         const mousePosition = Screen.MousePosition();
         return (mousePosition.X >= topLeft.X &&
             mousePosition.X <= topLeft.X + boxSize.Width &&
             (mousePosition.Y > topLeft.Y && mousePosition.Y < topLeft.Y + boxSize.Height));
     }
+
     static GetTextWidth(text, font, scale) {
         game.beginTextCommandGetWidth("CELL_EMAIL_BCON");
         Text.AddLongString(text);
@@ -35,6 +39,7 @@ export default class Screen {
         const res = Screen.ResolutionMaintainRatio;
         return res.Width * width;
     }
+
     static GetLineCount(text, position, font, scale, wrap) {
         game.beginTextCommandLineCount("CELL_EMAIL_BCON");
         Text.AddLongString(text);

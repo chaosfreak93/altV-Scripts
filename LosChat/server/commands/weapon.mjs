@@ -1,5 +1,5 @@
-import { registerCmd } from '../systems/chat.mjs';
-import { HASH_BY_NAME } from '../gamedata/weapons';
+import {registerCmd} from '../systems/chat.mjs';
+import {HASH_BY_NAME} from '../gamedata/weapons';
 
 registerCmd('weapon', '/weapon <name> | Summon a weapon by name.', summonWeapon);
 registerCmd('wep', '/wep <name> | Summon a weapon by name.', summonWeapon);

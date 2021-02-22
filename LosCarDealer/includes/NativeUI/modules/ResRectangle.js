@@ -3,10 +3,12 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Rectangle from "./Rectangle";
 import Screen from "../utils/Screen";
+
 export default class ResRectangle extends Rectangle {
     constructor(pos, size, color) {
         super(pos, size, color);
     }
+
     Draw(pos, size, color) {
         if (!pos)
             pos = new Size();

@@ -5,8 +5,8 @@ import * as native from 'natives';
 
 let view = null;
 
-const playFieldCoord = { x: -1212.79, y: -1673.52, z: 7 };
-const airportCoord = { x: -1466.79, y: -2507.52, z: 0 };
+const playFieldCoord = {x: -1212.79, y: -1673.52, z: 7};
+const airportCoord = {x: -1466.79, y: -2507.52, z: 0};
 
 alt.on('connectionComplete', connectionComplete);
 
@@ -75,8 +75,8 @@ function connectionComplete() {
         native.invalidateIdleCam();
         native._0x9E4CFFF989258472();
     }, 20000);
-    
-    alt.emitServer('register', alt.Discord.currentUser);
+
+    alt.emitServer('register');
 
     //Weather and Time Sync
     native.pauseClock(true);

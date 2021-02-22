@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import { logDeath } from '../discord';
-import { WEAPON_BY_HASH } from '../gamedata/weapons';
+import {logDeath} from '../discord';
+import {WEAPON_BY_HASH} from '../gamedata/weapons';
 
 alt.on('playerDeath', playerDeath);
 

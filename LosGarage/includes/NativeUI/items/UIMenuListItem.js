@@ -9,6 +9,7 @@ import Point from "../utils/Point";
 import Size from "../utils/Size";
 import Screen from "../utils/Screen";
 import UIMenuItem from "./UIMenuItem";
+
 export default class UIMenuListItem extends UIMenuItem {
     constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0, data = null) {
         super(text, description, data);
@@ -24,14 +25,21 @@ export default class UIMenuListItem extends UIMenuItem {
         this._arrowRight = new Sprite("commonmenu", "arrowright", new Point(280, 105 + y), new Size(30, 30));
         this._itemText = new ResText("", new Point(290, y + 104), 0.35, Color.White, Font.ChaletLondon, Alignment.Right);
     }
+
     get Collection() {
         return this._itemsCollection;
     }
+
     set Collection(v) {
         if (!v)
             throw new Error("The collection can't be null");
         this._itemsCollection = v;
     }
+
+    get SelectedItem() {
+        return this.Collection.length > 0 ? this.Collection[this.Index] : null;
+    }
+
     set SelectedItem(v) {
         const idx = this.Collection.findIndex(li => li.Id === v.Id);
         if (idx > 0)
@@ -39,9 +47,7 @@ export default class UIMenuListItem extends UIMenuItem {
         else
             this.Index = 0;
     }
-    get SelectedItem() {
-        return this.Collection.length > 0 ? this.Collection[this.Index] : null;
-    }
+
     get SelectedValue() {
         return this.SelectedItem == null
             ? null
@@ -49,6 +55,7 @@ export default class UIMenuListItem extends UIMenuItem {
                 ? this.SelectedItem.DisplayText
                 : this.SelectedItem.Data;
     }
+
     get Index() {
         if (this.Collection == null)
             return -1;
@@ -56,6 +63,7 @@ export default class UIMenuListItem extends UIMenuItem {
             return -1;
         return this._index % this.Collection.length;
     }
+
     set Index(value) {
         if (this.Collection == null)
             return;
@@ -67,9 +75,11 @@ export default class UIMenuListItem extends UIMenuItem {
             : " ";
         this._currentOffset = Screen.GetTextWidth(caption, this._itemText && this._itemText.Font ? this._itemText.Font : 0, 0.35);
     }
+
     setCollection(collection) {
         this.Collection = collection.getListItems();
     }
+
     setCollectionItem(index, item, resetSelection = true) {
         if (index > this.Collection.length)
             throw new Error("Index out of bounds");
@@ -79,18 +89,22 @@ export default class UIMenuListItem extends UIMenuItem {
         if (resetSelection)
             this.Index = 0;
     }
+
     SetVerticalPosition(y) {
         this._arrowLeft.Pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
         this._arrowRight.Pos = new Point(400 + this.Offset.X + this.Parent.WidthOffset, 147 + y + this.Offset.Y);
         this._itemText.Pos = new Point(300 + this.Offset.X + this.Parent.WidthOffset, y + 147 + this.Offset.Y);
         super.SetVerticalPosition(y);
     }
+
     SetRightLabel(text) {
         return this;
     }
+
     SetRightBadge(badge) {
         return this;
     }
+
     Draw() {
         super.Draw();
         const caption = this.Collection.length >= this.Index
@@ -118,8 +132,7 @@ export default class UIMenuListItem extends UIMenuItem {
             this._arrowLeft.Draw();
             this._arrowRight.Draw();
             this._itemText.Pos = new Point(405 + this.Offset.X + this.Parent.WidthOffset, this._itemText.Pos.Y);
-        }
-        else {
+        } else {
             this._itemText.Pos = new Point(420 + this.Offset.X + this.Parent.WidthOffset, this._itemText.Pos.Y);
         }
         this._itemText.Draw();

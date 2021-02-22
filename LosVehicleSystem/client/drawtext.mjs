@@ -18,64 +18,64 @@ alt.on('enteredVehicle', _enterVeh);
 alt.on('leftVehicle', _leaveVeh);
 alt.onServer('player:leftVehicle', _leaveVeh);
 
-function _leaveVeh(){
-  alt.clearEveryTick(_getTank);
-  alt.clearEveryTick(_isEngineOn);
-  alt.clearInterval(_speedTick);
-  alt.clearEveryTick(_engine);
-  alt.clearInterval(_Tank);
-  alt.clearEveryTick(_display);
+function _leaveVeh() {
+    alt.clearEveryTick(_getTank);
+    alt.clearEveryTick(_isEngineOn);
+    alt.clearInterval(_speedTick);
+    alt.clearEveryTick(_engine);
+    alt.clearInterval(_Tank);
+    alt.clearEveryTick(_display);
 }
 
 alt.onServer('getTank', (tank) => {
-  _tank = tank;
+    _tank = tank;
 });
 
 alt.onServer('isEngineRunning', (engineOn) => {
-  _engineOn = engineOn;
+    _engineOn = engineOn;
 });
 
 function _enterVeh(Vehicle) {
-  _getTank = alt.everyTick(() => {
-    if (Vehicle !== null && Vehicle.valid) {
-      alt.emitServer('getTank', Vehicle);
-      alt.emitServer('isEngineRunning', Vehicle);
-    }
-  });
+    _getTank = alt.everyTick(() => {
+        if (Vehicle !== null && Vehicle.valid) {
+            alt.emitServer('getTank', Vehicle);
+            alt.emitServer('isEngineRunning', Vehicle);
+        }
+    });
 
     _speedTick = alt.setInterval(() => {
-      if (Vehicle !== null && Vehicle.valid) {
-        _speed = Math.round(native.getEntitySpeed(Vehicle.scriptID)*3.6);
-      }
+        if (Vehicle !== null && Vehicle.valid) {
+            _speed = Math.round(native.getEntitySpeed(Vehicle.scriptID) * 3.6);
+        }
     }, 100);
 
-    _engine = alt.everyTick(() =>{
-      if (Vehicle !== null && Vehicle.valid) {
-        if(_tank <= 0){
-          native.setVehicleEngineOn(Vehicle.scriptID, false, false, true);
+    _engine = alt.everyTick(() => {
+        if (Vehicle !== null && Vehicle.valid) {
+            if (_tank <= 0) {
+                native.setVehicleEngineOn(Vehicle.scriptID, false, false, true);
+            }
         }
-      }
     });
     _Tank = alt.setInterval(() => {
-      if (Vehicle !== null && Vehicle.valid) {
-        if(_tank >= 1) {
-          if (_engineOn) {
-            let tank = _tank - 1;
-            alt.emitServer('setTank', Vehicle, tank);
-          }
+        if (Vehicle !== null && Vehicle.valid) {
+            if (_tank >= 1) {
+                if (_engineOn) {
+                    let tank = _tank - 1;
+                    alt.emitServer('setTank', Vehicle, tank);
+                }
+            }
         }
-      }
     }, 7000);
     _display = alt.everyTick(() => {
-      let tank = _tank;
-      let engine = _engineOn ? "On":"Off";
-      drawText2d(_speed + ' kmh' , 0.85, 0.8, 1, 4, 255, 255, 255, 255);
-      drawText2d('Tank: ' + tank + '%', 0.85, 0.85, 1, 4, 255, 255, 255, 255);
-      drawText2d('Engine: ' + engine, 0.85, 0.9, 1, 4, 255, 255, 255, 255);
+        let tank = _tank;
+        let engine = _engineOn ? "On" : "Off";
+        drawText2d(_speed + ' kmh', 0.85, 0.8, 1, 4, 255, 255, 255, 255);
+        drawText2d('Tank: ' + tank + '%', 0.85, 0.85, 1, 4, 255, 255, 255, 255);
+        drawText2d('Engine: ' + engine, 0.85, 0.9, 1, 4, 255, 255, 255, 255);
     });
-  }
+}
 
-    function drawText2d(
+function drawText2d(
     msg,
     x,
     y,
@@ -89,7 +89,7 @@ function _enterVeh(Vehicle) {
     useDropShadow = true,
     layer = 0,
     align = 0
-    ) {
+) {
     let hex = msg.match('{.*}');
     if (hex) {
         const rgb = hexToRgb(hex[0].replace('{', '').replace('}', ''));

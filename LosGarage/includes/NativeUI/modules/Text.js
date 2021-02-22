@@ -2,6 +2,7 @@ import game from 'natives';
 import Color from "../utils/Color";
 import Point from "../utils/Point";
 import IElement from "./IElement";
+
 export default class Text extends IElement {
     constructor(caption, pos, scale, color, font, centered) {
         super();
@@ -12,6 +13,24 @@ export default class Text extends IElement {
         this.Font = font || 0;
         this.Centered = centered || false;
     }
+
+    static AddLongString(text) {
+        if (!text.length)
+            return;
+        const maxStringLength = 99;
+        for (let i = 0, position; i < text.length; i += maxStringLength) {
+            let currentText = text.substr(i, i + maxStringLength);
+            let currentIndex = i;
+            if ((currentText.match(/~/g) || []).length % 2 !== 0) {
+                position = currentText.lastIndexOf('~');
+                i -= (maxStringLength - position);
+            } else {
+                position = Math.min(maxStringLength, text.length - currentIndex);
+            }
+            game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
+        }
+    }
+
     Draw(caption, pos, scale, color, font, centered) {
         if (caption && !pos && !scale && !color && !font && !centered) {
             pos = new Point(this.Pos.X + caption.Width, this.Pos.Y + caption.Height);
@@ -30,22 +49,5 @@ export default class Text extends IElement {
         Text.AddLongString(caption);
         game.endTextCommandDisplayText(x, y, 0);
     }
-    static AddLongString(text) {
-        if (!text.length)
-            return;
-        const maxStringLength = 99;
-        for (let i = 0, position; i < text.length; i += maxStringLength) {
-            let currentText = text.substr(i, i + maxStringLength);
-            let currentIndex = i;
-            if ((currentText.match(/~/g) || []).length % 2 !== 0) {
-                position = currentText.lastIndexOf('~');
-                i -= (maxStringLength - position);
-            }
-            else {
-                position = Math.min(maxStringLength, text.length - currentIndex);
-            }
-            game.addTextComponentSubstringPlayerName(text.substr(currentIndex, position));
-        }
-    }
 }
-export { Text };
+export {Text};
