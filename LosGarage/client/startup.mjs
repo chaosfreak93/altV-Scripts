@@ -5,16 +5,18 @@ import * as native from 'natives';
 import * as NativeUI from '../includes/NativeUI/NativeUI';
 
 let garageContent = null;
-alt.emitServer('getGarage', alt.Discord.currentUser.id);
+alt.onServer('joinGarage', () => {
+    alt.emitServer('getGarage');
+});
 
 const mainMenu = new NativeUI.Menu('Garage', 'Was willst du tun?', new NativeUI.Point(50, 50));
 const garageMenu = new NativeUI.Menu('Garage', 'Wähle ein Auto aus.', new NativeUI.Point(50, 50));
-const getOutVehicel = new NativeUI.UIMenuItem (
+const getOutVehicel = new NativeUI.UIMenuItem(
     "Ausparken",
     "Parke ein Auto aus"
 );
 mainMenu.AddItem(getOutVehicel);
-mainMenu.AddItem(new NativeUI.UIMenuItem (
+mainMenu.AddItem(new NativeUI.UIMenuItem(
     "Einparken",
     "Park dein aktuelles Auto in der Garage"
 ));
@@ -24,21 +26,24 @@ mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 alt.onServer('Garage:enter', CarDealerEnter);
 alt.onServer('Garage:leave', CarDealerLeave);
 
-function CarDealerEnter(player) {
+async function CarDealerEnter(player) {
     mainMenu.Open();
-    if (garageContent === null || garageContent === undefined) {
-        alt.emitServer('getGarage', alt.Discord.currentUser.id);
-    }
     garageMenu.Clear();
+    garageMenu.CleanUp();
+    await alt.emitServer('getGarage');
     for (let i = 0; i < garageContent.length; i++) {
-        garageMenu.AddItem(new NativeUI.UIMenuItem (
+        let status = garageContent[i].parking ? "Eingeparkt" : "Ausgeparkt";
+        garageMenu.AddItem(new NativeUI.UIMenuItem(
             garageContent[i].name + " | " + garageContent[i].numberplate,
-            "Tank: " + garageContent[i].tank
+            "Tank: " + garageContent[i].tank + " | Parked: " + status
         ));
     }
 }
 
 function CarDealerLeave() {
+    garageMenu.Close();
+    garageMenu.Clear();
+    garageMenu.CleanUp();
     mainMenu.Close();
 }
 
@@ -50,7 +55,7 @@ mainMenu.ItemSelect.on((item, index) => {
 
 garageMenu.ItemSelect.on((item) => {
     let data = item.Text.replaceAll(" ", "").split("|");
-    alt.emitServer('garage:SpawnVehicle', data[0], data[1]);
+    alt.emitServer('garage:SpawnVehicle', data);
     mainMenu.Close();
     garageMenu.Close();
 });

@@ -41,7 +41,7 @@ function entityLeaveColshape(colshape, entity) {
 
 alt.onClient('garage:SpawnVehicle', spawnVehicle);
 
-async function spawnVehicle(player, carName, numberPlate) {
+async function spawnVehicle(player, data) {
     try {
         if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
             player.getMeta('lastVehicle').destroy();
@@ -49,7 +49,7 @@ async function spawnVehicle(player, carName, numberPlate) {
         }
 
         let vehicle = await new alt.Vehicle(
-            carName,
+            data.name,
             104.22857666015625,
             -1078.5362548828125,
             29.1787109375,
@@ -59,14 +59,57 @@ async function spawnVehicle(player, carName, numberPlate) {
         );
         player.setMeta('lastVehicle', vehicle);
 
-        alt.emit('setTank', vehicle, 100);
+        alt.emit('setTank', vehicle, data.tank);
         vehicle.setSyncedMeta('engine', true);
         vehicle.setSyncedMeta('toggleVehicleLock', false);
         vehicle.lockState = 1;
-        vehicle.numberPlateText = numberPlate;
+        vehicle.numberPlateText = data.numberplate;
+        vehicle.dirtLevel = data.dirtLevel;
+
+        await applyOpticTunings(data, vehicle);
+        await applyPeformaceTunings(data, vehicle);
+        await applyDamage(data, vehicle);
+
         alt.emitClient(player, 'setPedIntoVehicle', vehicle);
-    } catch(err) {
+    } catch (err) {
         console.log(err);
+    }
+}
+
+function applyOpticTunings(data, vehicle) {
+    try {
+        vehicle.customTires = data.tuning.optic.customTires;
+        vehicle.dashboardColor = data.tuning.optic.dashboardColor;
+        vehicle.headlightColor = data.tuning.optic.headlightColor;
+        vehicle.interiorColor = data.tuning.optic.interiorColor;
+        vehicle.neon = data.tuning.optic.neon;
+        vehicle.neonColor = data.tuning.optic.neonColor;
+        vehicle.primaryColor = data.tuning.optic.primaryColor;
+        vehicle.secondaryColor = data.tuning.optic.secondaryColor;
+        vehicle.pearlColor = data.tuning.optic.pearlColor;
+        vehicle.tireSmokeColor = data.tuning.optic.tireSmokeColor;
+        vehicle.wheelColor = data.tuning.optic.wheelColor;
+        return true;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}
+
+function applyPeformaceTunings(data, vehicle) {
+
+}
+
+function applyDamage(data, vehicle) {
+    try {
+        vehicle.bodyAdditionalHealth = data.damage.bodyAdditionalHealth;
+        vehicle.bodyHealth = data.damage.bodyHealth;
+        vehicle.engineHealth = data.damage.engineHealth;
+        vehicle.petrolTankHealth = data.damage.petrolTankHealth;
+        vehicle.setHealthDataBase64(data.damage.healthDataBase64);
+    } catch (err) {
+        console.log(err);
+        return false;
     }
 }
 
@@ -77,28 +120,21 @@ function removeVehicle(player) {
         if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
             player.getMeta('lastVehicle').destroy();
         }
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
 
-alt.onClient('getGarage', (player, discord) => {
+alt.onClient('getGarage', (player) => {
     pool.getConnection(function (err, conn) {
         if (err) throw err;
         conn.execute(
-            'SELECT id FROM `account` WHERE discord=?',
-            [discord],
+            'SELECT garage FROM `character` WHERE socialId=?',
+            [player.getMeta('data').socialId],
             function (err, data, fields) {
                 if (err) throw err;
-                conn.execute(
-                    'SELECT garage FROM `character` WHERE guid=?',
-                    [data[0].id],
-                    function (err, data, fields) {
-                        if (err) throw err;
-                        let garage = JSON.parse(data[0]["garage"]);
-                        alt.emitClient(player, 'getGarage', garage);
-                    }
-                );
+                let garage = JSON.parse(data[0]["garage"]);
+                alt.emitClient(player, 'getGarage', garage);
             }
         );
         pool.releaseConnection(conn);

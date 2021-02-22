@@ -37,9 +37,7 @@ function entityLeaveColshape(colshape, entity) {
     alt.emitClient(entity, 'CarDealer:leave');
 }
 
-alt.onClient('CarDealer:buyCar', buyCar);
-
-async function buyCar(player, carName) {
+alt.onClient('CarDealer:buyCar', async (player, carName) => {
     try {
         if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
             player.getMeta('lastVehicle').destroy();
@@ -66,16 +64,53 @@ async function buyCar(player, carName) {
         pool.getConnection(function (err, conn) {
             if (err) throw err;
             conn.execute(
-                'SELECT garage FROM `character` WHERE guid=?',
-                [player.getMeta('data').id],
-                function (err, data, fields) {
+                'SELECT garage FROM `character` WHERE socialId=?',
+                [player.socialId],
+                function (err, garageData, fields) {
                     if (err) throw err;
-                    let garage = JSON.parse(data[0]["garage"]);
-                    garage.push({ name: carName, tank: 100, numberplate: numberPlate, parking: true });
+                    let garage = JSON.parse(garageData[0]["garage"]);
+                    garage.push({
+                        name: carName,
+                        tank: 100,
+                        numberplate: numberPlate,
+                        parking: true,
+                        dirtLevel: vehicle.dirtLevel,
+                        damage: {
+                            bodyAdditionalHealth: vehicle.bodyAdditionalHealth,
+                            bodyHealth: vehicle.bodyHealth,
+                            engineHealth: vehicle.engineHealth,
+                            petrolTankHealth: vehicle.petrolTankHealth,
+                            healthDataBase64: vehicle.getHealthDataBase64()
+                        },
+                        tuning: {
+                            optic: {
+                                customTires: vehicle.customTires,
+                                dashboardColor: vehicle.dashboardColor,
+                                headlightColor: vehicle.headlightColor,
+                                interiorColor: vehicle.interiorColor,
+                                neon: vehicle.neon,
+                                neonColor: vehicle.neonColor,
+                                primaryColor: vehicle.primaryColor,
+                                secondaryColor: vehicle.secondaryColor,
+                                pearlColor: vehicle.pearlColor,
+                                tireSmokeColor: vehicle.tireSmokeColor,
+                                wheelColor: vehicle.wheelColor
+                            },
+                            peformance: {
+                                brakes: vehicle.getMod(12),
+                                engine: vehicle.getMod(11),
+                                hydraulics: vehicle.getMod(38),
+                                spoiler: vehicle.getMod(0),
+                                suspension: vehicle.getMod(15),
+                                transmission: vehicle.getMod(13),
+                                turbo: vehicle.getMod(18)
+                            }
+                        }
+                    });
                     conn.execute(
-                        'UPDATE `character` SET garage=? WHERE guid=?',
-                        [JSON.stringify(garage), player.getMeta('data').id],
-                        function (err, data, fields) {
+                        'UPDATE `character` SET garage=? WHERE socialId=?',
+                        [JSON.stringify(garage), player.socialId],
+                        function (err, res, fields) {
                             if (err) throw err;
                         }
                     );
@@ -84,17 +119,18 @@ async function buyCar(player, carName) {
             pool.releaseConnection(conn);
         });
         alt.emitClient(player, 'setPedIntoVehicle', vehicle);
-    } catch(err) {
+        alt.emit('getGarage');
+    } catch (err) {
         console.log(err);
     }
-}
+});
 
 function makeNumberPlate(length) {
-    let result           = '';
-    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
- }
+}
