@@ -4,11 +4,11 @@ import * as alt from 'alt-client';
 
 alt.onServer('joinJob', joinJob);
 
-function joinJob(lul, player) {
+function joinJob(player) {
     alt.setInterval(() => {
-        alt.emitServer('joinJob', player);
+        alt.emitServer('joinJob', alt.Player.local);
     }, 3000);
     alt.setInterval(() => {
-        alt.emitServer('salary', player);
+        alt.emitServer('salary', alt.Player.local);
     }, 3600000);
 }

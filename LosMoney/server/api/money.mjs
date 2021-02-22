@@ -1,5 +1,4 @@
 /// <reference types="@altv/types-server" />
-import * as alt from 'alt-server';
 import mysql from 'mysql2';
 
 let pool = mysql.createPool({
@@ -13,10 +12,10 @@ let pool = mysql.createPool({
 });
 
 export function addMoneyToBank(player, amount) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT money_bank FROM `character` WHERE guid=?', [id], function (
+        conn.execute('SELECT money_bank FROM `character` WHERE socialId=?', [id], function (
             err,
             res,
             fields
@@ -24,12 +23,12 @@ export function addMoneyToBank(player, amount) {
             let currentAmount = parseInt(res[0].money_bank);
             let newAmount = parseInt(currentAmount) + parseInt(amount);
             conn.execute(
-                'UPDATE `character` SET money_bank=? WHERE guid=?',
+                'UPDATE `character` SET money_bank=? WHERE socialId=?',
                 [parseInt(newAmount), id],
                 function (err, res, fields) {
                     if (err) throw err;
                     pool.releaseConnection(conn);
-                    return;
+
                 }
             );
         });
@@ -37,10 +36,10 @@ export function addMoneyToBank(player, amount) {
 }
 
 export function addMoneyToHand(player, amount) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT money_hand FROM `character` WHERE guid=?', [id], function (
+        conn.execute('SELECT money_hand FROM `character` WHERE socialId=?', [id], function (
             err,
             res,
             fields
@@ -48,12 +47,12 @@ export function addMoneyToHand(player, amount) {
             let currentAmount = parseInt(res[0].money_hand);
             let newAmount = parseInt(currentAmount) + parseInt(amount);
             conn.execute(
-                'UPDATE `character` SET money_hand=? WHERE guid=?',
+                'UPDATE `character` SET money_hand=? WHERE socialId=?',
                 [parseInt(newAmount), id],
                 function (err, res, fields) {
                     if (err) throw err;
                     pool.releaseConnection(conn);
-                    return;
+
                 }
             );
         });
@@ -61,10 +60,10 @@ export function addMoneyToHand(player, amount) {
 }
 
 export function removeMoneyFromBank(player, amount) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT money_bank FROM `character` WHERE guid=?', [id], function (
+        conn.execute('SELECT money_bank FROM `character` WHERE socialId=?', [id], function (
             err,
             res,
             fields
@@ -77,12 +76,12 @@ export function removeMoneyFromBank(player, amount) {
             }
             let newAmount = parseInt(currentAmount) - parseInt(amount);
             conn.execute(
-                'UPDATE `character` SET money_bank=? WHERE guid=?',
+                'UPDATE `character` SET money_bank=? WHERE socialId=?',
                 [parseInt(newAmount), id],
                 function (err, res, fields) {
                     if (err) throw err;
                     pool.releaseConnection(conn);
-                    return;
+
                 }
             );
         });
@@ -90,10 +89,10 @@ export function removeMoneyFromBank(player, amount) {
 }
 
 export function removeMoneyFromHand(player, amount) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT money_hand FROM `character` WHERE guid=?', [id], function (
+        conn.execute('SELECT money_hand FROM `character` WHERE socialId=?', [id], function (
             err,
             res,
             fields
@@ -106,12 +105,12 @@ export function removeMoneyFromHand(player, amount) {
             }
             let newAmount = parseInt(currentAmount) - parseInt(amount);
             conn.execute(
-                'UPDATE `character` SET money_hand=? WHERE guid=?',
+                'UPDATE `character` SET money_hand=? WHERE socialId=?',
                 [parseInt(newAmount), id],
                 function (err, res, fields) {
                     if (err) throw err;
                     pool.releaseConnection(conn);
-                    return;
+
                 }
             );
         });

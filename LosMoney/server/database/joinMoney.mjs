@@ -15,10 +15,10 @@ let pool = mysql.createPool({
 alt.onClient('joinMoney', joinMoney);
 
 function joinMoney(player) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT money_hand, money_bank FROM `character` WHERE guid=?', [id], function (
+        conn.execute('SELECT money_hand, money_bank FROM `character` WHERE socialId=?', [id], function (
             err,
             res,
             fields
@@ -26,7 +26,7 @@ function joinMoney(player) {
             if (err) throw err;
             alt.emitClient(player, 'updateWebView', res[0]);
             pool.releaseConnection(conn);
-            return;
+
         });
     });
 }

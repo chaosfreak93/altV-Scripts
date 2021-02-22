@@ -14,94 +14,76 @@ let pool = mysql.createPool({
 
 alt.onClient('register', register);
 
-function register(player, discordData) {
-    if (discordData === null || discordData === undefined) {
-        player.setMeta('discord', 'false');
-        player.kick('Du musst Discord geöffnet haben! Und alt:V neustarten.');
-        return;
-    }
-    player.setMeta('discord', 'true');
-    pool.getConnection(function (err, conn) {
-        if (err) throw err;
-        conn.execute('SELECT * FROM `account`', function (e, res, fields) {
-            if (e) throw e;
-            if (res === undefined) {
-                conn.execute(
-                    'INSERT INTO `account` SET discord=?, admin=?',
-                    [discordData.id, false],
-                    function (err, res, fields) {
-                        if (err) throw err;
-                        getChar(player, res.id);
-                        pool.releaseConnection(conn);
-                    }
-                );
-                return;
-            }
-
-            const account = res.find((acc) => {
-                if (acc.discord === discordData.id) return acc;
-            });
-
-            if (!account) {
-                conn.execute(
-                    'INSERT INTO `account` SET discord=?, admin=?',
-                    [discordData.id, false],
-                    function (err, res, fields) {
-                        if (err) throw err;
-                        getChar(player, res.insertId);
-                        pool.releaseConnection(conn);
-                    }
-                );
-                return;
-            }
-
-            getChar(player, account.id);
-            pool.releaseConnection(conn);
-        });
-    });
-}
-
-function getChar(player, id) {
-    pool.getConnection(function (err, conn) {
-        if (err) throw err;
-        conn.execute('SELECT * FROM `character` WHERE guid=?', [`${id}`], function (
-            err,
-            data,
-            fields
-        ) {
+function register(player) {
+    pool.getConnection(
+        function (err, conn) {
             if (err) throw err;
-            if (Array.isArray(data) && data.length >= 1) {
-                finishLogin(player, data[0]);
-                pool.releaseConnection(conn);
-                return;
-            }
-
             conn.execute(
-                'INSERT INTO `character` SET guid=?, money_bank=?, money_hand=?, job=?, garage=?',
-                [`${id}`, 0, 5000, 1, "[]"],
+                'SELECT * FROM `account` WHERE socialclub=?',
+                [player.socialId],
                 function (err, res, fields) {
                     if (err) throw err;
-                    getChar(player, res.insertId);
-                    pool.releaseConnection(conn);
+                    if (res === undefined || res === null || res.length < 1) {
+                        conn.execute(
+                            'INSERT INTO `account` SET name=?, socialclub=?, admin=?',
+                            [player.name, player.socialId, false],
+                            function (err, res, fields) {
+                                if (err) throw err;
+                                register(player);
+                                pool.releaseConnection(conn);
+                            }
+                        );
+                    } else {
+                        getChar(player);
+                        pool.releaseConnection(conn);
+                    }
                 }
             );
-            return;
-        });
-    });
+        }
+    );
+}
+
+function getChar(player) {
+    pool.getConnection(
+        function (err, conn) {
+            if (err) throw err;
+            conn.execute(
+                'SELECT * FROM `character` WHERE socialId=?',
+                [player.socialId],
+                function (err, res, fields) {
+                    if (err) throw err;
+                    if (res === undefined || res === null || res.length < 1) {
+                        conn.execute(
+                            'INSERT INTO `character` SET socialId=?, money_bank=?, money_hand=?, job=?, garage=?',
+                            [player.socialId, 0, 5000, 1, "[]"],
+                            function (err, res, fields) {
+                                if (err) throw err;
+                                getChar(player);
+                                pool.releaseConnection(conn);
+                            }
+                        );
+                    } else {
+                        finishLogin(player, res[0]);
+                        pool.releaseConnection(conn);
+                    }
+                }
+            );
+        }
+    );
 }
 
 function finishLogin(player, data) {
     player.setMeta('data', data);
-    player.setMeta('id', data.id);
     player.model = 'mp_m_freemode_01';
 
-    if (!player.getMeta('data').position) {
+    if (!data.position) {
         player.spawn(212.7032928466797, -906.8043823242188, 30.6783447265625);
     } else {
-        const pos = JSON.parse(player.getMeta('data').position);
+        const pos = JSON.parse(data.position);
         player.spawn(pos.x, pos.y, pos.z, 0);
     }
 
     alt.emitClient(player, 'joinMoney');
-    alt.emitClient(player, 'joinJob', player);
+    alt.emitClient(player, 'joinJob');
+    alt.emitClient(player, 'joinGarage');
 }

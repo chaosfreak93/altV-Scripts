@@ -15,10 +15,10 @@ let pool = mysql.createPool({
 alt.onClient('joinJob', joinJob);
 
 function joinJob(player) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT job FROM `character` WHERE guid=?', [id], function (err, res, fields) {
+        conn.execute('SELECT job FROM `character` WHERE socialId=?', [id], function (err, res, fields) {
             if (err) throw err;
             conn.execute('SELECT * FROM `jobs` WHERE id=?', [res[0].job], function (
                 err,

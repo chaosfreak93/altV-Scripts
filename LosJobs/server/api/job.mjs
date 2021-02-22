@@ -1,4 +1,3 @@
-import * as alt from 'alt-server';
 import mysql from 'mysql2';
 
 let pool = mysql.createPool({
@@ -12,25 +11,25 @@ let pool = mysql.createPool({
 });
 
 export function setJob(player, jobid) {
-    let id = player.getMeta('id');
+    let id = player.getMeta('data').socialId;
     pool.getConnection(function (err, conn) {
         if (err) throw err;
-        conn.execute('SELECT job FROM `character` WHERE guid=?', [id], function (err, res, fields) {
+        conn.execute('SELECT job FROM `character` WHERE socialId=?', [id], function (err, res, fields) {
             if (err) throw err;
             conn.execute('SELECT id FROM `jobs` WHERE id=?', [jobid], function (err, res, fields) {
                 if (err) throw err;
-                if (res.length < 1) {
+                if (res.length <= 1) {
                     player.send('Diese Job ID konnte nicht in der Datenbank gefunden werden!');
                     return;
                 }
-                conn.execute('UPDATE `character` SET job=? WHERE guid=?', [jobid, id], function (
+                conn.execute('UPDATE `character` SET job=? WHERE socialId=?', [jobid, id], function (
                     err,
                     res,
                     fields
                 ) {
                     if (err) throw err;
                     pool.releaseConnection(conn);
-                    return;
+
                 });
             });
         });

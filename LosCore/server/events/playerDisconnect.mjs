@@ -19,7 +19,7 @@ function playerDisconnect(player) {
         return;
     }
 
-    if (player.name === 'Player' || player.getMeta('discord') === 'false') {
+    if (player.name === 'Player') {
         return;
     }
 
@@ -28,8 +28,8 @@ function playerDisconnect(player) {
     }
 
     pool.execute(
-        'UPDATE `character` SET position=? WHERE guid=?',
-        [JSON.stringify(player.pos), player.getMeta('data').id],
+        'UPDATE `character` SET position=? WHERE socialId=?',
+        [JSON.stringify(player.pos), player.socialId],
         function (err, res, fields) {
             if (err) throw err;
         }
