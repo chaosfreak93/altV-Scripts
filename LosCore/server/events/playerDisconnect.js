@@ -23,8 +23,8 @@ function playerDisconnect(player) {
         return;
     }
 
-    if (player.getMeta('lastVehicle') !== null && player.getMeta('lastVehicle') !== undefined) {
-        player.getMeta('lastVehicle').destroy();
+    if (player.getSyncedMeta('lastVehicle') !== null && player.getSyncedMeta('lastVehicle') !== undefined) {
+        player.getSyncedMeta('lastVehicle').destroy();
     }
 
     pool.execute(

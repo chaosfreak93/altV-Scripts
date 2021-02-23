@@ -39,9 +39,9 @@ function entityLeaveColshape(colshape, entity) {
 
 alt.onClient('CarDealer:buyCar', async (player, carName) => {
     try {
-        if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
-            player.getMeta('lastVehicle').destroy();
-            player.deleteMeta('lastVehicle');
+        if (player.getSyncedMeta('lastVehicle') && player.getSyncedMeta('lastVehicle').valid) {
+            player.getSyncedMeta('lastVehicle').destroy();
+            player.deleteSyncedMeta('lastVehicle');
         }
 
         let vehicle = await new alt.Vehicle(
@@ -53,12 +53,11 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
             0,
             -0.346317321062088
         );
-        player.setMeta('lastVehicle', vehicle);
+        player.setSyncedMeta('lastVehicle', vehicle);
 
-        alt.emit('setTank', vehicle, 100);
+        vehicle.setSyncedMeta('tank', 100);
         vehicle.setSyncedMeta('engine', true);
-        vehicle.setSyncedMeta('toggleVehicleLock', false);
-        vehicle.lockState = 1;
+        vehicle.setSyncedMeta('vehicleLock', 1);
         let numberPlate = makeNumberPlate(8);
         vehicle.numberPlateText = numberPlate;
         pool.getConnection(function (err, conn) {

@@ -46,12 +46,10 @@ alt.setTimeout(async () => {
         await getGarages();
     }
     for (let i = 0; i < garage_list.length; i++) {
-        let Garage = new alt.ColshapeCylinder(
+        let Garage = new alt.ColshapeCircle(
             garage_list[i].x,
             garage_list[i].y,
-            garage_list[i].z,
-            1.5,
-            3
+            1.5
         );
 
         Garage.name = 'Garage';
@@ -102,12 +100,11 @@ async function spawnVehicle(player, data) {
                 }
             }
         })
-        player.setMeta('lastVehicle', vehicle);
+        player.setSyncedMeta('lastVehicle', vehicle);
 
-        alt.emit('setTank', vehicle, data[0].tank);
+        vehicle.setSyncedMeta('tank', data[0].tank);
         vehicle.setSyncedMeta('engine', true);
-        vehicle.setSyncedMeta('toggleVehicleLock', false);
-        vehicle.lockState = 1;
+        vehicle.setSyncedMeta('vehicleLock', 1);
         vehicle.numberPlateText = data[0].numberplate;
         vehicle.dirtLevel = data[0].dirtLevel;
 
@@ -182,7 +179,7 @@ alt.onClient('garage:RemoveVehicle', removeVehicle);
 
 function removeVehicle(player) {
     try {
-        let vehicle = player.getMeta('lastVehicle');
+        let vehicle = player.getSyncedMeta('lastVehicle');
         if (vehicle && vehicle.valid && vehicle.numberPlateText !== "ADMIN") {
             pool.getConnection(function (err, conn) {
                 if (err) throw err;
@@ -228,7 +225,7 @@ function removeVehicle(player) {
                             function (err, res, fields) {
                                 if (err) throw err;
                                 vehicle.destroy();
-                                player.deleteMeta('lastVehicle');
+                                player.deleteSyncedMeta('lastVehicle');
                                 getGarage(player);
                             }
                         );
@@ -238,7 +235,7 @@ function removeVehicle(player) {
             });
         } else if (vehicle && vehicle.valid && vehicle.numberPlateText === "ADMIN") {
             vehicle.destroy();
-            player.deleteMeta('lastVehicle');
+            player.deleteSyncedMeta('lastVehicle');
         }
     } catch (err) {
         console.log(err);

@@ -15,9 +15,9 @@ async function handleAddVehicle(player, args) {
         return;
     }
 
-    if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
-        player.getMeta('lastVehicle').destroy();
-        player.deleteMeta('lastVehicle');
+    if (player.getSyncedMeta('lastVehicle') && player.getSyncedMeta('lastVehicle').valid) {
+        player.getSyncedMeta('lastVehicle').destroy();
+        player.deleteSyncedMeta('lastVehicle');
     }
 
     const vehicleName = args[0];
@@ -38,12 +38,11 @@ async function handleAddVehicle(player, args) {
             0,
             0
         );
-        player.setMeta('lastVehicle', vehicle);
+        player.setSyncedMeta('lastVehicle', vehicle);
 
-        alt.emit('setTank', vehicle, 100);
+        vehicle.setSyncedMeta('tank', 100);
         vehicle.setSyncedMeta('engine', true);
-        vehicle.setSyncedMeta('toggleVehicleLock', false);
-        vehicle.lockState = 1;
+        vehicle.setSyncedMeta('vehicleLock', 1);
         vehicle.numberPlateText = "ADMIN";
         player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);
     } catch (err) {

@@ -28,12 +28,6 @@ alt.onClient('isEngineRunning', (player, vehicle) => {
     }
 });
 
-alt.onClient('syncSirenAudio', (player, vehicle, muted) => {
-    if (vehicle && vehicle.valid) {
-        alt.emitClient(null, 'syncSirenAudio', vehicle, muted);
-    }
-});
-
 alt.onClient('toggleEngine', (player, vehicle) => {
     if (vehicle && vehicle.valid) {
         if (!vehicle.getSyncedMeta('engine')) {
@@ -44,26 +38,27 @@ alt.onClient('toggleEngine', (player, vehicle) => {
     }
 });
 
-alt.onClient('toggleVehicleLock', (player) => {
-    if (player.getMeta('lastVehicle') && player.getMeta('lastVehicle').valid) {
-        if (!player.getMeta('lastVehicle').getSyncedMeta('toggleVehicleLock')) {
-            player.getMeta('lastVehicle').lockState = 2;
-            player.getMeta('lastVehicle').setSyncedMeta('toggleVehicleLock', true);
-            alt.emitClient(player, 'displayLockState', true);
-            alt.emitClient(null, 'LockStateAnimation', player);
+alt.onClient('toggleVehicleLock', (player, vehicle) => {
+    if (vehicle && vehicle.valid) {
+        if (vehicle.getSyncedMeta('vehicleLock') === 2) {
+            vehicle.setSyncedMeta('vehicleLock', 1);
         } else {
-            player.getMeta('lastVehicle').lockState = 1;
-            player.getMeta('lastVehicle').setSyncedMeta('toggleVehicleLock', false);
-            alt.emitClient(player, 'displayLockState', false);
-            alt.emitClient(null, 'LockStateAnimation', player);
+            vehicle.setSyncedMeta('vehicleLock', 2);
+        }
+        alt.emitClient(null, 'LockStateAnimation', player);
+    }
+});
+
+alt.onClient('toggleSirenAudio', (player, vehicle) => {
+    if (vehicle && vehicle.valid) {
+        if (!vehicle.getSyncedMeta('sirenAudio')) {
+            vehicle.setSyncedMeta('sirenAudio', true);
+        } else {
+            vehicle.setSyncedMeta('sirenAudio', false);
         }
     }
 });
 
 alt.on('playerLeftVehicle', (player) => {
     alt.emitClient(player, 'player:leftVehicle');
-});
-
-alt.onClient('getLastVehicle', (player) => {
-    alt.emitClient(player, 'getLastVehicle', player.getMeta('lastVehicle'));
 });
