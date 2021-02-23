@@ -21,9 +21,9 @@ alt.on('keyup', (key) => {
                 }
                 break;
             case 85:
-                if (alt.Player.local.getSyncedMeta('lastVehicle') && alt.Player.local.getSyncedMeta('lastVehicle').valid) {
-                    if (getDistanceToOwnVehicle(15, alt.Player.local.getSyncedMeta('lastVehicle'))) {
-                        alt.emitServer('toggleVehicleLock', alt.Player.local.getSyncedMeta('lastVehicle'));
+                if (alt.Player.local.getStreamSyncedMeta('lastVehicle') && alt.Player.local.getStreamSyncedMeta('lastVehicle').valid) {
+                    if (getDistanceToOwnVehicle(15, alt.Player.local.getStreamSyncedMeta('lastVehicle'))) {
+                        alt.emitServer('toggleVehicleLock', alt.Player.local.getStreamSyncedMeta('lastVehicle'));
                     }
                 }
                 break;
@@ -51,7 +51,7 @@ alt.on('keyup', (key) => {
 });
 
 alt.onServer('LockStateAnimation', (player) => {
-    if (!native.isPedInVehicle(player.scriptID, player.getSyncedMeta('lastVehicle').scriptID, false)) {
+    if (!native.isPedInVehicle(player.scriptID, player.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
         native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
         native.taskPlayAnim(player.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 8.0, -1, 50, 0, false, false, false);
         alt.setTimeout(() => {

@@ -15,9 +15,9 @@ async function handleAddVehicle(player, args) {
         return;
     }
 
-    if (player.getSyncedMeta('lastVehicle') && player.getSyncedMeta('lastVehicle').valid) {
-        player.getSyncedMeta('lastVehicle').destroy();
-        player.deleteSyncedMeta('lastVehicle');
+    if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
+        player.getStreamSyncedMeta('lastVehicle').destroy();
+        player.deleteStreamSyncedMeta('lastVehicle');
     }
 
     const vehicleName = args[0];
@@ -38,7 +38,7 @@ async function handleAddVehicle(player, args) {
             0,
             0
         );
-        player.setSyncedMeta('lastVehicle', vehicle);
+        player.setStreamSyncedMeta('lastVehicle', vehicle);
 
         vehicle.setSyncedMeta('tank', 100);
         vehicle.setSyncedMeta('engine', true);

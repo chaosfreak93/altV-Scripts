@@ -83,6 +83,10 @@ async function spawnVehicle(player, data) {
             return;
         }
 
+        if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
+            return;
+        }
+
         let vehicle;
 
         garage_list.some(item => {
@@ -100,7 +104,7 @@ async function spawnVehicle(player, data) {
                 }
             }
         })
-        player.setSyncedMeta('lastVehicle', vehicle);
+        player.setStreamSyncedMeta('lastVehicle', vehicle);
 
         vehicle.setSyncedMeta('tank', data[0].tank);
         vehicle.setSyncedMeta('engine', true);
@@ -179,7 +183,7 @@ alt.onClient('garage:RemoveVehicle', removeVehicle);
 
 function removeVehicle(player) {
     try {
-        let vehicle = player.getSyncedMeta('lastVehicle');
+        let vehicle = player.getStreamSyncedMeta('lastVehicle');
         if (vehicle && vehicle.valid && vehicle.numberPlateText !== "ADMIN") {
             pool.getConnection(function (err, conn) {
                 if (err) throw err;
@@ -225,7 +229,7 @@ function removeVehicle(player) {
                             function (err, res, fields) {
                                 if (err) throw err;
                                 vehicle.destroy();
-                                player.deleteSyncedMeta('lastVehicle');
+                                player.deleteStreamSyncedMeta('lastVehicle');
                                 getGarage(player);
                             }
                         );
@@ -235,7 +239,7 @@ function removeVehicle(player) {
             });
         } else if (vehicle && vehicle.valid && vehicle.numberPlateText === "ADMIN") {
             vehicle.destroy();
-            player.deleteSyncedMeta('lastVehicle');
+            player.deleteStreamSyncedMeta('lastVehicle');
         }
     } catch (err) {
         console.log(err);
