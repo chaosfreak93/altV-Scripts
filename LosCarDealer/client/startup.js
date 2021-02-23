@@ -99,6 +99,7 @@ function CarDealerLeave() {
 menu.ItemSelect.on((item) => {
     alt.emitServer('CarDealer:buyCar', item.SelectedItem.DisplayText);
     menu.Close();
+    alt.emitServer('getGarage');
 });
 
 function promisify(callback) {

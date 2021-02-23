@@ -4,10 +4,29 @@ import * as alt from 'alt-client';
 import * as native from 'natives';
 import * as NativeUI from '../includes/NativeUI/NativeUI';
 
-let garageContent = null;
-alt.onServer('joinGarage', () => {
-    alt.emitServer('getGarage');
+let rob_list;
+
+alt.emitServer('getGarageList');
+
+alt.onServer('getGarageList', (robs) => {
+    rob_list = robs;
 });
+
+alt.setTimeout(async () => {
+    for (let i = 0; i < rob_list.length; i++) {
+        let garage = native.addBlipForCoord(rob_list[i].x, rob_list[i].y, rob_list[i].z);
+        native.setBlipSprite(garage, 357);
+        native.setBlipColour(garage, 37);
+        native.setBlipDisplay(garage, 3);
+        native.setBlipCategory(garage, 1);
+        native.beginTextCommandSetBlipName('STRING');
+        native.addTextComponentSubstringPlayerName('Garage');
+        native.endTextCommandSetBlipName(garage);
+    }
+}, 2500);
+
+let garageContent = null;
+alt.emitServer('getGarage');
 
 const mainMenu = new NativeUI.Menu('Garage', 'Was willst du tun?', new NativeUI.Point(50, 50));
 const garageMenu = new NativeUI.Menu('Garage', 'Wähle ein Auto aus.', new NativeUI.Point(50, 50));
@@ -26,17 +45,17 @@ mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 alt.onServer('Garage:enter', CarDealerEnter);
 alt.onServer('Garage:leave', CarDealerLeave);
 
-async function CarDealerEnter(player) {
-    mainMenu.Open();
+async function CarDealerEnter(colshapePos) {
     await alt.emitServer('getGarage');
+    mainMenu.Open();
     garageMenu.Clear();
     garageMenu.CleanUp();
     for (let i = 0; i < garageContent.length; i++) {
         let status = garageContent[i].parking ? "Eingeparkt" : "Ausgeparkt";
         garageMenu.AddItem(new NativeUI.UIMenuItem(
             garageContent[i].name + " | " + garageContent[i].numberplate,
-            "Tank: " + garageContent[i].tank + " | Parked: " + status,
-            garageContent[i]
+            "Tank: " + garageContent[i].tank + " | Status: " + status,
+            [garageContent[i], colshapePos]
         ));
     }
 }
@@ -46,6 +65,7 @@ function CarDealerLeave() {
     garageMenu.Clear();
     garageMenu.CleanUp();
     mainMenu.Close();
+    alt.emitServer('getGarage');
 }
 
 mainMenu.ItemSelect.on((item, index) => {

@@ -69,11 +69,17 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
                 function (err, garageData, fields) {
                     if (err) throw err;
                     let garage = JSON.parse(garageData[0]["garage"]);
+                    if (garage.some(item => item.hash === vehicle.model)) {
+                        vehicle.destroy();
+                        pool.releaseConnection(conn);
+                        return;
+                    }
                     garage.push({
                         name: carName,
+                        hash: vehicle.model,
                         tank: 100,
                         numberplate: numberPlate,
-                        parking: true,
+                        parking: false,
                         dirtLevel: vehicle.dirtLevel,
                         damage: {
                             bodyAdditionalHealth: vehicle.bodyAdditionalHealth,
@@ -83,6 +89,7 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
                             healthDataBase64: vehicle.getHealthDataBase64()
                         },
                         tuning: {
+                            modkit: vehicle.modKit,
                             optic: {
                                 customTires: vehicle.customTires,
                                 dashboardColor: vehicle.dashboardColor,
@@ -99,7 +106,6 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
                             peformance: {
                                 brakes: vehicle.getMod(12),
                                 engine: vehicle.getMod(11),
-                                hydraulics: vehicle.getMod(38),
                                 spoiler: vehicle.getMod(0),
                                 suspension: vehicle.getMod(15),
                                 transmission: vehicle.getMod(13),
@@ -112,14 +118,14 @@ alt.onClient('CarDealer:buyCar', async (player, carName) => {
                         [JSON.stringify(garage), player.socialId],
                         function (err, res, fields) {
                             if (err) throw err;
+                            alt.emitClient(player, 'setPedIntoVehicle', vehicle);
+                            alt.emit('getGarage');
                         }
                     );
                 }
             );
             pool.releaseConnection(conn);
         });
-        alt.emitClient(player, 'setPedIntoVehicle', vehicle);
-        alt.emit('getGarage');
     } catch (err) {
         console.log(err);
     }
