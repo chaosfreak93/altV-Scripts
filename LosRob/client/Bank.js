@@ -51,7 +51,7 @@ alt.everyTick(() => {
 alt.setTimeout(() => {
     for (let i = 0; i < rob_list.length; i++) {
         if (rob_list[i].door != null) {
-            alt.emitServer('ServerDoorControl', native.getHashKey(rob_list[i].door.hash), rob_list[i].door.x, rob_list[i].door.y, rob_list[i].door.z, true, 0, 0, 0);
+            alt.emitServer('ServerDoorControl', alt.hash(rob_list[i].door.hash), rob_list[i].door.x, rob_list[i].door.y, rob_list[i].door.z, true, 0, 0, 0);
         }
     }
 }, 500);
@@ -78,15 +78,30 @@ function bankRobLeave() {
 alt.on("HackingGame:Result", (result) => {
     ready = false;
     if (result) {
-        for (let i = 0; i < rob_list.length; i++) {
-            if (rob_list[i].door != null) {
-                alt.emitServer('ServerDoorControl', native.getHashKey(rob_list[i].door.hash), rob_list[i].door.x, rob_list[i].door.y, rob_list[i].door.z, false, 0, 0, rob_list[i].door.angel);
-            } else {
-                alt.emitServer('successRob', 5000);
+        rob_list.some(item => {
+            if (getDistance(5, item)) {
+                if (item.door !== null && item.door !== undefined) {
+                    alt.emitServer('ServerDoorControl', alt.hash(item.door.hash), item.door.x, item.door.y, item.door.z, false, 0, 0, item.door.angel);
+                } else {
+                    alt.emitServer('successRob', 5000);
+                }
             }
-        }
+        });
     }
 });
+
+function getDistance(radius, colshape) {
+    let playerPed = alt.Player.local.scriptID;
+    let playerCoord = native.getEntityCoords(playerPed, true);
+    let tempCoord;
+
+    tempCoord = native.getDistanceBetweenCoords(playerCoord.x, playerCoord.y, playerCoord.z, colshape.x, colshape.y, colshape.z, true);
+    if (tempCoord <= radius) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 alt.onServer('ClientDoorControl', (hashKey, posX, posY, posZ, state, rotX, rotY, rotZ) => {
     native.doorControl(hashKey, posX, posY, posZ, state, rotX, rotY, rotZ);

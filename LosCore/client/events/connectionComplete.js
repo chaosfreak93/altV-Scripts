@@ -25,12 +25,12 @@ function connectionComplete() {
         alt.setTimeout(() => {
             native.setCutsceneEntityStreamingFlags("MP_Female_Character" , 0, 1); // disable other gender
             // Unload other gender
-            native.registerEntityForCutscene(0, "MP_Female_Character" , 3, native.getHashKey("mp_f_freemode_01"), 0);
+            native.registerEntityForCutscene(0, "MP_Female_Character" , 3, alt.hash("mp_f_freemode_01"), 0);
 
             for (let i = 0; i <= 7; i++) {
                 native.setCutsceneEntityStreamingFlags("MP_Plane_Passenger_" + i, 0, 1);
-                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, native.getHashKey('mp_f_freemode_01'), 0);
-                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, native.getHashKey('mp_m_freemode_01'), 0);
+                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, alt.hash('mp_f_freemode_01'), 0);
+                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, alt.hash('mp_m_freemode_01'), 0);
               }
 
               // Make sure our cutscene looks nice
