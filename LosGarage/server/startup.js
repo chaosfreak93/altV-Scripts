@@ -107,7 +107,7 @@ async function spawnVehicle(player, data) {
         player.setStreamSyncedMeta('lastVehicle', vehicle);
 
         vehicle.setSyncedMeta('tank', data[0].tank);
-        vehicle.setSyncedMeta('engine', true);
+        vehicle.setSyncedMeta('engine', false);
         vehicle.setSyncedMeta('vehicleLock', 1);
         vehicle.numberPlateText = data[0].numberplate;
         vehicle.dirtLevel = data[0].dirtLevel;

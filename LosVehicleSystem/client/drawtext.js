@@ -69,27 +69,21 @@ function _enterVeh(Vehicle) {
     _display = alt.everyTick(() => {
         let tank = _tank;
         let engine = _engineOn ? "On" : "Off";
-        drawText2d(_speed + ' kmh', 0.85, 0.8, 1, 4, 255, 255, 255, 255);
-        drawText2d('Tank: ' + tank + '%', 0.85, 0.85, 1, 4, 255, 255, 255, 255);
-        drawText2d('Engine: ' + engine, 0.85, 0.9, 1, 4, 255, 255, 255, 255);
+        drawText2d(_speed + ' kmh', 0.85, 0.8, 1, 255, 255, 255, 255);
+        drawText2d('Tank: ' + tank + '%', 0.85, 0.85, 1, 255, 255, 255, 255);
+        drawText2d('Engine: ' + engine, 0.85, 0.9, 1, 255, 255, 255, 255);
     });
 }
 
-function drawText2d(
-    msg,
-    x,
-    y,
-    scale,
-    fontType,
-    r,
-    g,
-    b,
-    a,
-    useOutline = true,
-    useDropShadow = true,
-    layer = 0,
-    align = 0
-) {
+function hexToRgb(hex) {
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return [r, g, b];
+}
+
+function drawText2d(msg, x, y, scale, r, g, b, a) {
     let hex = msg.match('{.*}');
     if (hex) {
         const rgb = hexToRgb(hex[0].replace('{', '').replace('}', ''));
@@ -101,20 +95,12 @@ function drawText2d(
 
     native.beginTextCommandDisplayText('STRING');
     native.addTextComponentSubstringPlayerName(msg);
-    native.setTextFont(fontType);
+    native.setTextFont(4);
     native.setTextScale(1, scale);
     native.setTextWrap(0.0, 1.0);
     native.setTextCentre(true);
     native.setTextColour(r, g, b, a);
-    native.setTextJustification(align);
-
-    if (useOutline) {
-        native.setTextOutline();
-    }
-
-    if (useDropShadow) {
-        native.setTextDropShadow();
-    }
-
+    native.setTextOutline();
+    native.setTextDropShadow();
     native.endTextCommandDisplayText(x, y);
 }
