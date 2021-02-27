@@ -5,70 +5,102 @@ import * as native from 'natives';
 
 let view = null;
 
-const playFieldCoord = {x: -1212.79, y: -1673.52, z: 7};
-const airportCoord = {x: -1466.79, y: -2507.52, z: 0};
+const rootPos = {
+  x: -75,
+  y: -820,
+  z: 326
+};
+
+const cam = native.createCamWithParams('DEFAULT_SCRIPTED_CAMERA', 0, 0, 0, 0, 0, 0, 10, false, 2);
+
+const getPointAtPoint = (pos, angle) => {
+  const p = {
+    x: 0,
+    y: 0
+  };
+
+  let s = Math.sin(angle);
+  let c = Math.cos(angle);
+
+  // translate point back to origin:
+  p.x -= pos.x;
+  p.y -= pos.y;
+
+  // rotate point
+  let xnew = p.x * c - p.y * s;
+  let ynew = p.x * s + p.y * c;
+
+  // translate point back:
+  p.x = xnew + pos.x;
+  p.y = ynew + pos.y;
+
+  return p;
+};
+
+let angle = 0;
+let loggedIn = false;
 
 alt.on('connectionComplete', connectionComplete);
 
 function connectionComplete() {
 
-    /**if (!view) {
-        native.requestCutsceneWithPlaybackList("mp_intro_concat", 31, 8);
-        native.setCutsceneEntityStreamingFlags('MP_Male_Character', 0, 1);
-        native.prepareMusicEvent('GLOBAL_KILL_MUSIC');
-        native.prepareMusicEvent('FM_INTRO_START');
+    native.setCamActive(cam, true);
+    native.renderScriptCams(true, true, 16.6667, false, false);
+    
+    native.newLoadSceneStartSphere(rootPos.x, rootPos.y, rootPos.z, 500, 0);
+
+    const interval = alt.everyTick(() => {
+        native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
+    });
+
+    const interval2 = alt.setInterval(() => {
+        const np = rootPos;
+        const p = getPointAtPoint(np, angle);
       
-        view = new alt.WebView('http://resource/client/html/loading/index.html');
-        view.focus();
-        view.isVisible = true;
-        alt.toggleGameControls(false);
-        alt.setTimeout(() => {
-            native.setCutsceneEntityStreamingFlags("MP_Female_Character" , 0, 1); // disable other gender
-            // Unload other gender
-            native.registerEntityForCutscene(0, "MP_Female_Character" , 3, alt.hash("mp_f_freemode_01"), 0);
+        native.setCamCoord(cam, p.x + rootPos.x, p.y + rootPos.x, rootPos.z + 150);
+        native.pointCamAtCoord(cam, rootPos.x, rootPos.y, rootPos.z);
+      
+        angle += 0.003;
+      
+        if (loggedIn) {
+            alt.clearInterval(interval);
+            alt.clearInterval(interval2);
+            
+            native.renderScriptCams(false, false, 0, true, false);
+            
+            native.destroyCam(cam, true);
+            
+            native.setFollowPedCamViewMode(1);
+            native.clearFocus();
+            
+            native.newLoadSceneStop();
+      
+            alt.showCursor(false);
+            alt.toggleGameControls(true);
+            native.displayRadar(true);
+            view.destroy();
+            SkyCameraTeleport({x: 500.1758117675781, y: 5538.9755859375, z: 788});
+        }
+    }, 16.666667);
 
-            for (let i = 0; i <= 7; i++) {
-                native.setCutsceneEntityStreamingFlags("MP_Plane_Passenger_" + i, 0, 1);
-                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, alt.hash('mp_f_freemode_01'), 0);
-                native.registerEntityForCutscene(0, 'MP_Plane_Passenger_' + i, 3, alt.hash('mp_m_freemode_01'), 0);
-              }
+    native.displayRadar(false);
 
-              // Make sure our cutscene looks nice
-              native.newLoadSceneStartSphere(playFieldCoord.x, playFieldCoord.y, playFieldCoord.z, 1000, 0);
+    //Weather and Time Sync
+    native.pauseClock(true);
+    alt.setWeatherSyncActive(true);
 
-              alt.setTimeout(() => {
-                native.triggerMusicEvent('GLOBAL_KILL_MUSIC');
-                native.triggerMusicEvent('FM_INTRO_START');
+    if (!view) {
+        view = new alt.WebView('http://resource/client/html/login/index.html');
+        alt.showCursor(true);
+        view.on('finishLogin', () => {
+            alt.emit('finish_login');
+        });
+    }
+}
 
-                view.unfocus();
-                view.isVisible = false;
-                view.destroy();
-                view = null;
-    
-                //native.setWeatherTypeNow("EXTRASUNNY");
-                native.startCutscene(4);
-    
-                native.registerEntityForCutscene(0, "MP_Male_Character", 0, 0, 0);
-
-                alt.setTimeout(() => native.newLoadSceneStartSphere(airportCoord.x, airportCoord.y, airportCoord.z, 1000, 0), 20_000);
-    
-                alt.setTimeout(() =>  {
-                    alt.setTimeout(() => {
-                        native.doScreenFadeOut(1000);
-                        alt.setTimeout(() => {
-                            native.stopCutsceneImmediately();
-                            native.triggerMusicEvent("GLOBAL_KILL_MUSIC");
-                            alt.setTimeout(() => {
-                                native.doScreenFadeIn(1000);
-                                native.newLoadSceneStop();
-                                alt.toggleGameControls(true);
-                            }, 2000);
-                        }, 2000);
-                    }, 8_000);
-                }, 22_000);
-              }, 1000);
-        }, 2000);
-    }**/
+alt.on('finish_login', () => {
+    native.setEntityCoords(alt.Player.local.scriptID, rootPos.x, rootPos.y, rootPos.z + 10, 0, 0, 0, false);
+    native.switchOutPlayer(alt.Player.local.scriptID, 0, 1);
 
     //Disable Idle Cam
     alt.setInterval(() => {
@@ -76,14 +108,10 @@ function connectionComplete() {
         native._0x9E4CFFF989258472();
     }, 20000);
 
-    alt.emitServer('register');
-
-    //Weather and Time Sync
-    native.pauseClock(true);
-    alt.setWeatherSyncActive(true);
-
     //Vehicle System
-    native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+    alt.everyTick(() => {
+        native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+    });
 
     // Ambient Sounds
     native.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
@@ -95,4 +123,16 @@ function connectionComplete() {
     native.clearAmbientZoneState("AZ_DISTANT_SASQUATCH", 0, 0);
     native.setAudioFlag("LoadMPData", true);
     native.setAudioFlag("DisableFlightMusic", true);
+    alt.setStat('stamina', 100);
+
+    loggedIn = true;
+});
+
+function SkyCameraTeleport(pos) {
+    alt.setTimeout(() => {
+        native.setEntityCoords(alt.Player.local.scriptID, pos.x, pos.y, pos.z, 0, 0, 0, false);
+        native.freezeEntityPosition(alt.Player.local.scriptID, true);
+        native.switchInPlayer(alt.Player.local.scriptID);
+        native.freezeEntityPosition(alt.Player.local.scriptID, false);
+    }, 1000);
 }
