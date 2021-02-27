@@ -11,17 +11,23 @@ function playerConnect(player) {
     if (player.name === 'Player') {
         setTimeout(() => {
             player.kick('Bitte ändere deinen Nutzernamen unter Einstellungen->Nutzername');
-        }, 500);
+        }, 1000);
         return;
     }
     alt.emitClient(player, 'chat:Init');
-    alt.emit('PlayerLoggedIn', player, player.name);
+    //alt.emit('PlayerLoggedIn', player, player.name);
 
     const currentDate = new Date();
 
     setDate(player, currentDate);
 
     alt.log(player.name + " hat den Staat beitreten!");
+
+    player.spawn(402.9230651855469, -996.7911987304688, -99.0146484375, 0);
+    //player.rot = { x: 0, y: 0, z: 3.1168558597564697 };
+    player.model = 'mp_m_freemode_01';
+    //Camera Position: 402.75, -999.65, -97.6
+    //player.dimension = 1;
 }
 
 alt.setInterval(() => {
