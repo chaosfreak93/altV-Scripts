@@ -41,7 +41,7 @@ async function handleAddVehicle(player, args) {
         player.setStreamSyncedMeta('lastVehicle', vehicle);
 
         vehicle.setSyncedMeta('tank', 100);
-        vehicle.setSyncedMeta('engine', true);
+        vehicle.setSyncedMeta('engine', false);
         vehicle.setSyncedMeta('vehicleLock', 1);
         vehicle.numberPlateText = "ADMIN";
         player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);

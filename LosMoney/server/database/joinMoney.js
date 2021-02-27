@@ -24,9 +24,8 @@ function joinMoney(player) {
             fields
         ) {
             if (err) throw err;
-            alt.emitClient(player, 'updateWebView', res[0]);
-            pool.releaseConnection(conn);
-
+            alt.emitClient(player, 'updateWebView', res[0]); 
         });
+        pool.releaseConnection(conn);
     });
 }
