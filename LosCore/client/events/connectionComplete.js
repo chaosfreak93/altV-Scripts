@@ -74,12 +74,10 @@ function connectionComplete() {
             native.clearFocus();
             
             native.newLoadSceneStop();
-      
-            alt.showCursor(false);
+
             alt.toggleGameControls(true);
             native.displayRadar(true);
-            view.destroy();
-            SkyCameraTeleport({x: 500.1758117675781, y: 5538.9755859375, z: 788});
+            alt.emitServer('backToReality');
         }
     }, 16.666667);
 
@@ -89,16 +87,12 @@ function connectionComplete() {
     native.pauseClock(true);
     alt.setWeatherSyncActive(true);
 
-    if (!view) {
-        view = new alt.WebView('http://resource/client/html/login/index.html');
-        alt.showCursor(true);
-        view.on('finishLogin', () => {
-            alt.emit('finish_login');
-        });
-    }
+    alt.emitServer('discord:BeginAuth', alt.Player.local);
 }
 
-alt.on('finish_login', () => {
+alt.onServer('discord:AuthDone', (discordInfo) => {
+    alt.log(JSON.stringify(discordInfo));
+    native.freezeEntityPosition(alt.Player.local.scriptID, true);
     native.setEntityCoords(alt.Player.local.scriptID, rootPos.x, rootPos.y, rootPos.z + 10, 0, 0, 0, false);
     native.switchOutPlayer(alt.Player.local.scriptID, 0, 1);
 
@@ -128,11 +122,12 @@ alt.on('finish_login', () => {
     loggedIn = true;
 });
 
-function SkyCameraTeleport(pos) {
+alt.onServer('teleportToLastPosition', teleportToLastPosition);
+
+function teleportToLastPosition(pos) {
     alt.setTimeout(() => {
         native.setEntityCoords(alt.Player.local.scriptID, pos.x, pos.y, pos.z, 0, 0, 0, false);
-        native.freezeEntityPosition(alt.Player.local.scriptID, true);
         native.switchInPlayer(alt.Player.local.scriptID);
         native.freezeEntityPosition(alt.Player.local.scriptID, false);
-    }, 1000);
+    }, 2000);
 }
