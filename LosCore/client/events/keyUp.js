@@ -22,6 +22,9 @@ function keyup(key) {
             case 117:
                 //Job Menu
                 break;
+            case 77:
+                alt.emit("SaltyChat:UseRadio", true, false);
+                break;
         }
     }
 }

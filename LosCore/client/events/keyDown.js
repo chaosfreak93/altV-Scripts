@@ -73,6 +73,9 @@ function keydown(key) {
                     }
                 }
                 break;
+            case 77:
+                alt.emit("SaltyChat:UseRadio", true, true);
+                break;
         }
     }
 }
