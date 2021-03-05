@@ -2,6 +2,7 @@
 import * as alt from 'alt-server';
 import * as http from 'http';
 import MongoClient from 'mongodb';
+
 let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 let garage_list;
@@ -176,48 +177,48 @@ function removeVehicle(player) {
     try {
         let vehicle = player.getStreamSyncedMeta('lastVehicle');
         if (vehicle && vehicle.valid && vehicle.numberPlateText !== "ADMIN") {
-            MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+            MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
                 if (err) throw err;
                 let database = db.db('altv');
-                database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+                database.collection('accounts').findOne({socialclub: player.socialID}, function (err, result) {
                     if (err) throw err;
                     let garage = result.garage;
-                        for (let i = 0; i < garage.length; i++) {
-                            if (garage[i].hash === vehicle.model) {
-                                garage[i].tank = vehicle.getSyncedMeta('tank');
-                                garage[i].parking = true;
-                                garage[i].dirtLevel = vehicle.dirtLevel;
-                                garage[i].damage.bodyAdditionalHealth = vehicle.bodyAdditionalHealth;
-                                garage[i].damage.bodyHealth = vehicle.bodyHealth;
-                                garage[i].damage.engineHealth = vehicle.engineHealth;
-                                garage[i].damage.petrolTankHealth = vehicle.petrolTankHealth;
-                                garage[i].damage.healthDataBase64 = vehicle.getHealthDataBase64();
-                                garage[i].tuning.modkit = vehicle.modKit;
-                                garage[i].tuning.optic.customTires = vehicle.customTires;
-                                garage[i].tuning.optic.dashboardColor = vehicle.dashboardColor;
-                                garage[i].tuning.optic.headlightColor = vehicle.headlightColor;
-                                garage[i].tuning.optic.interiorColor = vehicle.interiorColor;
-                                garage[i].tuning.optic.neon = vehicle.neon;
-                                garage[i].tuning.optic.neonColor = vehicle.neonColor;
-                                garage[i].tuning.optic.primaryColor = vehicle.primaryColor;
-                                garage[i].tuning.optic.secondaryColor = vehicle.secondaryColor;
-                                garage[i].tuning.optic.pearlColor = vehicle.pearlColor;
-                                garage[i].tuning.optic.tireSmokeColor = vehicle.tireSmokeColor;
-                                garage[i].tuning.optic.wheelColor = vehicle.wheelColor;
-                                garage[i].tuning.peformance.brakes = vehicle.getMod(12);
-                                garage[i].tuning.peformance.engine = vehicle.getMod(11);
-                                garage[i].tuning.peformance.spoiler = vehicle.getMod(0);
-                                garage[i].tuning.peformance.suspension = vehicle.getMod(15);
-                                garage[i].tuning.peformance.transmission = vehicle.getMod(13);
-                                garage[i].tuning.peformance.turbo = vehicle.getMod(18);
-                            }
+                    for (let i = 0; i < garage.length; i++) {
+                        if (garage[i].hash === vehicle.model) {
+                            garage[i].tank = vehicle.getSyncedMeta('tank');
+                            garage[i].parking = true;
+                            garage[i].dirtLevel = vehicle.dirtLevel;
+                            garage[i].damage.bodyAdditionalHealth = vehicle.bodyAdditionalHealth;
+                            garage[i].damage.bodyHealth = vehicle.bodyHealth;
+                            garage[i].damage.engineHealth = vehicle.engineHealth;
+                            garage[i].damage.petrolTankHealth = vehicle.petrolTankHealth;
+                            garage[i].damage.healthDataBase64 = vehicle.getHealthDataBase64();
+                            garage[i].tuning.modkit = vehicle.modKit;
+                            garage[i].tuning.optic.customTires = vehicle.customTires;
+                            garage[i].tuning.optic.dashboardColor = vehicle.dashboardColor;
+                            garage[i].tuning.optic.headlightColor = vehicle.headlightColor;
+                            garage[i].tuning.optic.interiorColor = vehicle.interiorColor;
+                            garage[i].tuning.optic.neon = vehicle.neon;
+                            garage[i].tuning.optic.neonColor = vehicle.neonColor;
+                            garage[i].tuning.optic.primaryColor = vehicle.primaryColor;
+                            garage[i].tuning.optic.secondaryColor = vehicle.secondaryColor;
+                            garage[i].tuning.optic.pearlColor = vehicle.pearlColor;
+                            garage[i].tuning.optic.tireSmokeColor = vehicle.tireSmokeColor;
+                            garage[i].tuning.optic.wheelColor = vehicle.wheelColor;
+                            garage[i].tuning.peformance.brakes = vehicle.getMod(12);
+                            garage[i].tuning.peformance.engine = vehicle.getMod(11);
+                            garage[i].tuning.peformance.spoiler = vehicle.getMod(0);
+                            garage[i].tuning.peformance.suspension = vehicle.getMod(15);
+                            garage[i].tuning.peformance.transmission = vehicle.getMod(13);
+                            garage[i].tuning.peformance.turbo = vehicle.getMod(18);
                         }
-                        database.collection('accounts').updateOne({ socialclub: player.socialID }, { $set: { garage: garage }}, function (err, result) {
-                            if (err) throw err;
-                            vehicle.destroy();
-                            player.deleteStreamSyncedMeta('lastVehicle');
-                            getGarage(player);
-                        });
+                    }
+                    database.collection('accounts').updateOne({socialclub: player.socialID}, {$set: {garage: garage}}, function (err, result) {
+                        if (err) throw err;
+                        vehicle.destroy();
+                        player.deleteStreamSyncedMeta('lastVehicle');
+                        getGarage(player);
+                    });
                 });
             });
         } else if (vehicle && vehicle.valid && vehicle.numberPlateText === "ADMIN") {
@@ -232,10 +233,10 @@ function removeVehicle(player) {
 alt.onClient('getGarage', getGarage);
 
 function getGarage(player) {
-    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
         if (err) throw err;
         let database = db.db('altv');
-        database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+        database.collection('accounts').findOne({socialclub: player.socialID}, function (err, result) {
             if (err) throw err;
             alt.emitClient(player, 'getGarage', result.garage);
         });
@@ -243,10 +244,10 @@ function getGarage(player) {
 }
 
 function setVehicleStatus(player, hash, status) {
-    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
         if (err) throw err;
         let database = db.db('altv');
-        database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+        database.collection('accounts').findOne({socialclub: player.socialID}, function (err, result) {
             if (err) throw err;
             let garage = result.garage;
             garage.some(item => {
@@ -254,7 +255,7 @@ function setVehicleStatus(player, hash, status) {
                     item.parking = status;
                 }
             });
-            database.collection('accounts').updateOne({ socialclub: player.socialID }, { $set: { garage: garage }}, function (err, result) {
+            database.collection('accounts').updateOne({socialclub: player.socialID}, {$set: {garage: garage}}, function (err, result) {
                 if (err) throw err;
             });
         });
@@ -264,10 +265,10 @@ function setVehicleStatus(player, hash, status) {
 alt.on('resourceStart', resourceStart);
 
 function resourceStart() {
-    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
         if (err) throw err;
         let database = db.db('altv');
-        database.collection('accounts').find({}).toArray(function(err, result) {
+        database.collection('accounts').find({}).toArray(function (err, result) {
             if (err) throw err;
             for (let i = 0; i < result.length; i++) {
                 let garage = result[i].garage;
@@ -276,7 +277,7 @@ function resourceStart() {
                         item.parking = true;
                     }
                 });
-                database.collection('accounts').updateOne({ socialclub: result[i].socialclub }, { $set: { garage: garage }}, function (err, result) {
+                database.collection('accounts').updateOne({socialclub: result[i].socialclub}, {$set: {garage: garage}}, function (err, result) {
                     if (err) throw err;
                 });
             }
