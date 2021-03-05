@@ -1,16 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import mysql from 'mysql2';
-
-let pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'keiner',
-    password: 'qS*qD7tc@cv#aJtu',
-    database: 'altv',
-    waitForConnections: true,
-    connectionLimit: 150,
-    queueLimit: 0,
-});
+import MongoClient from 'mongodb';
+let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 alt.on('playerDisconnect', playerDisconnect);
 
@@ -19,7 +10,15 @@ function playerDisconnect(player) {
         return;
     }
 
+    let socialId = player.socialID;
+    let pos = player.pos;
+
     if (player.name === 'Player') {
+        return;
+    }
+
+    if (!player.getSyncedMeta('loggedIn')) {
+        alt.log(player.name + " hat den Staat verlassen!");
         return;
     }
 
@@ -27,13 +26,13 @@ function playerDisconnect(player) {
         player.getStreamSyncedMeta('lastVehicle').destroy();
     }
 
-    pool.execute(
-        'UPDATE `character` SET position=? WHERE socialId=?',
-        [JSON.stringify(player.pos), player.socialId],
-        function (err, res, fields) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+        if (err) throw err;
+        let database = db.db('altv');
+        database.collection('accounts').updateOne({ socialclub: socialId }, { $set: { pos: pos } }, function (err, result) {
             if (err) throw err;
-        }
-    );
+        });
+    });
 
     alt.log(player.name + " hat den Staat verlassen!");
 }
