@@ -13,7 +13,7 @@ alt.on('keyup', (key) => {
                     if (native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, false)) {
                         let driver = native.getPedInVehicleSeat(alt.Player.local.vehicle.scriptID, -1, false);
                         if (alt.Player.local.scriptID === driver) {
-                            if (native.getEntitySpeed(alt.Player.local.vehicle.scriptID) <= 0.10) {
+                            if (native.getEntitySpeed(alt.Player.local.vehicle.scriptID) <= 0.75) {
                                 alt.emitServer('toggleEngine', alt.Player.local.vehicle);
                             }
                         }
@@ -50,8 +50,20 @@ alt.on('keyup', (key) => {
     }
 });
 
-alt.onServer('LockStateAnimation', (player) => {
-    if (!native.isPedInVehicle(player.scriptID, player.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
+alt.onServer('displayVehicleNotification', displayVehicleNotification);
+
+async function displayVehicleNotification(message) {
+    native.beginTextCommandThefeedPost('STRING');
+    native.addTextComponentSubstringPlayerName(message);
+    if (!native.hasStreamedTextureDictLoaded("DIA_DRIVER")) {
+        await native.requestStreamedTextureDict("DIA_DRIVER", false);
+    }
+    native.endTextCommandThefeedPostMessagetextTu("DIA_DRIVER", "DIA_DRIVER", false, 0, "Car System", "Vehicle Infos", 1);
+    return native.endTextCommandThefeedPostTicker(false, true);
+}
+
+alt.onServer('LockStateAnimation', () => {
+    if (!native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
         native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
         native.taskPlayAnim(alt.Player.local.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 8.0, -1, 50, 0, false, false, false);
         alt.setTimeout(() => {

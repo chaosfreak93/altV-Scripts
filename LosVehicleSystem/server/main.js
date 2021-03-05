@@ -32,20 +32,24 @@ alt.onClient('toggleEngine', (player, vehicle) => {
     if (vehicle && vehicle.valid) {
         if (!vehicle.getSyncedMeta('engine')) {
             vehicle.setSyncedMeta('engine', true);
+            alt.emitClient(player, 'displayVehicleNotification', "Turned motor ~g~On");
         } else {
             vehicle.setSyncedMeta('engine', false);
+            alt.emitClient(player, 'displayVehicleNotification', "Turned motor ~r~Off");
         }
     }
 });
 
 alt.onClient('toggleVehicleLock', (player, vehicle) => {
     if (vehicle && vehicle.valid) {
-        if (vehicle.getSyncedMeta('vehicleLock') === 2) {
-            vehicle.setSyncedMeta('vehicleLock', 1);
+        if (vehicle.lockState === 2) {
+            vehicle.lockState = 1;
+            alt.emitClient(player, 'displayVehicleNotification', "Your Vehicle is now ~g~Unlocked");
         } else {
-            vehicle.setSyncedMeta('vehicleLock', 2);
+            vehicle.lockState = 2;
+            alt.emitClient(player, 'displayVehicleNotification', "Your Vehicle is now ~r~Locked");
         }
-        alt.emitClient(null, 'LockStateAnimation', player);
+        alt.emitClient(player, 'LockStateAnimation');
     }
 });
 
@@ -53,12 +57,17 @@ alt.onClient('toggleSirenAudio', (player, vehicle) => {
     if (vehicle && vehicle.valid) {
         if (!vehicle.getSyncedMeta('sirenAudio')) {
             vehicle.setSyncedMeta('sirenAudio', true);
+            alt.emitClient(player, 'displayVehicleNotification', "Turned siren ~r~Off");
         } else {
             vehicle.setSyncedMeta('sirenAudio', false);
+            alt.emitClient(player, 'displayVehicleNotification', "Turned siren ~g~On");
         }
     }
 });
 
-alt.on('playerLeftVehicle', (player) => {
+alt.on('playerLeftVehicle', (player, vehicle, number) => {
+    if (vehicle && vehicle.valid) {
+        vehicle.setSyncedMeta('engine', false);
+    }
     alt.emitClient(player, 'player:leftVehicle');
 });
