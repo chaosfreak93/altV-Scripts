@@ -22,7 +22,7 @@ function keydown(key) {
                     if (!native.isPauseMenuActive()) {
                         native.requestAnimSet("move_ped_crouched");
                         if (crouched) {
-                            native.clearPedTasks(alt.Player.local.scriptID);
+                            //native.clearPedTasks(alt.Player.local.scriptID);
                             alt.setTimeout(() => {
                                 native.resetPedMovementClipset(alt.Player.local.scriptID, 0.45);
                                 crouched = false;
@@ -63,13 +63,13 @@ function keydown(key) {
                         native.requestTaskMoveNetworkStateTransition(alt.Player.local.scriptID, "Stop");
 
                         if (!native.isPedInjured(alt.Player.local.scriptID)) {
-                            native.clearPedSecondaryTask(alt.Player.local.scriptID);
+                            native.stopAnimTask(alt.Player.local.scriptID, "anim@mp_point", "task_mp_pointing", 0.5);
                         }
                         if (!native.isPedInAnyVehicle(alt.Player.local.scriptID, true)) {
                             native.setPedCurrentWeaponVisible(alt.Player.local.scriptID, true, true, true, true);
                         }
                         native.setPedConfigFlag(alt.Player.local.scriptID, 36, false);
-                        native.clearPedSecondaryTask(alt.Player.local.scriptID);
+                        native.stopAnimTask(alt.Player.local.scriptID, "anim@mp_point", "task_mp_pointing", 0.5);
                     }
                 }
                 break;

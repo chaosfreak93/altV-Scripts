@@ -53,9 +53,9 @@ alt.on('keyup', (key) => {
 alt.onServer('LockStateAnimation', (player) => {
     if (!native.isPedInVehicle(player.scriptID, player.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
         native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
-        native.taskPlayAnim(player.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 8.0, -1, 50, 0, false, false, false);
+        native.taskPlayAnim(alt.Player.local.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 8.0, -1, 50, 0, false, false, false);
         alt.setTimeout(() => {
-            native.clearPedTasks(player.scriptID);
+            native.stopAnimTask(alt.Player.local.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0);
         }, 1000);
     }
 });
