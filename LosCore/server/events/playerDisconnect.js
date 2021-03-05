@@ -1,6 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 import MongoClient from 'mongodb';
+
 let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 alt.on('playerDisconnect', playerDisconnect);
@@ -26,10 +27,10 @@ function playerDisconnect(player) {
         player.getStreamSyncedMeta('lastVehicle').destroy();
     }
 
-    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
         if (err) throw err;
         let database = db.db('altv');
-        database.collection('accounts').updateOne({ socialclub: socialId }, { $set: { pos: pos } }, function (err, result) {
+        database.collection('accounts').updateOne({socialclub: socialId}, {$set: {pos: pos}}, function (err, result) {
             if (err) throw err;
         });
     });

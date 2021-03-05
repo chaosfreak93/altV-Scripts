@@ -23,7 +23,7 @@ function playerConnect(player) {
     alt.log(player.name + " hat den Staat beitreten!");
 
     player.spawn(402.9230651855469, -996.7911987304688, -99.0146484375, 0);
-    player.rot = { x: 0, y: 0, z: 3.1168558597564697 };
+    player.rot = {x: 0, y: 0, z: 3.1168558597564697};
     //Camera Position: 402.75, -999.65, -97.6
     player.dimension = player.id;
     alt.emit("SaltyChat:EnablePlayer", player);

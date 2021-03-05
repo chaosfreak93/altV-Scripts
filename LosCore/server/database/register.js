@@ -1,6 +1,7 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 import MongoClient from 'mongodb';
+
 let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 alt.on('discord:AuthDone', (player, discordInfo) => {
@@ -8,10 +9,10 @@ alt.on('discord:AuthDone', (player, discordInfo) => {
     const socialclub = player.socialID;
     const discord = discordInfo.id;
 
-    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
         if (err) throw err;
         let database = db.db('altv');
-        database.collection('accounts').findOne({ discord: discord, socialclub: socialclub}, function(err, result) {
+        database.collection('accounts').findOne({discord: discord, socialclub: socialclub}, function (err, result) {
             if (err) throw err;
             if (result === null || result.length <= 0) {
                 const newData = {
@@ -33,7 +34,11 @@ alt.on('discord:AuthDone', (player, discordInfo) => {
                     player.dimension = 1;
                     player.model = 'u_m_m_jesus_01';
                     alt.emitClient(player, 'chat:Init');
-                    alt.emitClient(player, 'teleportToLastPosition', {x: -1044.6988525390625, y: -2749.6220703125, z: 22.3604736328125});
+                    alt.emitClient(player, 'teleportToLastPosition', {
+                        x: -1044.6988525390625,
+                        y: -2749.6220703125,
+                        z: 22.3604736328125
+                    });
                 })
             } else {
                 player.dimension = 1;

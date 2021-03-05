@@ -4,35 +4,35 @@ import * as alt from 'alt-client';
 import * as native from 'natives';
 
 const rootPos = {
-  x: -75,
-  y: -820,
-  z: 326
+    x: -75,
+    y: -820,
+    z: 326
 };
 
 const cam = native.createCamWithParams('DEFAULT_SCRIPTED_CAMERA', 0, 0, 0, 0, 0, 0, 10, false, 2);
 
 const getPointAtPoint = (pos, angle) => {
-  const p = {
-    x: 0,
-    y: 0
-  };
+    const p = {
+        x: 0,
+        y: 0
+    };
 
-  let s = Math.sin(angle);
-  let c = Math.cos(angle);
+    let s = Math.sin(angle);
+    let c = Math.cos(angle);
 
-  // translate point back to origin:
-  p.x -= pos.x;
-  p.y -= pos.y;
+    // translate point back to origin:
+    p.x -= pos.x;
+    p.y -= pos.y;
 
-  // rotate point
-  let xnew = p.x * c - p.y * s;
-  let ynew = p.x * s + p.y * c;
+    // rotate point
+    let xnew = p.x * c - p.y * s;
+    let ynew = p.x * s + p.y * c;
 
-  // translate point back:
-  p.x = xnew + pos.x;
-  p.y = ynew + pos.y;
+    // translate point back:
+    p.x = xnew + pos.x;
+    p.y = ynew + pos.y;
 
-  return p;
+    return p;
 };
 
 let angle = 0;
@@ -44,7 +44,7 @@ function connectionComplete() {
 
     native.setCamActive(cam, true);
     native.renderScriptCams(true, true, 16.6667, false, false);
-    
+
     native.newLoadSceneStartSphere(rootPos.x, rootPos.y, rootPos.z, 500, 0);
 
     alt.everyTick(() => {
@@ -54,22 +54,22 @@ function connectionComplete() {
     const interval = alt.setInterval(() => {
         const np = rootPos;
         const p = getPointAtPoint(np, angle);
-      
+
         native.setCamCoord(cam, p.x + rootPos.x, p.y + rootPos.x, rootPos.z + 150);
         native.pointCamAtCoord(cam, rootPos.x, rootPos.y, rootPos.z);
-      
+
         angle += 0.003;
-      
+
         if (loggedIn) {
             alt.clearInterval(interval);
-            
+
             native.renderScriptCams(false, false, 0, true, false);
-            
+
             native.destroyCam(cam, true);
-            
+
             native.setFollowPedCamViewMode(1);
             native.clearFocus();
-            
+
             native.newLoadSceneStop();
 
             native.displayHud(true);
@@ -120,7 +120,7 @@ alt.onServer('loginFinished', () => {
     loggedIn = true;
 });
 
-alt.onServer('teleportToLastPosition',  (pos) => {
+alt.onServer('teleportToLastPosition', (pos) => {
     alt.setTimeout(() => {
         native.setEntityCoords(alt.Player.local.scriptID, pos.x, pos.y, pos.z, 0, 0, 0, false);
         native.switchInPlayer(alt.Player.local.scriptID);
