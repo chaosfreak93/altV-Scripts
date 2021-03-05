@@ -9,7 +9,7 @@ registerCmd(
     handleAddVehicle
 );
 
-async function handleAddVehicle(player, args) {
+function handleAddVehicle(player, args) {
     if (!args || !args[0]) {
         player.send(`/vehicle <name>`);
         return;
@@ -21,6 +21,7 @@ async function handleAddVehicle(player, args) {
     }
 
     const vehicleName = args[0];
+    const vehicleHash = alt.hash(args[0]);
     const fwdVector = getForwardVectorServer(player.rot);
     const positionInFront = {
         x: player.pos.x + fwdVector.x * 4,
@@ -29,8 +30,8 @@ async function handleAddVehicle(player, args) {
     };
 
     try {
-        let vehicle = await new alt.Vehicle(
-            vehicleName,
+        let vehicle = new alt.Vehicle(
+            vehicleHash,
             positionInFront.x,
             positionInFront.y,
             positionInFront.z,
@@ -38,11 +39,12 @@ async function handleAddVehicle(player, args) {
             0,
             0
         );
+        vehicle.dimension = 1;
         player.setStreamSyncedMeta('lastVehicle', vehicle);
 
         vehicle.setSyncedMeta('tank', 100);
         vehicle.setSyncedMeta('engine', false);
-        vehicle.setSyncedMeta('vehicleLock', 1);
+        vehicle.lockState = 1;
         vehicle.numberPlateText = "ADMIN";
         player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);
     } catch (err) {
