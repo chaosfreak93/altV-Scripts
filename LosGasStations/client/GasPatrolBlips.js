@@ -1,4 +1,6 @@
-import * as native from 'natives';
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
+import * as alt from 'alt-client';
 
 const gas_patrol_list = [
     {
@@ -109,12 +111,10 @@ const gas_patrol_list = [
 ];
 
 for (let i = 0; i < gas_patrol_list.length; i++) {
-    let gas_partol = native.addBlipForCoord(gas_patrol_list[i].x, gas_patrol_list[i].y, gas_patrol_list[i].z);
-    native.setBlipSprite(gas_partol, 361);
-    native.setBlipColour(gas_partol, 81);
-    native.setBlipDisplay(gas_partol, 3);
-    native.setBlipCategory(gas_partol, 1);
-    native.beginTextCommandSetBlipName('STRING');
-    native.addTextComponentSubstringPlayerName('Gas Patrol');
-    native.endTextCommandSetBlipName(gas_partol);
+    let gas_partol = new alt.PointBlip(gas_patrol_list[i].x, gas_patrol_list[i].y, gas_patrol_list[i].z);
+    gas_partol.sprite = 361;
+    gas_partol.color = 81;
+    gas_partol.display = 2;
+    gas_partol.shortRange = true;
+    gas_partol.name = 'Gas Patrol';
 }

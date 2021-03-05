@@ -1,4 +1,6 @@
-import * as native from 'natives';
+/// <reference types="@altv/types-natives" />
+/// <reference types="@altv/types-client" />
+import * as alt from 'alt-client';
 
 const bank_list = [
     {
@@ -14,12 +16,10 @@ const bank_list = [
 ];
 
 for (let i = 0; i < bank_list.length; i++) {
-    let bank = native.addBlipForCoord(bank_list[i].x, bank_list[i].y, bank_list[i].z);
-    native.setBlipSprite(bank, 108);
-    native.setBlipColour(bank, 25);
-    native.setBlipDisplay(bank, 3);
-    native.setBlipCategory(bank, 1);
-    native.beginTextCommandSetBlipName('STRING');
-    native.addTextComponentSubstringPlayerName('Bank');
-    native.endTextCommandSetBlipName(bank);
+    let bank = new alt.PointBlip(bank_list[i].x, bank_list[i].y, bank_list[i].z);
+    bank.sprite = 108;
+    bank.color = 25;
+    bank.display = 2;
+    bank.shortRange = true;
+    bank.name = 'Bank';
 }

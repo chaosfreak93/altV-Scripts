@@ -14,14 +14,12 @@ alt.onServer('getGarageList', (robs) => {
 
 alt.setTimeout(async () => {
     for (let i = 0; i < rob_list.length; i++) {
-        let garage = native.addBlipForCoord(rob_list[i].x, rob_list[i].y, rob_list[i].z);
-        native.setBlipSprite(garage, 357);
-        native.setBlipColour(garage, 37);
-        native.setBlipDisplay(garage, 3);
-        native.setBlipCategory(garage, 1);
-        native.beginTextCommandSetBlipName('STRING');
-        native.addTextComponentSubstringPlayerName('Garage');
-        native.endTextCommandSetBlipName(garage);
+        let garage = new alt.PointBlip(rob_list[i].x, rob_list[i].y, rob_list[i].z);
+        garage.sprite = 357;
+        garage.color = 37;
+        garage.display = 2;
+        garage.shortRange = true;
+        garage.name = 'Garage';
     }
 }, 2500);
 
