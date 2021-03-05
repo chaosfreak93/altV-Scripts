@@ -3,8 +3,6 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 
-let view = null;
-
 const rootPos = {
   x: -75,
   y: -820,
@@ -49,11 +47,11 @@ function connectionComplete() {
     
     native.newLoadSceneStartSphere(rootPos.x, rootPos.y, rootPos.z, 500, 0);
 
-    const interval = alt.everyTick(() => {
+    alt.everyTick(() => {
         native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
     });
 
-    const interval2 = alt.setInterval(() => {
+    const interval = alt.setInterval(() => {
         const np = rootPos;
         const p = getPointAtPoint(np, angle);
       
@@ -64,7 +62,6 @@ function connectionComplete() {
       
         if (loggedIn) {
             alt.clearInterval(interval);
-            alt.clearInterval(interval2);
             
             native.renderScriptCams(false, false, 0, true, false);
             
@@ -75,23 +72,24 @@ function connectionComplete() {
             
             native.newLoadSceneStop();
 
-            alt.toggleGameControls(true);
-            native.displayRadar(true);
-            alt.emitServer('backToReality');
+            native.displayHud(true);
+            native.displayRadar(false);
         }
     }, 16.666667);
 
     native.displayRadar(false);
+    native.displayHud(false);
 
     //Weather and Time Sync
     native.pauseClock(true);
     alt.setWeatherSyncActive(true);
 
-    alt.emitServer('discord:BeginAuth', alt.Player.local);
+    alt.nextTick(() => {
+        alt.emitServer('discord:BeginAuth', alt.Player.local);
+    });
 }
 
-alt.onServer('discord:AuthDone', (discordInfo) => {
-    alt.log(JSON.stringify(discordInfo));
+alt.onServer('loginFinished', () => {
     native.freezeEntityPosition(alt.Player.local.scriptID, true);
     native.setEntityCoords(alt.Player.local.scriptID, rootPos.x, rootPos.y, rootPos.z + 10, 0, 0, 0, false);
     native.switchOutPlayer(alt.Player.local.scriptID, 0, 1);
@@ -122,12 +120,11 @@ alt.onServer('discord:AuthDone', (discordInfo) => {
     loggedIn = true;
 });
 
-alt.onServer('teleportToLastPosition', teleportToLastPosition);
-
-function teleportToLastPosition(pos) {
+alt.onServer('teleportToLastPosition',  (pos) => {
     alt.setTimeout(() => {
         native.setEntityCoords(alt.Player.local.scriptID, pos.x, pos.y, pos.z, 0, 0, 0, false);
         native.switchInPlayer(alt.Player.local.scriptID);
         native.freezeEntityPosition(alt.Player.local.scriptID, false);
+        alt.toggleGameControls(true);
     }, 2000);
-}
+});

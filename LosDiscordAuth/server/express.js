@@ -63,7 +63,7 @@ async function handleMainRedirect(req, res) {
     }
 
     alt.emitClient(player, 'discord:AuthExit');
-    alt.emitClient(player, 'discord:AuthDone', request.data);
+    alt.emit('discord:AuthDone', player, request.data);
     res.sendFile(path.join(htmlPath, '/done.html'), err => {});
 }
 

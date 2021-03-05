@@ -1,89 +1,50 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import mysql from 'mysql2';
+import MongoClient from 'mongodb';
+let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
-let pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'keiner',
-    password: 'qS*qD7tc@cv#aJtu',
-    database: 'altv',
-    waitForConnections: true,
-    connectionLimit: 150,
-    queueLimit: 0,
+alt.on('discord:AuthDone', (player, discordInfo) => {
+    alt.emitClient(player, 'loginFinished');
+    const socialclub = player.socialID;
+    const discord = discordInfo.id;
+
+    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+        if (err) throw err;
+        let database = db.db('altv');
+        database.collection('accounts').findOne({ discord: discord, socialclub: socialclub}, function(err, result) {
+            if (err) throw err;
+            if (result === null || result.length <= 0) {
+                const newData = {
+                    username: player.name,
+                    socialclub: socialclub,
+                    discord: discord,
+                    pos: {x: -1044.6988525390625, y: -2749.6220703125, z: 22.3604736328125},
+                    job: 1,
+                    money: {
+                        hand: 5000,
+                        bank: 0,
+                        black: 0
+                    },
+                    garage: []
+                };
+
+                database.collection('accounts').insertOne(newData, function (err, result) {
+                    if (err) throw err;
+                    player.dimension = 1;
+                    player.model = 'u_m_m_jesus_01';
+                    alt.emitClient(player, 'chat:Init');
+                    alt.emitClient(player, 'teleportToLastPosition', {x: -1044.6988525390625, y: -2749.6220703125, z: 22.3604736328125});
+                })
+            } else {
+                player.dimension = 1;
+                player.model = 'u_m_m_jesus_01';
+                alt.emitClient(player, 'chat:Init');
+                alt.emitClient(player, 'teleportToLastPosition', result.pos);
+            }
+            alt.emitClient(player, 'joinMoney');
+            alt.emitClient(player, 'joinJob');
+            alt.emit("SaltyChat:JoinRadioChannel", player, "Test", true);
+            player.setSyncedMeta('loggedIn', true);
+        });
+    });
 });
-
-alt.onClient('register', register);
-
-function register(player) {
-    pool.getConnection(
-        function (err, conn) {
-            if (err) throw err;
-            conn.execute(
-                'SELECT * FROM `account` WHERE socialclub=?',
-                [player.socialId],
-                function (err, res, fields) {
-                    if (err) throw err;
-                    if (res === undefined || res === null || res.length < 1) {
-                        conn.execute(
-                            'INSERT INTO `account` SET name=?, socialclub=?, admin=?',
-                            [player.name, player.socialId, false],
-                            function (err, res, fields) {
-                                if (err) throw err;
-                                register(player);
-                                pool.releaseConnection(conn);
-                            }
-                        );
-                    } else {
-                        getChar(player);
-                        pool.releaseConnection(conn);
-                    }
-                }
-            );
-        }
-    );
-}
-
-function getChar(player) {
-    pool.getConnection(
-        function (err, conn) {
-            if (err) throw err;
-            conn.execute(
-                'SELECT * FROM `character` WHERE socialId=?',
-                [player.socialId],
-                function (err, res, fields) {
-                    if (err) throw err;
-                    if (res === undefined || res === null || res.length < 1) {
-                        conn.execute(
-                            'INSERT INTO `character` SET socialId=?, money_bank=?, money_hand=?, job=?, garage=?',
-                            [player.socialId, 0, 5000, 1, "[]"],
-                            function (err, res, fields) {
-                                if (err) throw err;
-                                getChar(player);
-                                pool.releaseConnection(conn);
-                            }
-                        );
-                    } else {
-                        finishLogin(player, res[0]);
-                        pool.releaseConnection(conn);
-                    }
-                }
-            );
-        }
-    );
-}
-
-function finishLogin(player, data) {
-    player.setMeta('data', data);
-    player.model = 'mp_m_freemode_01';
-
-    if (!data.position) {
-        player.spawn(212.7032928466797, -906.8043823242188, 30.6783447265625);
-    } else {
-        const pos = JSON.parse(data.position);
-        player.spawn(pos.x, pos.y, pos.z, 0);
-    }
-
-    alt.emitClient(player, 'joinMoney');
-    alt.emitClient(player, 'joinJob');
-    alt.emitClient(player, 'joinGarage');
-}

@@ -14,7 +14,7 @@ function playerConnect(player) {
         }, 1000);
         return;
     }
-    //alt.emit('PlayerLoggedIn', player, player.name);
+    player.setSyncedMeta('loggedIn', false);
 
     const currentDate = new Date();
 
@@ -26,6 +26,7 @@ function playerConnect(player) {
     player.rot = { x: 0, y: 0, z: 3.1168558597564697 };
     //Camera Position: 402.75, -999.65, -97.6
     player.dimension = player.id;
+    alt.emit("SaltyChat:EnablePlayer", player);
 }
 
 alt.setInterval(() => {
@@ -40,10 +41,3 @@ alt.setInterval(() => {
 function setDate(player, currentDate) {
     player.setDateTime(currentDate.getDate(), currentDate.getMonth(), currentDate.getFullYear(), currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds());
 }
-
-alt.onClient('backToReality', (player) => {
-    player.dimension = 1;
-    player.model = 'mp_m_freemode_01';
-    alt.emitClient(player, 'chat:Init');
-    alt.emitClient(player, 'teleportToLastPosition', {x: -1045.068115234375, y: -2750.05712890625, z: 22.3604736328125})
-});
