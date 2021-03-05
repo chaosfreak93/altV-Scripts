@@ -1,9 +1,9 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 import MongoClient from 'mongodb';
-let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
-
 import './resourceStart';
+
+let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 alt.on('entityEnterColshape', entityEnterColshape);
 alt.on('entityLeaveColshape', entityLeaveColshape);
@@ -46,10 +46,10 @@ alt.onClient('CarDealer:buyCar', (player, carName) => {
         vehicle.lockState = 1;
         let numberPlate = makeNumberPlate(8);
         vehicle.numberPlateText = numberPlate;
-        MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
+        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
             if (err) throw err;
             let database = db.db('altv');
-            database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+            database.collection('accounts').findOne({socialclub: player.socialID}, function (err, result) {
                 if (err) throw err;
                 if (result === null || result.length <= 0) {
                     vehicle.destroy();
@@ -99,7 +99,7 @@ alt.onClient('CarDealer:buyCar', (player, carName) => {
                         }
                     }
                 });
-                database.collection('accounts').updateOne({ socialclub: player.socialID }, { $set: { garage: garage }}, function (err, result) {
+                database.collection('accounts').updateOne({socialclub: player.socialID}, {$set: {garage: garage}}, function (err, result) {
                     if (err) throw err;
                     alt.emitClient(player, 'setPedIntoVehicle', vehicle);
                     alt.emit('getGarage');

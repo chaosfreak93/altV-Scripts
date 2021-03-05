@@ -10,7 +10,7 @@ alt.on('resourceStart', (errored) => {
             1,
             3,
         );
-        
+
         CarDealer.dimension = 1;
         CarDealer.playersOnly = true;
         CarDealer.name = 'CarDealer';
