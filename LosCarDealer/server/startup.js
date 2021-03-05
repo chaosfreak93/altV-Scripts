@@ -12,27 +12,19 @@ let pool = mysql.createPool({
     queueLimit: 0,
 });
 
-let CarDealer = new alt.ColshapeCylinder(
-    -35.235164642333984,
-    -1102.6812744140625,
-    26.4154052734375,
-    1,
-    3,
-);
-
-CarDealer.name = 'CarDealer';
+import './resourceStart';
 
 alt.on('entityEnterColshape', entityEnterColshape);
 alt.on('entityLeaveColshape', entityLeaveColshape);
 
 function entityEnterColshape(colshape, entity) {
-    if (colshape.name == undefined || colshape.name != 'CarDealer') return;
+    if (colshape === undefined || colshape.name !== 'CarDealer') return;
 
     alt.emitClient(entity, 'CarDealer:enter', entity);
 }
 
 function entityLeaveColshape(colshape, entity) {
-    if (colshape.name == undefined || colshape.name != 'CarDealer') return;
+    if (colshape === undefined || colshape.name !== 'CarDealer') return;
 
     alt.emitClient(entity, 'CarDealer:leave');
 }

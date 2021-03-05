@@ -41,38 +41,35 @@ alt.onClient('getGarageList', (player) => {
     alt.emitClient(player, 'getGarageList', garage_list);
 });
 
-alt.setTimeout(async () => {
-    if (garage_list === undefined || garage_list === null) {
-        await getGarages();
-    }
+alt.setTimeout(() => {
     for (let i = 0; i < garage_list.length; i++) {
-        let Garage = new alt.ColshapeCircle(
+        let Garage = new alt.ColshapeCylinder(
             garage_list[i].x,
             garage_list[i].y,
-            1.5
+            garage_list[i].z,
+            1.5,
+            3
         );
 
+        Garage.dimension = 1;
+        Garage.playersOnly = true;
         Garage.name = 'Garage';
     }
-}, 2500);
+}, 3000);
 
 alt.on('entityEnterColshape', entityEnterColshape);
 alt.on('entityLeaveColshape', entityLeaveColshape);
 
 function entityEnterColshape(colshape, entity) {
-    if (colshape.name === undefined) return;
+    if (colshape === undefined || colshape.name !== 'Garage') return;
 
-    if (colshape.name === 'Garage') {
-        alt.emitClient(entity, 'Garage:enter', colshape.pos);
-    }
+    alt.emitClient(entity, 'Garage:enter', colshape.pos);
 }
 
 function entityLeaveColshape(colshape, entity) {
-    if (colshape.name === undefined) return;
+    if (colshape === undefined || colshape.name !== 'Garage') return;
 
-    if (colshape.name === 'Garage') {
-        alt.emitClient(entity, 'Garage:leave');
-    }
+    alt.emitClient(entity, 'Garage:leave');
 }
 
 alt.onClient('garage:SpawnVehicle', spawnVehicle);

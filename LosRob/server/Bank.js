@@ -32,9 +32,6 @@ alt.onClient('getRobPlaces', (player) => {
 });
 
 alt.setTimeout(async () => {
-    if (rob_list === undefined || rob_list === null) {
-        await getRobPlaces();
-    }
     for (let i = 0; i < rob_list.length; i++) {
         let Bank = new alt.ColshapeCylinder(
             rob_list[i].x,
@@ -44,6 +41,8 @@ alt.setTimeout(async () => {
             3
         );
 
+        Bank.dimension = 1;
+        Bank.playersOnly = true;
         Bank.name = 'Bank';
     }
 }, 2500);
@@ -52,13 +51,13 @@ alt.on('entityEnterColshape', entityEnterColshape);
 alt.on('entityLeaveColshape', entityLeaveColshape);
 
 function entityEnterColshape(colshape, entity) {
-    if (colshape.name == undefined || colshape.name != 'Bank') return;
+    if (colshape === undefined || colshape.name !== 'Bank') return;
 
     alt.emitClient(entity, 'bank:RobEnter', entity);
 }
 
 function entityLeaveColshape(colshape, entity) {
-    if (colshape.name == undefined || colshape.name != 'Bank') return;
+    if (colshape === undefined || colshape.name !== 'Bank') return;
 
     alt.emitClient(entity, 'bank:RobLeave', entity);
 }
