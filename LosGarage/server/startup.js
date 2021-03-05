@@ -1,17 +1,8 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import mysql from 'mysql2';
 import * as http from 'http';
-
-let pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'keiner',
-    password: 'qS*qD7tc@cv#aJtu',
-    database: 'altv',
-    waitForConnections: true,
-    connectionLimit: 150,
-    queueLimit: 0,
-});
+import MongoClient from 'mongodb';
+let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
 let garage_list;
 getGarages();
@@ -74,7 +65,7 @@ function entityLeaveColshape(colshape, entity) {
 
 alt.onClient('garage:SpawnVehicle', spawnVehicle);
 
-async function spawnVehicle(player, data) {
+function spawnVehicle(player, data) {
     try {
         if (!data[0].parking) {
             return;
@@ -89,8 +80,10 @@ async function spawnVehicle(player, data) {
         garage_list.some(item => {
             if (item.x === data[1].x) {
                 if (item.y === data[1].y) {
+                    let carHash = alt.hash(data[0].name);
+
                     vehicle = new alt.Vehicle(
-                        data[0].name,
+                        carHash,
                         item.parkslot.pos.x,
                         item.parkslot.pos.y,
                         item.parkslot.pos.z,
@@ -98,6 +91,7 @@ async function spawnVehicle(player, data) {
                         item.parkslot.rot.y,
                         item.parkslot.rot.z
                     );
+                    vehicle.dimension = 1;
                 }
             }
         })
@@ -105,15 +99,15 @@ async function spawnVehicle(player, data) {
 
         vehicle.setSyncedMeta('tank', data[0].tank);
         vehicle.setSyncedMeta('engine', false);
-        vehicle.setSyncedMeta('vehicleLock', 1);
+        vehicle.lockState = 1;
         vehicle.numberPlateText = data[0].numberplate;
         vehicle.dirtLevel = data[0].dirtLevel;
 
-        await applyOpticTunings(data[0], vehicle);
-        await applyPeformaceTunings(data[0], vehicle);
-        await applyDamage(data[0], vehicle);
+        applyOpticTunings(data[0], vehicle);
+        applyPeformaceTunings(data[0], vehicle);
+        applyDamage(data[0], vehicle);
 
-        await setVehicleStatus(player, data[0].hash, false);
+        setVehicleStatus(player, data[0].hash, false);
 
         alt.emitClient(player, 'setPedIntoVehicle', vehicle);
         getGarage(player);
@@ -182,14 +176,12 @@ function removeVehicle(player) {
     try {
         let vehicle = player.getStreamSyncedMeta('lastVehicle');
         if (vehicle && vehicle.valid && vehicle.numberPlateText !== "ADMIN") {
-            pool.getConnection(function (err, conn) {
+            MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
                 if (err) throw err;
-                conn.execute(
-                    'SELECT garage FROM `character` WHERE socialId=?',
-                    [player.socialId],
-                    function (err, garageData, fields) {
-                        if (err) throw err;
-                        let garage = JSON.parse(garageData[0]["garage"]);
+                let database = db.db('altv');
+                database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+                    if (err) throw err;
+                    let garage = result.garage;
                         for (let i = 0; i < garage.length; i++) {
                             if (garage[i].hash === vehicle.model) {
                                 garage[i].tank = vehicle.getSyncedMeta('tank');
@@ -220,19 +212,13 @@ function removeVehicle(player) {
                                 garage[i].tuning.peformance.turbo = vehicle.getMod(18);
                             }
                         }
-                        conn.execute(
-                            'UPDATE `character` SET garage=? WHERE socialId=?',
-                            [JSON.stringify(garage), player.socialId],
-                            function (err, res, fields) {
-                                if (err) throw err;
-                                vehicle.destroy();
-                                player.deleteStreamSyncedMeta('lastVehicle');
-                                getGarage(player);
-                            }
-                        );
-                    }
-                );
-                pool.releaseConnection(conn);
+                        database.collection('accounts').updateOne({ socialclub: player.socialID }, { $set: { garage: garage }}, function (err, result) {
+                            if (err) throw err;
+                            vehicle.destroy();
+                            player.deleteStreamSyncedMeta('lastVehicle');
+                            getGarage(player);
+                        });
+                });
             });
         } else if (vehicle && vehicle.valid && vehicle.numberPlateText === "ADMIN") {
             vehicle.destroy();
@@ -246,78 +232,54 @@ function removeVehicle(player) {
 alt.onClient('getGarage', getGarage);
 
 function getGarage(player) {
-    pool.getConnection(function (err, conn) {
+    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
         if (err) throw err;
-        conn.execute(
-            'SELECT garage FROM `character` WHERE socialId=?',
-            [player.socialId],
-            function (err, data, fields) {
-                if (err) throw err;
-                if (data[0] === undefined) {
-                    pool.releaseConnection(conn);
-                    return;
-                }
-                let garage = JSON.parse(data[0]["garage"]);
-                alt.emitClient(player, 'getGarage', garage);
-            }
-        );
-        pool.releaseConnection(conn);
+        let database = db.db('altv');
+        database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+            if (err) throw err;
+            alt.emitClient(player, 'getGarage', result.garage);
+        });
     });
 }
 
 function setVehicleStatus(player, hash, status) {
-    pool.getConnection(function (err, conn) {
+    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
         if (err) throw err;
-        conn.execute(
-            'SELECT garage FROM `character` WHERE socialId=?',
-            [player.socialId],
-            function (err, data, fields) {
+        let database = db.db('altv');
+        database.collection('accounts').findOne({ socialclub: player.socialID }, function(err, result) {
+            if (err) throw err;
+            let garage = result.garage;
+            garage.some(item => {
+                if (item.hash === hash) {
+                    item.parking = status;
+                }
+            });
+            database.collection('accounts').updateOne({ socialclub: player.socialID }, { $set: { garage: garage }}, function (err, result) {
                 if (err) throw err;
-                let garage = JSON.parse(data[0]["garage"]);
-                garage.some(item => {
-                    if (item.hash === hash) {
-                        item.parking = status;
-                    }
-                });
-                conn.execute(
-                    'UPDATE `character` SET garage=? WHERE socialId=?',
-                    [JSON.stringify(garage), player.socialId],
-                    function (err, res, fields) {
-                        if (err) throw err;
-                    }
-                );
-            }
-        );
-        pool.releaseConnection(conn);
+            });
+        });
     });
 }
 
 alt.on('resourceStart', resourceStart);
 
 function resourceStart() {
-    pool.getConnection(function (err, conn) {
+    MongoClient.connect(url,  {useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
         if (err) throw err;
-        conn.execute(
-            'SELECT garage, socialId FROM `character`',
-            function (err, res, fields) {
-                if (err) throw err;
-                for (let i = 0; i < res.length; i++) {
-                    let garage = JSON.parse(res[i]["garage"]);
-                    garage.some(item => {
-                        if (item.parking === false) {
-                            item.parking = true;
-                        }
-                    });
-                    conn.execute(
-                        'UPDATE `character` SET garage=? WHERE socialId=?',
-                        [JSON.stringify(garage), res[i]["socialId"]],
-                        function (err, res, fields) {
-                            if (err) throw err;
-                        }
-                    );
-                }
+        let database = db.db('altv');
+        database.collection('accounts').find({}).toArray(function(err, result) {
+            if (err) throw err;
+            for (let i = 0; i < result.length; i++) {
+                let garage = result[i].garage;
+                garage.some(item => {
+                    if (item.parking === false) {
+                        item.parking = true;
+                    }
+                });
+                database.collection('accounts').updateOne({ socialclub: result[i].socialclub }, { $set: { garage: garage }}, function (err, result) {
+                    if (err) throw err;
+                });
             }
-        );
-        pool.releaseConnection(conn);
+        });
     });
 }
