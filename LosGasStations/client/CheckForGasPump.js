@@ -131,7 +131,7 @@ alt.on('keyup', (key) => {
                                 } else {
                                     filling = false;
                                     alt.clearInterval(tank);
-                                    return;
+
                                 }
                             }, 2000);
                         }
