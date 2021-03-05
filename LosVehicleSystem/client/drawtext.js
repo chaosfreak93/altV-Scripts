@@ -25,6 +25,7 @@ function _leaveVeh() {
     alt.clearEveryTick(_engine);
     alt.clearInterval(_Tank);
     alt.clearEveryTick(_display);
+    native.displayRadar(false);
 }
 
 alt.onServer('getTank', (tank) => {
@@ -36,6 +37,7 @@ alt.onServer('isEngineRunning', (engineOn) => {
 });
 
 function _enterVeh(Vehicle) {
+    native.displayRadar(true);
     _getTank = alt.everyTick(() => {
         if (Vehicle !== null && Vehicle.valid) {
             alt.emitServer('getTank', Vehicle);
