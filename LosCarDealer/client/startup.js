@@ -72,7 +72,7 @@ menu.AddItem(new NativeUI.UIMenuListItem(
 menu.AddItem(new NativeUI.UIMenuListItem(
     "Sports Classic",
     "Sport Classic Category",
-    new NativeUI.ItemsCollection(["Ardent", "BType", "BType2", "BType3", "Casco", "Cheetah2", "Coquette2", "Dynasty", "Fagaloa", "Feltzer3", "GT500", "Infernus2", "JB7002", "Mamba", "Manana", "Manana2", "Michelli", "Monroe", "Nebula", "Peyote", "Peyote3", "Pigalle", "RapidGT3", "Retinue", "Retinue2", "Savestra", "Stinger", "StingerGT", "Swinger", "Torero", "Tornado", "Tornado2", "Tornado3", "Tornado4", "Tornado5", "Tornado6", "Turismo2", "Viseris", "Z190", "ZType", "Zion3", "Cheburek"])
+    new NativeUI.ItemsCollection(["BType", "BType2", "BType3", "Casco", "Cheetah2", "Coquette2", "Dynasty", "Fagaloa", "Feltzer3", "GT500", "Infernus2", "JB7002", "Mamba", "Manana", "Manana2", "Michelli", "Monroe", "Nebula", "Peyote", "Peyote3", "Pigalle", "RapidGT3", "Retinue", "Retinue2", "Savestra", "Stinger", "StingerGT", "Swinger", "Torero", "Tornado", "Tornado2", "Tornado3", "Tornado4", "Tornado5", "Tornado6", "Turismo2", "Viseris", "Z190", "ZType", "Zion3", "Cheburek"])
 ));
 menu.AddItem(new NativeUI.UIMenuListItem(
     "Super Sport",
