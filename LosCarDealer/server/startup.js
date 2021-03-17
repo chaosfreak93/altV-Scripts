@@ -41,7 +41,7 @@ alt.onClient('CarDealer:buyCar', (player, carName) => {
         vehicle.dimension = 1;
         player.setStreamSyncedMeta('lastVehicle', vehicle);
 
-        vehicle.setSyncedMeta('tank', 100);
+        vehicle.setStreamSyncedMeta('tank', 100);
         vehicle.setSyncedMeta('engine', false);
         vehicle.lockState = 1;
         let numberPlate = makeNumberPlate(8);

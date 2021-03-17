@@ -13,6 +13,7 @@ alt.everyTick(() => {
     let closestPropGasPump1C = native.getClosestObjectOfType(localPlayer.pos.x, localPlayer.pos.y, localPlayer.pos.z, 2, alt.hash("prop_gas_pump_1c"), false, true, true);
     let closestPropGasPump1D = native.getClosestObjectOfType(localPlayer.pos.x, localPlayer.pos.y, localPlayer.pos.z, 2, alt.hash("prop_gas_pump_1d"), false, true, true);
     let closestPropGasPumpOld2 = native.getClosestObjectOfType(localPlayer.pos.x, localPlayer.pos.y, localPlayer.pos.z, 2, alt.hash("prop_gas_pump_old2"), false, true, true);
+
     if (closestPropGasPump1A) {
         let gasPatrolPos = native.getEntityCoords(closestPropGasPump1A, true);
 
@@ -118,7 +119,7 @@ alt.on('keyup', (key) => {
                         if (alt.Player.local.scriptID === driver) {
                             let tank = alt.setInterval(() => {
                                 if (found) {
-                                    let currentTank = alt.Player.local.vehicle.getSyncedMeta('tank');
+                                    let currentTank = alt.Player.local.vehicle.getStreamSyncedMeta('tank');
                                     let nextTank = currentTank + 5;
                                     if (nextTank >= 100) {
                                         alt.emitServer('setTank', alt.Player.local.vehicle, 100);
