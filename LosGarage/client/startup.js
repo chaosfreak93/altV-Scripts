@@ -2,7 +2,7 @@
 /// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
 import * as native from 'natives';
-import * as NativeUI from '../includes/NativeUI/NativeUI';
+import * as NativeUI from '@LosAssets/content/NativeUI/NativeUI';
 
 const garage_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/garage.json'));
 
@@ -32,10 +32,8 @@ mainMenu.AddItem(new NativeUI.UIMenuItem(
 
 mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 
-alt.onServer('Garage:enter', async (colshapePos) => {
-    await promisify(() => {
-        alt.emitServer('getGarage');
-    });
+alt.onServer('Garage:enter', (colshapePos) => {
+    alt.emitServer('getGarage');
     mainMenu.Open();
     garageMenu.Clear();
     garageMenu.CleanUp();
@@ -90,5 +88,5 @@ alt.onServer('setPedIntoVehicle', async (vehicle) => {
 });
 
 alt.onServer('getGarage', (garage) => {
-    garageContent = garage;
+    garageContent = JSON.parse(garage);
 })

@@ -2,7 +2,7 @@
 /// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
 import * as native from 'natives';
-import * as NativeUI from '../includes/NativeUI/NativeUI';
+import * as NativeUI from '@LosAssets/content/NativeUI/NativeUI';
 
 alt.everyTick(() => {
     native.drawMarker(
@@ -88,7 +88,7 @@ menu.AddItem(new NativeUI.UIMenuListItem(
 alt.onServer('CarDealer:enter', CarDealerEnter);
 alt.onServer('CarDealer:leave', CarDealerLeave);
 
-function CarDealerEnter(player) {
+function CarDealerEnter() {
     menu.Open();
 }
 
