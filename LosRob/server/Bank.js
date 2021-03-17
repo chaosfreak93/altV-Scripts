@@ -1,72 +1,38 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-import money from 'LosMoney';
-import * as http from 'http';
+//import money from 'LosMoney';
 
-let rob_list;
-getRobPlaces();
+const rob_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/rob_list.json'));
 
-function getRobPlaces() {
+for (let i = 0; i < rob_list.length; i++) {
+    let Bank = new alt.ColshapeCylinder(
+        rob_list[i].x,
+        rob_list[i].y,
+        rob_list[i].z,
+        1.5,
+        3
+    );
 
-    let url = "http://127.0.0.1/altv/rob_list.json";
-
-    http.get(url, (res) => {
-        let body = "";
-
-        res.on("data", (chunk) => {
-            body += chunk;
-        });
-
-        res.on("end", () => {
-            return rob_list = JSON.parse(body);
-        });
-
-    }).on("error", (error) => {
-        console.error(error.message);
-        return null;
-    });
+    Bank.dimension = 1;
+    Bank.playersOnly = true;
+    Bank.name = 'Bank';
 }
 
-alt.onClient('getRobPlaces', (player) => {
-    alt.emitClient(player, 'getRobPlaces', rob_list);
-});
-
-alt.setTimeout(async () => {
-    for (let i = 0; i < rob_list.length; i++) {
-        let Bank = new alt.ColshapeCylinder(
-            rob_list[i].x,
-            rob_list[i].y,
-            rob_list[i].z,
-            1.5,
-            3
-        );
-
-        Bank.dimension = 1;
-        Bank.playersOnly = true;
-        Bank.name = 'Bank';
-    }
-}, 2500);
-
-alt.on('entityEnterColshape', entityEnterColshape);
-alt.on('entityLeaveColshape', entityLeaveColshape);
-
-function entityEnterColshape(colshape, entity) {
+alt.on('entityEnterColshape', (colshape, entity) => {
     if (colshape === undefined || colshape.name !== 'Bank') return;
 
     alt.emitClient(entity, 'bank:RobEnter', entity);
-}
+});
 
-function entityLeaveColshape(colshape, entity) {
+alt.on('entityLeaveColshape', (colshape, entity) => {
     if (colshape === undefined || colshape.name !== 'Bank') return;
 
     alt.emitClient(entity, 'bank:RobLeave', entity);
-}
+});
 
-alt.onClient('successRob', successRob);
-
-function successRob(player) {
-    money.api.addMoneyToHand(player, 5000);
-}
+alt.onClient('successRob', (player) => {
+    //money.api.addMoneyToHand(player, 5000);
+});
 
 alt.onClient('ServerDoorControl', (player, hashKey, posX, posY, posZ, state, rotX, rotY, rotZ) => {
     alt.emitClient(null, 'ClientDoorControl', hashKey, posX, posY, posZ, state, rotX, rotY, rotZ);

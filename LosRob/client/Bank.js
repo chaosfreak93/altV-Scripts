@@ -3,21 +3,11 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 
-let rob_list;
-
-alt.emitServer('getRobPlaces');
-
-alt.onServer('getRobPlaces', (robs) => {
-    rob_list = robs;
-});
+const rob_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/rob_list.json'));
 
 let ready = false;
 
 alt.everyTick(() => {
-    if (rob_list === undefined) {
-        rob_list = alt.emitServer('getRobPlaces');
-        return;
-    }
     for (let i = 0; i < rob_list.length; i++) {
         native.drawMarker(
             29,
@@ -48,32 +38,25 @@ alt.everyTick(() => {
     }
 });
 
-alt.setTimeout(() => {
-    for (let i = 0; i < rob_list.length; i++) {
-        if (rob_list[i].door != null) {
-            alt.emitServer('ServerDoorControl', alt.hash(rob_list[i].door.hash), rob_list[i].door.x, rob_list[i].door.y, rob_list[i].door.z, true, 0, 0, 0);
-        }
+for (let i = 0; i < rob_list.length; i++) {
+    if (rob_list[i].door != null) {
+        alt.emitServer('ServerDoorControl', alt.hash(rob_list[i].door.hash), rob_list[i].door.x, rob_list[i].door.y, rob_list[i].door.z, true, 0, 0, 0);
     }
-}, 500);
+}
 
-alt.on('keyup', keyup);
-
-function keyup(key) {
+alt.on('keyup', (key) => {
     if (key === 69 && alt.gameControlsEnabled() && ready) {
         alt.emit("HackingGame:Start", "_keiner_", 2, 30, 150);
     }
-}
+});
 
-alt.onServer('bank:RobEnter', bankRobEnter);
-alt.onServer('bank:RobLeave', bankRobLeave);
-
-function bankRobEnter() {
+alt.onServer('bank:RobEnter', () => {
     ready = true;
-}
+});
 
-function bankRobLeave() {
+alt.onServer('bank:RobLeave', () => {
     ready = false;
-}
+});
 
 alt.on("HackingGame:Result", (result) => {
     ready = false;
