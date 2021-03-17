@@ -1,1 +1,2 @@
 import './MapBlips';
+import "./Interiors";
