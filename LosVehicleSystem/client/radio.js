@@ -50,12 +50,10 @@ alt.onServer('playerLeftVehicle', (vehicle, seat) => {
 
 alt.onServer('radio:AddStation', station => {
     if (mounted) {
-        browser.emit('addRadioStation', station);
+        browser.emit('addRadioStation', JSON.parse(station));
     } else {
-        stationsQueue.push(station);
+        stationsQueue.push(JSON.parse(station));
     }
-
-    alt.log(JSON.stringify(station));
 });
 
 // TODO: Fix sync with other vehicle occupants
