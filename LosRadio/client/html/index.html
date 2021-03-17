@@ -8,8 +8,9 @@
 </head>
 <body>
 <div id="app">
-    <input placeholder="edit me" v-model="message">
-    <p>Message is: {{ message }}</p>
+    <input type="number" min="1" max="100" v-model="channel" placeholder="Channel (1-100Mhz)" />
+    <button v-on:click="joinChannel">Join Channel</button>
+    <button v-on:click="leaveChannel">Leave Channel</button>
 </div>
 <script src="js/vue.min.js"></script>
 <script src="js/less.min.js"></script>
