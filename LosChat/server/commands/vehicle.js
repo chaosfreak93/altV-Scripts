@@ -15,10 +15,10 @@ function handleAddVehicle(player, args) {
         return;
     }
 
-    if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
+    /**if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
         player.getStreamSyncedMeta('lastVehicle').destroy();
         player.deleteStreamSyncedMeta('lastVehicle');
-    }
+    }**/
 
     const vehicleName = args[0];
     const vehicleHash = alt.hash(args[0]);
