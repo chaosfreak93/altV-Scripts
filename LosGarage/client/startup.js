@@ -4,24 +4,16 @@ import * as alt from 'alt-client';
 import * as native from 'natives';
 import * as NativeUI from '../includes/NativeUI/NativeUI';
 
-let rob_list;
+const garage_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/garage.json'));
 
-alt.emitServer('getGarageList');
-
-alt.onServer('getGarageList', (robs) => {
-    rob_list = robs;
-});
-
-alt.setTimeout(async () => {
-    for (let i = 0; i < rob_list.length; i++) {
-        let garage = new alt.PointBlip(rob_list[i].x, rob_list[i].y, rob_list[i].z);
-        garage.sprite = 357;
-        garage.color = 37;
-        garage.display = 2;
-        garage.shortRange = true;
-        garage.name = 'Garage';
-    }
-}, 2500);
+for (let i = 0; i < garage_list.length; i++) {
+    let garage = new alt.PointBlip(garage_list[i].x, garage_list[i].y, garage_list[i].z);
+    garage.sprite = 357;
+    garage.color = 37;
+    garage.display = 2;
+    garage.shortRange = true;
+    garage.name = 'Garage';
+}
 
 let garageContent = null;
 alt.emitServer('getGarage');
@@ -40,11 +32,10 @@ mainMenu.AddItem(new NativeUI.UIMenuItem(
 
 mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 
-alt.onServer('Garage:enter', CarDealerEnter);
-alt.onServer('Garage:leave', CarDealerLeave);
-
-async function CarDealerEnter(colshapePos) {
-    await alt.emitServer('getGarage');
+alt.onServer('Garage:enter', async (colshapePos) => {
+    await promisify(() => {
+        alt.emitServer('getGarage');
+    });
     mainMenu.Open();
     garageMenu.Clear();
     garageMenu.CleanUp();
@@ -56,15 +47,15 @@ async function CarDealerEnter(colshapePos) {
             [garageContent[i], colshapePos]
         ));
     }
-}
+});
 
-function CarDealerLeave() {
+alt.onServer('Garage:leave', () => {
     garageMenu.Close();
     garageMenu.Clear();
     garageMenu.CleanUp();
     mainMenu.Close();
     alt.emitServer('getGarage');
-}
+});
 
 mainMenu.ItemSelect.on((item, index) => {
     if (index === 1) {
