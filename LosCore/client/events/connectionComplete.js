@@ -42,7 +42,7 @@ alt.on('connectionComplete', () => {
     alt.toggleGameControls(false);
 
     native.setCamActive(cam, true);
-    native.renderScriptCams(true, true, 16.6667, false, false);
+    native.renderScriptCams(true, true, 16.6667, false, false, 0);
 
     native.loadScene(rootPos.x, rootPos.y, rootPos.z);
 
@@ -58,7 +58,7 @@ alt.on('connectionComplete', () => {
         if (loggedIn) {
             alt.clearInterval(interval);
 
-            native.renderScriptCams(false, false, 0, true, false);
+            native.renderScriptCams(false, false, 0, true, false, 0);
 
             native.destroyCam(cam, true);
 
@@ -87,10 +87,12 @@ alt.on('connectionComplete', () => {
 });
 
 alt.everyTick(() => {
-    native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
+    native.drawRect(0, 0, 0, 0, 0, 0, 0, 0, 0);
     native.setPedConfigFlag(alt.Player.local.scriptID, 184, true);
     //native.setPedConfigFlag(alt.Player.local.scriptID, 33, true);
     native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+    native.invalidateIdleCam();
+    native.invalidateVehicleIdleCam();
 });
 
 alt.onServer('loginFinished', () => {
@@ -98,20 +100,14 @@ alt.onServer('loginFinished', () => {
     native.setEntityCoords(alt.Player.local.scriptID, rootPos.x, rootPos.y, rootPos.z + 10, 0, 0, 0, false);
     native.switchOutPlayer(alt.Player.local.scriptID, 0, 1);
 
-    //Disable Idle Cam
-    alt.setInterval(() => {
-        native.invalidateIdleCam();
-        native.invalidateVehicleIdleCam();
-    }, 20000);
-
     // Ambient Sounds
     native.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
     native.cancelCurrentPoliceReport();
-    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_GENERAL", 1, 0);
-    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_WARNING", 1, 0);
-    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_ALARM", 1, 0);
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_GENERAL", 1);
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_WARNING", 1);
+    native.clearAmbientZoneState("AZ_COUNTRYSIDE_PRISON_01_ANNOUNCER_ALARM", 1);
     native.setAmbientZoneState(0, 0, 0);
-    native.clearAmbientZoneState("AZ_DISTANT_SASQUATCH", 0, 0);
+    native.clearAmbientZoneState("AZ_DISTANT_SASQUATCH", 0);
     native.setAudioFlag("LoadMPData", true);
     native.setAudioFlag("DisableFlightMusic", true);
     alt.setStat('stamina', 100);

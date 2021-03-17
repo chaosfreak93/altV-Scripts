@@ -33,7 +33,7 @@ async function handleMainRedirect(req, res) {
     authParams.append(`scope`, `identify`);
     authParams.append(`redirect_uri`, `http://${process.env['REDIRECT_IP']}:7790/authenticate`);
 
-    request = await axios.post(`https://discordapp.com/api/oauth2/token`, authParams, {
+    request = await axios.post(`https://discord.com/api/oauth2/token`, authParams, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
@@ -43,7 +43,7 @@ async function handleMainRedirect(req, res) {
     }
 
     const discordData = { ...request.data };
-    request = await axios.get(`https://discordapp.com/api/users/@me`, {
+    request = await axios.get(`https://discord.com/api/users/@me`, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `${discordData.token_type} ${discordData.access_token}`,
