@@ -1,3 +1,4 @@
+/// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
 
 alt.Player.prototype.send = function send(msg) {
