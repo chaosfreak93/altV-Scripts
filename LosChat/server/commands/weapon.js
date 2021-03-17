@@ -1,5 +1,8 @@
+/// <reference types="@altv/types-server" />
+import * as alt from 'alt-server';
 import {registerCmd} from '../systems/chat.js';
-import {HASH_BY_NAME} from '../gamedata/weapons';
+
+const HASH_BY_NAME = JSON.parse(alt.File.read('@LosAssets/content/data/weapon/HASH_BY_NAME.json'));
 
 registerCmd('weapon', '/weapon <name> | Summon a weapon by name.', summonWeapon);
 registerCmd('wep', '/wep <name> | Summon a weapon by name.', summonWeapon);
