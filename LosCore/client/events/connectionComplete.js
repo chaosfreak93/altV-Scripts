@@ -38,18 +38,13 @@ const getPointAtPoint = (pos, angle) => {
 let angle = 0;
 let loggedIn = false;
 
-alt.on('connectionComplete', connectionComplete);
-
-function connectionComplete() {
+alt.on('connectionComplete', () => {
+    alt.toggleGameControls(false);
 
     native.setCamActive(cam, true);
     native.renderScriptCams(true, true, 16.6667, false, false);
 
-    native.newLoadSceneStartSphere(rootPos.x, rootPos.y, rootPos.z, 500, 0);
-
-    alt.everyTick(() => {
-        native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
-    });
+    native.loadScene(rootPos.x, rootPos.y, rootPos.z);
 
     const interval = alt.setInterval(() => {
         const np = rootPos;
@@ -75,19 +70,28 @@ function connectionComplete() {
             native.displayHud(true);
             native.displayRadar(false);
         }
-    }, 16.666667);
+    }, 16.6667);
 
     native.displayRadar(false);
     native.displayHud(false);
 
     //Weather and Time Sync
-    native.pauseClock(true);
+    alt.setMsPerGameMinute(60000);
+    alt.setWeatherCycle([0], [25]);
+    //alt.setWeatherCycle([0, 1, 3, 4, 5, 6, 8, 9], [10, 10, 15, 15, 20, 20, 25, 25]);
     alt.setWeatherSyncActive(true);
 
     alt.nextTick(() => {
         alt.emitServer('discord:BeginAuth', alt.Player.local);
     });
-}
+});
+
+alt.everyTick(() => {
+    native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
+    native.setPedConfigFlag(alt.Player.local.scriptID, 184, true);
+    //native.setPedConfigFlag(alt.Player.local.scriptID, 33, true);
+    native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+});
 
 alt.onServer('loginFinished', () => {
     native.freezeEntityPosition(alt.Player.local.scriptID, true);
@@ -97,13 +101,8 @@ alt.onServer('loginFinished', () => {
     //Disable Idle Cam
     alt.setInterval(() => {
         native.invalidateIdleCam();
-        native._0x9E4CFFF989258472();
+        native.invalidateVehicleIdleCam();
     }, 20000);
-
-    //Vehicle System
-    alt.everyTick(() => {
-        native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
-    });
 
     // Ambient Sounds
     native.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
