@@ -3,34 +3,6 @@ import * as alt from 'alt-server';
 import MongoClient from 'mongodb';
 let url = "mongodb://keiner:Gommekiller93@127.0.0.1:27017/";
 
-const garage_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/garage.json'));
-
-for (let i = 0; i < garage_list.length; i++) {
-    let Garage = new alt.ColshapeCylinder(
-        garage_list[i].x,
-        garage_list[i].y,
-        garage_list[i].z,
-        1.5,
-        3
-    );
-
-    Garage.dimension = 1;
-    Garage.playersOnly = true;
-    Garage.name = 'Garage';
-}
-
-alt.on('entityEnterColshape', (colshape, entity) => {
-    if (colshape === undefined || colshape.name !== 'Garage') return;
-
-    alt.emitClient(entity, 'Garage:enter', colshape.pos);
-});
-
-alt.on('entityLeaveColshape', (colshape, entity) => {
-    if (colshape === undefined || colshape.name !== 'Garage') return;
-
-    alt.emitClient(entity, 'Garage:leave');
-});
-
 alt.onClient('garage:SpawnVehicle', (player, data) => {
     try {
         if (!data[0].parking) {
@@ -193,7 +165,9 @@ alt.onClient('garage:RemoveVehicle', (player) => {
     }
 });
 
-alt.onClient('getGarage', (player) => {
+alt.onClient('getGarage', getGarage);
+
+function getGarage(player) {
     if (player.getSyncedMeta('loggedIn')) {
         MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
             if (err) throw err;
@@ -204,7 +178,7 @@ alt.onClient('getGarage', (player) => {
             });
         });
     }
-});
+}
 
 function setVehicleStatus(player, hash, status) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
