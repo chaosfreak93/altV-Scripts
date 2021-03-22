@@ -101,5 +101,5 @@ function drawText2d(msg, x, y, scale, r, g, b, a) {
     native.setTextColour(r, g, b, a);
     native.setTextOutline();
     native.setTextDropShadow();
-    native.endTextCommandDisplayText(x, y);
+    native.endTextCommandDisplayText(x, y, 0);
 }

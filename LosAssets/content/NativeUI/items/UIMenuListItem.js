@@ -1,3 +1,4 @@
+/// <reference types="@altv/types-client" />
 import Font from "@LosAssets/content/NativeUI/enums/Font";
 import Alignment from "@LosAssets/content/NativeUI/enums/Alignment";
 import ItemsCollection from "@LosAssets/content/NativeUI/modules/ItemsCollection";

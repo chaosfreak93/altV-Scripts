@@ -175,7 +175,7 @@ class HackingGame {
                     case 86:
                         this.Timer = natives.getGameTimer() + 2000;
                         this.Action = TimerAction.Remove;
-                        natives.playSoundFrontend(-1, "HACKING_SUCCESS", 0, 1);
+                        natives.playSoundFrontend(-1, "HACKING_SUCCESS", undefined, 1);
                         natives.beginScaleformMovieMethod(this.ScaleForm, "SET_ROULETTE_OUTCOME");
                         natives.scaleformMovieMethodAddParamBool(true);
                         this._ScaleformPushString("Successful Hacked");
@@ -184,13 +184,13 @@ class HackingGame {
 
                     // Player failed one of the columns (our job to find if they completely failed)
                     case 87:
-                        natives.playSoundFrontend(-1, "HACKING_CLICK_BAD", 0, 1);
+                        natives.playSoundFrontend(-1, "HACKING_CLICK_BAD", undefined, 1);
                         this.Lives--;
                         if (this.Lives <= 0) {
                             this.Timer = natives.getGameTimer() + 2000;
                             this.Action = TimerAction.Kill;
                             this._ScaleformRemove();
-                            natives.playAmbientSpeech1(alt.Player.local.scriptID, "GENERIC_CURSE_HIGH", "SPEECH_PARAMS_FORCE_FRONTEND", 1);
+                            natives.playPedAmbientSpeechNative(alt.Player.local.scriptID, "GENERIC_CURSE_HIGH", "SPEECH_PARAMS_FORCE_FRONTEND", 1);
                         } else {
                             this.Timer = natives.getGameTimer() + 500;
                             this.Action = TimerAction.Reset;
@@ -201,7 +201,7 @@ class HackingGame {
 
                     // Properly hit character
                     case 92:
-                        natives.playSoundFrontend(-1, "HACKING_CLICK", 0, 1);
+                        natives.playSoundFrontend(-1, "HACKING_CLICK", undefined, 1);
                         break;
 
                 }
@@ -272,7 +272,7 @@ class HackingGame {
      */
     _ScaleformCheckInput(first, second, input) {
         if (natives.isControlJustPressed(2, first) || natives.isControlJustPressed(2, second)) {
-            natives.playSoundFrontend(-1, "HACKING_MOVE_CURSOR", 0, 1);
+            natives.playSoundFrontend(-1, "HACKING_MOVE_CURSOR", undefined, 1);
             natives.beginScaleformMovieMethod(this.ScaleForm, "SET_INPUT_EVENT");
             natives.scaleformMovieMethodAddParamInt(input);
             natives.endScaleformMovieMethod();

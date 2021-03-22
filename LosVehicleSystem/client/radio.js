@@ -93,7 +93,7 @@ alt.everyTick(() => {
 
 alt.on('keydown', key => {
     if (key == 81 && browser) {
-        const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1);
+        const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1, false);
         if (pedInSeat !== player.scriptID) return;
 
         browser.focus();
@@ -103,7 +103,7 @@ alt.on('keydown', key => {
 
 alt.on('keyup', key => {
     if (key == 81 && browser) {
-        const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1);
+        const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1, false);
         if (pedInSeat !== player.scriptID) return;
 
         browser.unfocus();

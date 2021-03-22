@@ -1,3 +1,5 @@
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
 import * as native from 'natives';
 import Point from "@LosAssets/content/NativeUI/utils/Point";
 import Size from "@LosAssets/content/NativeUI/utils/Size";

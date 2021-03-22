@@ -183,6 +183,6 @@ function drawText3d(msg, x, y, z, scale, r, g, b, a) {
     native.setTextColour(r, g, b, a);
     native.setTextOutline();
     native.setTextDropShadow();
-    native.endTextCommandDisplayText(0, 0);
+    native.endTextCommandDisplayText(0, 0, 0);
     native.clearDrawOrigin();
 }

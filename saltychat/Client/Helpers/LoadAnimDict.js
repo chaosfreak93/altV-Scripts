@@ -1,3 +1,5 @@
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
 import { doesAnimDictExist, hasAnimDictLoaded, requestAnimDict } from "natives";
 import { setInterval, clearInterval } from "alt-client";
 export function loadAnimDict(animDict) {

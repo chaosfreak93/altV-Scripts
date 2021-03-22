@@ -18,8 +18,11 @@ for (let i = 0; i < garage_list.length; i++) {
 let garageContent = null;
 alt.emitServer('getGarage');
 
+let banner = new NativeUI.ResRectangle(new NativeUI.Point(0, 0), new NativeUI.Size(0, 0), new NativeUI.Color(0, 0, 175, 255));
 const mainMenu = new NativeUI.Menu('Garage', 'Was willst du tun?', new NativeUI.Point(50, 50));
+mainMenu.SetRectangleBannerType(banner);
 const garageMenu = new NativeUI.Menu('Garage', 'Wähle ein Auto aus.', new NativeUI.Point(50, 50));
+garageMenu.SetRectangleBannerType(banner);
 const getOutVehicel = new NativeUI.UIMenuItem(
     "Ausparken",
     "Parke ein Auto aus"
@@ -63,7 +66,7 @@ mainMenu.ItemSelect.on((item, index) => {
 
 garageMenu.ItemSelect.on((item) => {
     let data = item.Data;
-    alt.emitServer('garage:SpawnVehicle', data);
+    alt.emitServer('garage:SpawnVehicle', JSON.stringify(data));
     mainMenu.Close();
     garageMenu.Close();
 });

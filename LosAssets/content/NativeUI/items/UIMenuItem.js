@@ -1,3 +1,5 @@
+/// <reference types="@altv/types-client" />
+/// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
 import BadgeStyle from "@LosAssets/content/NativeUI/enums/BadgeStyle";
 import Font from "@LosAssets/content/NativeUI/enums/Font";
