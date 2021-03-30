@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="css/all.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<title>smartphone</title>
+	</head>
+	<body>
+		<div id="smartphone">
+			<div id="head">
+				<div id="clock"></div>
+				<div id="notch"></div>
+				<div id="headInfo">
+					<i class="fas fa-battery-full" id="battery"></i>
+					<i class="fas fa-signal" id="signal"></i>
+				</div>
+			</div>
+			<div id="homeScreen">
+				<div id="apps">
+					<div class="app" id="appCalenderButton"></div>
+					<div class="app" id="appWeatherButton">
+						<i class="fas fa-cloud-sun"></i>
+					</div>
+					<div class="app" id="appRadioButton">
+						<i class="fas fa-broadcast-tower"></i>
+					</div>
+				</div>
+				<div id="fav">
+					<div class="app" id="appPhoneButton">
+						<i class="fas fa-phone"></i>
+					</div>
+					<div class="app" id="appContactsButton">
+						<i class="fas fa-address-book"></i>
+					</div>
+					<div class="app" id="appMessagesButton">
+						<i class="fas fa-comment"></i>
+					</div>
+					<div class="app" id="appSettingsButton">
+						<i class="fas fa-cogs"></i>
+					</div>
+				</div>
+			</div>
+
+			<div id="appScreen">
+				<!-- KONTAKTE -->
+				<div id="appContacts">
+					<div id="appContactsOverview">
+						<h5>Kontakte</h5>
+						<input
+							type="text"
+							id="appContactsSearch"
+							placeholder="Suche"
+						/>
+						<div id="appContactsList"></div>
+					</div>
+					<div id="appContactsEdit">
+						<div id="editContactHead">
+							<i class="fas fa-chevron-left"></i> Kontakte
+						</div>
+						<div id="editContactLetter">
+							<span></span>
+						</div>
+						<div id="editContactName"></div>
+						<div id="editContactButtons">
+							<div id="editContactCallPhone"><i class="fas fa-phone"></i></div>
+							<div id="editContactMessage"><i class="fas fa-comment"></i></div>
+							<div id="editContactDeleteButton">
+								<i class="fas fa-trash"></i>
+							</div>
+						</div>
+						<div id="editContact">
+							<input type="hidden" id="contactId" />
+							<input type="text" id="contactNewName" />
+							<input type="text" id="contactNewPhone" />
+						</div>
+					</div>
+				</div>
+				<!-- KONTAKTE END -->
+				<!-- FUNK -->
+				<div id="appRadio">
+					<div id="appRadioOverview">
+						<h5>Funk</h5>
+						<input
+							type="number"
+							id="appRadioChannel"
+							placeholder="Frequenz"
+							required
+						/>
+						<div id="appRadioJoinChannel">
+							<i class="fas fa-sign-in-alt"></i>
+						</div>
+						<div id="appRadioLeaveChannel">
+							<i class="fas fa-sign-out-alt"></i>
+						</div>
+					</div>
+				</div>
+				<!-- FUNK END -->
+			</div>
+
+			<div id="homeButton">
+				<i class="fas fa-home"></i>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>

@@ -8,7 +8,7 @@ function keyup(key) {
     if (alt.gameControlsEnabled()) {
         switch (key) {
             case 112:
-                //Mobile Phone
+                alt.emit('toggleSmartphone');
                 break;
             case 113:
                 //Inventory
