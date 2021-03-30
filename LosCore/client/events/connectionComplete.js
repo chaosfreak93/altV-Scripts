@@ -3,74 +3,17 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 
-const rootPos = {
-    x: -75,
-    y: -820,
-    z: 326
-};
-
-const cam = native.createCamWithParams('DEFAULT_SCRIPTED_CAMERA', 0, 0, 0, 0, 0, 0, 10, false, 2);
-
-const getPointAtPoint = (pos, angle) => {
-    const p = {
-        x: 0,
-        y: 0
-    };
-
-    let s = Math.sin(angle);
-    let c = Math.cos(angle);
-
-    // translate point back to origin:
-    p.x -= pos.x;
-    p.y -= pos.y;
-
-    // rotate point
-    let xnew = p.x * c - p.y * s;
-    let ynew = p.x * s + p.y * c;
-
-    // translate point back:
-    p.x = xnew + pos.x;
-    p.y = ynew + pos.y;
-
-    return p;
-};
-
-let angle = 0;
-let loggedIn = false;
+const cam = native.createCamWithParams('DEFAULT_SCRIPTED_CAMERA', 0, 0, 0, 0, 0, 0, 90, false, 2);
 
 alt.on('connectionComplete', () => {
     alt.toggleGameControls(false);
 
     native.setCamActive(cam, true);
-    native.renderScriptCams(true, true, 16.6667, false, false, 0);
+    native.renderScriptCams(true, false, 0, false, false, 0);
 
-    native.loadScene(rootPos.x, rootPos.y, rootPos.z);
-
-    const interval = alt.setInterval(() => {
-        const np = rootPos;
-        const p = getPointAtPoint(np, angle);
-
-        native.setCamCoord(cam, p.x + rootPos.x, p.y + rootPos.x, rootPos.z + 150);
-        native.pointCamAtCoord(cam, rootPos.x, rootPos.y, rootPos.z);
-
-        angle += 0.003;
-
-        if (loggedIn) {
-            alt.clearInterval(interval);
-
-            native.renderScriptCams(false, false, 0, true, false, 0);
-
-            native.destroyCam(cam, true);
-
-            native.setFollowPedCamViewMode(1);
-            native.clearFocus();
-
-            native.newLoadSceneStop();
-
-            native.displayHud(true);
-            native.displayRadar(false);
-        }
-    }, 16.6667);
+    native.loadScene(4882.25927734375, -4925.96044921875, 10.1552734375);
+    native.setCamCoord(cam, 4883.525390625, -4925.8154296875, 13.205078125);
+    native.pointCamAtCoord(cam, 4809.1123046875, -4926.8701171875, -0.2747802734375);
 
     native.displayRadar(false);
     native.displayHud(false);
@@ -89,7 +32,7 @@ alt.on('connectionComplete', () => {
 alt.everyTick(() => {
     native.drawRect(0, 0, 0, 0, 0, 0, 0, 0, 0);
     native.setPedConfigFlag(alt.Player.local.scriptID, 184, true);
-    //native.setPedConfigFlag(alt.Player.local.scriptID, 33, true);
+    native.setPedConfigFlag(alt.Player.local.scriptID, 423, true);
     native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
     native.invalidateIdleCam();
     native.invalidateVehicleIdleCam();
@@ -97,7 +40,7 @@ alt.everyTick(() => {
 
 alt.onServer('loginFinished', () => {
     native.freezeEntityPosition(alt.Player.local.scriptID, true);
-    native.setEntityCoords(alt.Player.local.scriptID, rootPos.x, rootPos.y, rootPos.z + 10, 0, 0, 0, false);
+    native.setEntityCoords(alt.Player.local.scriptID, 4890.94921875, -4924.7998046875, 10.3070068359375, 0, 0, 0, false);
     native.switchOutPlayer(alt.Player.local.scriptID, 0, 1);
 
     // Ambient Sounds
@@ -112,7 +55,17 @@ alt.onServer('loginFinished', () => {
     native.setAudioFlag("DisableFlightMusic", true);
     alt.setStat('stamina', 100);
 
-    loggedIn = true;
+    native.renderScriptCams(false, false, 0, true, false, 0);
+
+    native.destroyCam(cam, true);
+
+    native.setFollowPedCamViewMode(1);
+    native.clearFocus();
+
+    native.newLoadSceneStop();
+
+    native.displayHud(true);
+    native.displayRadar(false);
 });
 
 alt.onServer('teleportToLastPosition', (pos) => {
