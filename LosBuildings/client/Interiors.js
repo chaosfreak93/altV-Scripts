@@ -107,7 +107,7 @@ alt.on("connectionComplete",()=>{
     alt.requestIpl('bkr_bi_id1_23_door');
     alt.requestIpl('lr_cs6_08_grave_closed');
     alt.requestIpl('hei_sm_16_interior_v_bahama_milo_');
-    alt.requestIpl('CS3_07_MPGates');
+    alt.removeIpl('CS3_07_MPGates');
     alt.requestIpl('cs5_4_trains');
     alt.requestIpl('v_lesters');
     alt.requestIpl('v_trevors');
@@ -276,6 +276,8 @@ alt.on("connectionComplete",()=>{
     alt.requestIpl("h4_mph4_terrain_06_grass_0");
     alt.requestIpl("h4_mph4_airstrip_interior_0_airstrip_hanger");
 });
+
+alt.removeIpl('CS3_07_MPGates');
 
 let nearIsland = false;
 
