@@ -103,6 +103,16 @@ input[type='text'] {
 	border-radius: 0.25vw;
 	font-size: 0.75vw;
 }
+input[type='number'] {
+	width: calc(100% - 0.5vw);
+	margin: 0.25vw 0;
+	background-color: var(--fav-dark);
+	border: 0;
+	padding: 0.25vw;
+	color: var(--font);
+	border-radius: 0.25vw;
+	font-size: 0.75vw;
+}
 #homeButton {
 	position: absolute;
 	bottom: 0;
@@ -122,10 +132,6 @@ input[type='text'] {
 #homeButton:hover {
 	opacity: 0.5;
 	cursor: pointer;
-}
-#appScreen,
-#homeButton {
-	display: none;
 }
 #fav,
 #apps {
@@ -200,12 +206,6 @@ input[type='text'] {
 	padding: 0.25vw;
 	font-size: 0.75vw;
 }
-#appContactsEdit {
-	display: none;
-}
-#appContactsOverview {
-	display: none;
-}
 #editContactHead {
 	font-size: 0.75vw;
 	cursor: pointer;
@@ -251,4 +251,3 @@ input[type='text'] {
 	margin-top: 1vw;
 	text-align: center;
 }
-#

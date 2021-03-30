@@ -1,28 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" href="css/all.css" />
-		<link rel="stylesheet" href="css/app.css" />
-		<title>smartphone</title>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+		<title>Smartphone</title>
+		<link rel="stylesheet" type="text/css" href="css/all.css" />
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
 	</head>
 	<body>
-		<div id="smartphone">
+		<div id="smartphone" ref="smartphone">
 			<div id="head">
-				<div id="clock"></div>
+				<div id="clock">{{ currentTime }}</div>
 				<div id="notch"></div>
 				<div id="headInfo">
-					<i class="fas fa-battery-full" id="battery"></i>
+					<i class="fas fa-battery-full" id="battery" ref="battery"></i>
 					<i class="fas fa-signal" id="signal"></i>
 				</div>
 			</div>
-			<div id="homeScreen">
+			<div id="homeScreen" ref="homeScreen" v-show="homeScreenVisible">
 				<div id="apps">
-					<div class="app" id="appCalenderButton"></div>
-					<div class="app" id="appWeatherButton">
-						<i class="fas fa-cloud-sun"></i>
-					</div>
-					<div class="app" id="appRadioButton">
+					<div class="app" id="appCalenderButton" v-on:click="appClick($event);">{{ date }}</div>
+					<div class="app" id="appWeatherButton" ref="appWeatherButton" v-on:click="appClick($event);"></div>
+					<div class="app" id="appRadioButton" v-on:click="appClick($event); openRadioApp();">
 						<i class="fas fa-broadcast-tower"></i>
 					</div>
 				</div>
@@ -30,7 +28,7 @@
 					<div class="app" id="appPhoneButton">
 						<i class="fas fa-phone"></i>
 					</div>
-					<div class="app" id="appContactsButton">
+					<div class="app" id="appContactsButton" v-on:click="appClick($event); openContactsApp();">
 						<i class="fas fa-address-book"></i>
 					</div>
 					<div class="app" id="appMessagesButton">
@@ -42,55 +40,62 @@
 				</div>
 			</div>
 
-			<div id="appScreen">
+			<div id="appScreen" ref="appScreen" v-show="appScreenVisible">
 				<!-- KONTAKTE -->
-				<div id="appContacts">
-					<div id="appContactsOverview">
+				<div id="appContacts" ref="appContacts" v-show="appContacts">
+					<div id="appContactsOverview" v-show="appContactsOverviewVisible">
 						<h5>Kontakte</h5>
 						<input
 							type="text"
 							id="appContactsSearch"
-							placeholder="Suche"
+							placeholder="Suche..."
+							v-model="searchQuery"
 						/>
-						<div id="appContactsList"></div>
+						<div id="appContactsList">
+							<div class="contact" v-for="contact in appContactsSearch" v-bind:data-id="contact.id" v-bind:data-name="contact.name" v-bind:data-phone="contact.phone" v-on:click="openEditContacts($event);">{{ contact.name }}</div>
+						</div>
 					</div>
-					<div id="appContactsEdit">
-						<div id="editContactHead">
+					<div id="appContactsEdit" v-show="appContactsEditVisible">
+						<div id="editContactHead" v-on:click="hideEditContact($event);">
 							<i class="fas fa-chevron-left"></i> Kontakte
 						</div>
 						<div id="editContactLetter">
-							<span></span>
+							<span>{{ contactName[0] }}</span>
 						</div>
-						<div id="editContactName"></div>
+						<div id="editContactName">{{ contactName }}</div>
 						<div id="editContactButtons">
 							<div id="editContactCallPhone"><i class="fas fa-phone"></i></div>
 							<div id="editContactMessage"><i class="fas fa-comment"></i></div>
-							<div id="editContactDeleteButton">
+							<div id="editContactDeleteButton" v-on:click="deleteContact($event);">
 								<i class="fas fa-trash"></i>
 							</div>
 						</div>
 						<div id="editContact">
-							<input type="hidden" id="contactId" />
-							<input type="text" id="contactNewName" />
-							<input type="text" id="contactNewPhone" />
+							<input type="hidden" id="contactId" v-model="contactId" />
+							<input type="text" id="contactNewName" v-model="contactName" v-on:input="updateContact" />
+							<input type="number" id="contactNewPhone" v-model="contactPhone" v-on:input="updateContact" />
 						</div>
 					</div>
 				</div>
 				<!-- KONTAKTE END -->
 				<!-- FUNK -->
-				<div id="appRadio">
-					<div id="appRadioOverview">
+				<div id="appRadio" v-show="appRadio">
+					<div id="appRadioOverview" v-show="appRadioOverviewVisible">
 						<h5>Funk</h5>
 						<input
 							type="number"
+							min="1"
+							max="100"
 							id="appRadioChannel"
-							placeholder="Frequenz"
+							ref="appRadioChannel"
+							v-model="channel"
+							placeholder="Channel (1-100Mhz)"
 							required
 						/>
-						<div id="appRadioJoinChannel">
+						<div id="appRadioJoinChannel" v-on:click="joinChannel();">
 							<i class="fas fa-sign-in-alt"></i>
 						</div>
-						<div id="appRadioLeaveChannel">
+						<div id="appRadioLeaveChannel" v-on:click="leaveChannel();">
 							<i class="fas fa-sign-out-alt"></i>
 						</div>
 					</div>
@@ -98,11 +103,11 @@
 				<!-- FUNK END -->
 			</div>
 
-			<div id="homeButton">
+			<div id="homeButton" v-show="homeButtonVisible" v-on:click="clickHomeButton();">
 				<i class="fas fa-home"></i>
 			</div>
 		</div>
-		<script src="js/jquery.js"></script>
-		<script src="js/app.js"></script>
+		<script src="js/vue.min.js"></script>
+		<script src="app.js" type="text/javascript"></script>
 	</body>
 </html>

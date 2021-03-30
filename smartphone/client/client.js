@@ -104,10 +104,19 @@ function deleteContact(deleteId) {
 
 function updateData() {
 	const time = new Date(Date.now());
+	let minutes = time.getMinutes();
+	if (minutes <= 9) {
+		minutes = "0" + minutes;
+	}
+
+	let hours = time.getHours();
+	if (hours <= 9) {
+		hours = "0" + hours;
+	}
 
 	let smartphoneData = {
 		batteryPercent: 100,
-		currentTime: time.getHours() + ':' + time.getMinutes(),
+		currentTime: hours + ':' + minutes,
 		weather: 'sun', // wind, smog, cloud, sun, cloud-sun-rain, cloud-sun, cloud-showers-heavy, cloud-rain, snowflake
 		date: time.getDate()
 	};
@@ -115,7 +124,7 @@ function updateData() {
 
 	alt.setTimeout(() => {
 		updateData();
-	}, 5000);
+	}, 1000);
 }
 
 function sendContacts() {
