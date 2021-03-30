@@ -115,16 +115,16 @@ window.addEventListener('load', () => {
     msgInputLine.addEventListener('keydown', (e) => {
         if (e.keyCode === 9) {
             e.preventDefault();
-        } else if (e.keyCode == 40) {
+        } else if (e.keyCode === 40) {
             e.preventDefault();
 
             if (currentBufferIndex > 0) {
                 loadBuffer(--currentBufferIndex);
-            } else if (currentBufferIndex == 0) {
+            } else if (currentBufferIndex === 0) {
                 currentBufferIndex = -1;
                 msgInputLine.value = '';
             }
-        } else if (e.keyCode == 38) {
+        } else if (e.keyCode === 38) {
             e.preventDefault();
 
             if (currentBufferIndex < buffer.length - 1) {

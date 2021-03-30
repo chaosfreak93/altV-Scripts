@@ -105,7 +105,7 @@ menu.ItemSelect.on((item) => {
 function promisify(callback) {
     return new Promise((resolve, reject) => {
         let loader = alt.setInterval(() => {
-            if (callback() == true) {
+            if (callback() === true) {
                 resolve(true);
                 alt.clearInterval(loader);
             }

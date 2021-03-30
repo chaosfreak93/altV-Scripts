@@ -62,7 +62,7 @@ alt.onServer('radio:AddStation', station => {
 //     if (entity != player.vehicle) return;
 //     const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1);
 //     if (key != 'radioStation') return;
-//     if (pedInSeat == player.scriptID) return;
+//     if (pedInSeat === player.scriptID) return;
 
 //     let radioStation = value;
 
@@ -92,7 +92,7 @@ alt.everyTick(() => {
 });
 
 alt.on('keydown', key => {
-    if (key == 81 && browser) {
+    if (key === 81 && browser) {
         const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1, false);
         if (pedInSeat !== player.scriptID) return;
 
@@ -102,7 +102,7 @@ alt.on('keydown', key => {
 });
 
 alt.on('keyup', key => {
-    if (key == 81 && browser) {
+    if (key === 81 && browser) {
         const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1, false);
         if (pedInSeat !== player.scriptID) return;
 

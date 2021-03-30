@@ -58,7 +58,7 @@ function handleKeyup(key) {
         opened = true;
         view.emit('openChat', true);
         alt.toggleGameControls(false);
-    } else if (opened && key == 0x1b) {
+    } else if (opened && key === 0x1b) {
         opened = false;
         view.emit('closeChat');
         alt.toggleGameControls(true);
