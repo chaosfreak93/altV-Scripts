@@ -52,18 +52,19 @@ function chatSend(player, msg) {
             invokeCmd(player, commandName, args);
         }
 
+    } else {
+
+        // Chat
+        msg = msg.trim();
+        if (msg.length <= 0) {
+            return;
+        }
+
+        alt.log(`[Message] ${player.name}: ${msg}`);
+
+        // Cleanse Message
+        msg = msg.replace(/</g, '&lt;').replace(/'/g, '&#39').replace(/"/g, '&#34');
+
+        alt.emitClient(null, 'chat:Send', `${player.name}: ${msg}`);
     }
-
-    // Chat
-    /**msg = msg.trim();
-     if (msg.length <= 0) {
-        return;
-    }
-
-     alt.log(`[Message] ${player.name}: ${msg}`);
-
-     // Cleanse Message
-     msg = msg.replace(/</g, '&lt;').replace(/'/g, '&#39').replace(/"/g, '&#34');
-
-     alt.emitClient(null, 'chat:Send', `${player.name}: ${msg}`);**/
 }
