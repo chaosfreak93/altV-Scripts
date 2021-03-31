@@ -11,7 +11,7 @@ alt.on('connectionComplete', () => {
     native.setCamActive(cam, true);
     native.renderScriptCams(true, false, 0, false, false, 0);
 
-    native.loadScene(4882.25927734375, -4925.96044921875, 10.1552734375);
+    native.newLoadSceneStartSphere(4882.25927734375, -4925.96044921875, 10.1552734375, 200, 0);
     native.setCamCoord(cam, 4883.525390625, -4925.8154296875, 13.205078125);
     native.pointCamAtCoord(cam, 4809.1123046875, -4926.8701171875, -0.2747802734375);
 
