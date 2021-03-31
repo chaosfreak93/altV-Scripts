@@ -6,14 +6,16 @@ import cors from 'cors';
 import path from 'path';
 
 const htmlPath = path.join(alt.getResourcePath(alt.resourceName), 'server/html');
-const stylesPath = path.join(alt.getResourcePath(alt.resourceName), 'server/html/styles');
-const jsPaths = path.join(alt.getResourcePath(alt.resourceName), 'server/html/js');
+const fontsPath = path.join(alt.getResourcePath(alt.resourceName), 'server/html/fonts');
+const cssPath = path.join(alt.getResourcePath(alt.resourceName), 'server/html/css');
+const jsPath = path.join(alt.getResourcePath(alt.resourceName), 'server/html/js');
 const app = express();
 
 app.use(cors());
 app.get('/authenticate', handleMainRedirect);
-app.use('/js', express.static(jsPaths));
-app.use('/styles', express.static(stylesPath));
+app.use('/fonts', express.static(fontsPath));
+app.use('/css', express.static(cssPath));
+app.use('/js', express.static(jsPath));
 
 async function handleMainRedirect(req, res) {
     const token = req.query.code;
@@ -31,7 +33,7 @@ async function handleMainRedirect(req, res) {
     authParams.append(`grant_type`, `authorization_code`);
     authParams.append(`code`, token);
     authParams.append(`scope`, `identify`);
-    authParams.append(`redirect_uri`, `http://${process.env['REDIRECT_IP']}:7790/authenticate`);
+    authParams.append(`redirect_uri`, `http://${process.env['REDIRECT_IP']}:1893/authenticate`);
 
     request = await axios.post(`https://discord.com/api/oauth2/token`, authParams, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -67,4 +69,4 @@ async function handleMainRedirect(req, res) {
     res.sendFile(path.join(htmlPath, '/done.html'), err => {});
 }
 
-app.listen(7790);
+app.listen(1893);

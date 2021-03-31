@@ -2,7 +2,7 @@
 import * as alt from 'alt-server';
 import sjcl from 'sjcl';
 
-const ip = encodeURI(`http://${process.env['REDIRECT_IP']}:7790/authenticate`);
+const ip = encodeURI(`http://${process.env['REDIRECT_IP']}:1893/authenticate`);
 const url = `https://discord.com/api/oauth2/authorize?client_id=${process.env['CLIENT_ID']}&redirect_uri=${ip}&prompt=none&response_type=code&scope=identify`;
 
 alt.onClient('discord:BeginAuth', handleBeginAuth);

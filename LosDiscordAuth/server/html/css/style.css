@@ -1,16 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono|Staatliches&display=swap');
-@dark: rgba(50, 50, 50, 1);
-@darker: rgba(20, 20, 20, 1);
-@medium: rgba(100, 100, 100, 1);
-@light: rgba(215, 215, 215, 1);
-@contrast: rgb(68, 199, 118);
-@contrast2: rgb(162, 91, 190);
-@contrast2-light: rgb(195, 143, 216);
-@error: rgb(255, 233, 137);
-@Roboto: 'Roboto';
-@RobotoCondensed: 'Roboto Condensed';
-@RobotoMono: 'Roboto Mono';
-@Staatliches: 'Staatliches';
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/roboto-v20-latin-regular.eot');
+    src: local(''),
+         url('../fonts/roboto-v20-latin-regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-v20-latin-regular.woff2') format('woff2'),
+         url('../fonts/roboto-v20-latin-regular.woff') format('woff'),
+         url('../fonts/roboto-v20-latin-regular.ttf') format('truetype'),
+         url('../fonts/roboto-v20-latin-regular.svg#Roboto') format('svg');
+}
 
 *,
 *:focus {
@@ -21,7 +20,7 @@ body,
 html {
     padding: 0;
     margin: 0;
-    font-family: @Roboto;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -42,39 +41,39 @@ body {
     align-content: center;
     width: 100vw;
     height: 100vh;
-    background: @dark;
+    background: rgba(50, 50, 50, 1);
     border-radius: 5px;
     padding: 24px;
     box-sizing: border-box;
     user-select: none;
+}
 
-    p {
-        color: @light;
-        text-align: center;
-    }
+.container p {
+    color: rgba(215, 215, 215, 1);
+    text-align: center;
+}
 
-    h2 {
-        padding-bottom: 12px;
-        margin: 0;
-        color: @light;
-    }
+.container h2 {
+    padding-bottom: 12px;
+    margin: 0;
+    color: rgba(215, 215, 215, 1);
+}
 
-    button {
-        padding: 12px;
-        background: @darker;
-        color: @light;
-        border: 0px;
-        border-radius: 5px;
+.container button {
+    padding: 12px;
+    background: rgba(20, 20, 20, 1);
+    color: rgba(215, 215, 215, 1);
+    border: 0px;
+    border-radius: 5px;
+}
 
-        &:hover {
-            background: @contrast;
-            color: @darker;
-        }
+.container button:hover {
+    background: rgb(68, 199, 118);
+    color: rgba(20, 20, 20, 1);
+}
 
-        &:active {
-            transform: scale(0.975);
-        }
-    }
+.container button:active {
+    transform: scale(0.975);
 }
 
 .lds-ring {
