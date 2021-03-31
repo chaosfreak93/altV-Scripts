@@ -198,6 +198,9 @@ input[type='number'] {
 #appCalenderButton {
 	background-color: rgb(51, 51, 51);
 }
+#appBusinessButton {
+	background-color: rgb(124, 68, 106);
+}
 .contact {
 	cursor: pointer;
 }

@@ -23,18 +23,21 @@
 					<div class="app" id="appRadioButton" v-on:click="appClick($event); openRadioApp();">
 						<i class="fas fa-broadcast-tower"></i>
 					</div>
+					<div class="app" id="appBusinessButton" v-on:click="appClick($event);">
+						<i class="fas fa-briefcase"></i>
+					</div>
 				</div>
 				<div id="fav">
-					<div class="app" id="appPhoneButton">
+					<div class="app" id="appPhoneButton" v-on:click="appClick($event);">
 						<i class="fas fa-phone"></i>
 					</div>
 					<div class="app" id="appContactsButton" v-on:click="appClick($event); openContactsApp();">
 						<i class="fas fa-address-book"></i>
 					</div>
-					<div class="app" id="appMessagesButton">
+					<div class="app" id="appMessagesButton" v-on:click="appClick($event);">
 						<i class="fas fa-comment"></i>
 					</div>
-					<div class="app" id="appSettingsButton">
+					<div class="app" id="appSettingsButton" v-on:click="appClick($event);">
 						<i class="fas fa-cogs"></i>
 					</div>
 				</div>
@@ -50,6 +53,7 @@
 							id="appContactsSearch"
 							placeholder="Suche..."
 							v-model="searchQuery"
+							tabindex="-1"
 						/>
 						<div id="appContactsList">
 							<div class="contact" v-for="contact in appContactsSearch" v-bind:data-id="contact.id" v-bind:data-name="contact.name" v-bind:data-phone="contact.phone" v-on:click="openEditContacts($event);">{{ contact.name }}</div>
@@ -71,9 +75,9 @@
 							</div>
 						</div>
 						<div id="editContact">
-							<input type="hidden" id="contactId" v-model="contactId" />
-							<input type="text" id="contactNewName" v-model="contactName" v-on:input="updateContact" />
-							<input type="number" id="contactNewPhone" v-model="contactPhone" v-on:input="updateContact" />
+							<input type="hidden" id="contactId" v-model="contactId" tabindex="-1" />
+							<input type="text" id="contactNewName" v-model="contactName" v-on:input="updateContact" tabindex="-1" />
+							<input type="number" id="contactNewPhone" v-model="contactPhone" v-on:input="updateContact" tabindex="-1" />
 						</div>
 					</div>
 				</div>
@@ -87,9 +91,9 @@
 							min="1"
 							max="100"
 							id="appRadioChannel"
-							ref="appRadioChannel"
 							v-model="channel"
 							placeholder="Channel (1-100Mhz)"
+							tabindex="-1"
 							required
 						/>
 						<div id="appRadioJoinChannel" v-on:click="joinChannel();">
