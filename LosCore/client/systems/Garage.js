@@ -1,19 +1,7 @@
 /// <reference types="@altv/types-client" />
 /// <reference types="@altv/types-natives" />
 import * as alt from 'alt-client';
-import * as native from 'natives';
 import * as NativeUI from '@LosAssets/content/NativeUI/NativeUI';
-
-const garage_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/garage.json'));
-
-for (let i = 0; i < garage_list.length; i++) {
-    let garage = new alt.PointBlip(garage_list[i].x, garage_list[i].y, garage_list[i].z);
-    garage.sprite = 357;
-    garage.color = 37;
-    garage.display = 2;
-    garage.shortRange = true;
-    garage.name = 'Garage';
-}
 
 let garageContent = null;
 alt.emitServer('getGarage');
@@ -36,7 +24,6 @@ mainMenu.AddItem(new NativeUI.UIMenuItem(
 mainMenu.AddSubMenu(garageMenu, getOutVehicel);
 
 alt.onServer('Garage:enter', (colshapePos) => {
-    alt.emitServer('getGarage');
     mainMenu.Open();
     garageMenu.Clear();
     garageMenu.CleanUp();
@@ -55,7 +42,6 @@ alt.onServer('Garage:leave', () => {
     garageMenu.Clear();
     garageMenu.CleanUp();
     mainMenu.Close();
-    alt.emitServer('getGarage');
 });
 
 mainMenu.ItemSelect.on((item, index) => {
@@ -69,25 +55,6 @@ garageMenu.ItemSelect.on((item) => {
     alt.emitServer('garage:SpawnVehicle', JSON.stringify(data));
     mainMenu.Close();
     garageMenu.Close();
-});
-
-function promisify(callback) {
-    return new Promise((resolve, reject) => {
-        let loader = alt.setInterval(() => {
-            if (callback() === true) {
-                resolve(true);
-                alt.clearInterval(loader);
-            }
-        }, 80);
-    });
-}
-
-alt.onServer('setPedIntoVehicle', async (vehicle) => {
-    const player = alt.Player.local;
-    await promisify(() => {
-        if (player.vehicle) return true;
-        native.setPedIntoVehicle(player.scriptID, vehicle.scriptID, -1);
-    });
 });
 
 alt.onServer('getGarage', (garage) => {

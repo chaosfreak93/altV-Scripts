@@ -1,6 +1,9 @@
 /// <reference types="@altv/types-natives" />
 /// <reference types="@altv/types-client" />
 import * as alt from 'alt-client';
+const gas_blips = JSON.parse(alt.File.read('@LosAssets/content/data/position/gas_blips.json'));
+const garage_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/garage.json'));
+const bank_list = JSON.parse(alt.File.read('@LosAssets/content/data/position/bank_blips.json'));
 
 let adminarea = new alt.RadiusBlip(4657.4638671875, -5168.59765625, 220.4578857421875, 1500);
 adminarea.color = 49;
@@ -60,7 +63,7 @@ diamond_casino.sprite = 679;
 diamond_casino.color = 4;
 diamond_casino.display = 2;
 diamond_casino.shortRange = true;
-diamond_casino.name = 'Daimond Casino';
+diamond_casino.name = 'Daimond Kasino';
 
 let main_hall = new alt.PointBlip(-539.6043701171875, -213.58680725097656, 37.6373291015625);
 main_hall.sprite = 181;
@@ -68,3 +71,31 @@ main_hall.color = 4;
 main_hall.display = 2;
 main_hall.shortRange = true;
 main_hall.name = 'Rathaus';
+
+for (let i = 0; i < gas_blips.length; i++) {
+    let gas_partol = new alt.PointBlip(gas_blips[i].x, gas_blips[i].y, gas_blips[i].z);
+    gas_partol.sprite = 361;
+    gas_partol.color = 81;
+    gas_partol.display = 2;
+    gas_partol.shortRange = true;
+    gas_partol.name = 'Tankstelle';
+}
+
+for (let i = 0; i < garage_list.length; i++) {
+    let garage = new alt.PointBlip(garage_list[i].x, garage_list[i].y, garage_list[i].z);
+    garage.sprite = 357;
+    garage.color = 37;
+    garage.display = 2;
+    garage.shortRange = true;
+    garage.name = 'Garage';
+}
+
+
+for (let i = 0; i < bank_list.length; i++) {
+    let bank = new alt.PointBlip(bank_list[i].x, bank_list[i].y, bank_list[i].z);
+    bank.sprite = 108;
+    bank.color = 25;
+    bank.display = 2;
+    bank.shortRange = true;
+    bank.name = 'Bank';
+}
