@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+*:focus {
+    outline: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Segoe UI Symbol', Arial, sans-serif;
+    font-size: 16px;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.msginput {
+    display: none;
+    width: 100%;
+}
+
+.msginput input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 0;
+    padding: 10px;
+    width: 250px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1em;
+}
+
+.msginput input::selection {
+    background-color: #fff;
+    color: #000;
+}
+
+@media screen and (max-width: 2560px) {
+    body {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .msginput input {
+        height: 15px;
+    }
+}

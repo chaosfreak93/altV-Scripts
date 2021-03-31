@@ -11,14 +11,13 @@ registerCmd(
 
 function handleAddVehicle(player, args) {
     if (!args || !args[0]) {
-        player.send(`/vehicle <name>`);
         return;
     }
 
-    /**if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
+    if (player.getStreamSyncedMeta('lastVehicle') && player.getStreamSyncedMeta('lastVehicle').valid) {
         player.getStreamSyncedMeta('lastVehicle').destroy();
         player.deleteStreamSyncedMeta('lastVehicle');
-    }**/
+    }
 
     const vehicleName = args[0];
     const vehicleHash = alt.hash(args[0]);
@@ -46,8 +45,5 @@ function handleAddVehicle(player, args) {
         vehicle.setSyncedMeta('engine', false);
         vehicle.lockState = 1;
         vehicle.numberPlateText = "ADMIN";
-        player.send(`{00FF00}${vehicleName} wurde erfolgreich gespawnt.`);
-    } catch (err) {
-        player.send(`{FF0000}${vehicleName} ist kein gültiger Fahrzeug Name.`);
-    }
+    } catch {}
 }

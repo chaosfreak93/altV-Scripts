@@ -3,18 +3,8 @@ let buffer = [];
 let currentBufferIndex = -1;
 let timeout = null;
 let messagesBlock = null;
-let msgListBlock = null;
 let msgInputBlock = null;
 let msgInputLine = null;
-
-if (window.alt === undefined) {
-    window.alt = {
-        emit: () => {
-        },
-        on: () => {
-        },
-    };
-}
 
 function colorify(text) {
     let matches = [];
@@ -56,22 +46,10 @@ function colorify(text) {
     return text;
 }
 
-function checkOverflow() {
-    if (messagesBlock.clientHeight > msgListBlock.clientHeight) {
-        if (!msgListBlock.classList.contains('overflowed')) {
-            msgListBlock.classList.add('overflowed');
-        }
-    } else if (msgListBlock.classList.contains('overflowed')) {
-        msgListBlock.classList.remove('overflowed');
-    }
-}
-
 function openChat(insertSlash) {
     clearTimeout(timeout);
 
     if (!chatOpened) {
-        document.querySelector('.chatbox').classList.add('active');
-
         if (insertSlash) {
             msgInputLine.value = '/';
         }
@@ -86,8 +64,6 @@ function openChat(insertSlash) {
 
 function closeChat() {
     if (chatOpened) {
-        document.querySelector('.chatbox').classList.remove('active');
-
         msgInputLine.blur();
         msgInputBlock.style.display = 'none';
 
@@ -97,7 +73,6 @@ function closeChat() {
 
 window.addEventListener('load', () => {
     messagesBlock = document.querySelector('.messages');
-    msgListBlock = document.querySelector('.msglist');
     msgInputBlock = document.querySelector('.msginput');
     msgInputLine = document.querySelector('.msginput input');
 
@@ -149,36 +124,5 @@ function loadBuffer(idx) {
     msgInputLine.value = buffer[idx];
 }
 
-function highlightChat() {
-    msgListBlock.scrollTo({
-        left: 0,
-        top: msgListBlock.scrollHeight,
-        behaviour: 'smooth',
-    });
-
-    document.querySelector('.chatbox').classList.add('active');
-
-    clearTimeout(timeout);
-    timeout = setTimeout(() => document.querySelector('.chatbox').classList.remove('active'), 4000);
-}
-
-function appendMessage(text) {
-    if (text.includes('{') && text.includes('}')) {
-        text = colorify(text);
-    }
-
-    if (messagesBlock.children.length > 100) {
-        messagesBlock.removeChild(messagesBlock.children[0]);
-    }
-
-    const msg = document.createElement('p');
-    msg.innerHTML = text;
-    messagesBlock.appendChild(msg);
-
-    checkOverflow();
-    highlightChat();
-}
-
-alt.on('appendMessage', (text) => appendMessage(text));
 alt.on('openChat', openChat);
 alt.on('closeChat', closeChat);

@@ -8,12 +8,11 @@ let opened = false;
 let view = null;
 
 alt.onServer('chat:Init', initializeChat);
-alt.onServer('chat:Send', appendMessage);
 alt.on('keyup', handleKeyup);
 
 function initializeChat() {
     if (!view) {
-        view = new alt.WebView('http://resource/client/chat/index.html');
+        view = new alt.WebView('http://resource/client/html/index.html');
         view.on('chatloaded', chatLoaded);
         view.on('chatmessage', chatMessage);
     }
@@ -39,7 +38,7 @@ function chatLoaded() {
 }
 
 function chatMessage(message) {
-    alt.emitServer('chat:Send', message);
+    alt.emitServer('command', message);
 
     opened = false;
     alt.toggleGameControls(true);

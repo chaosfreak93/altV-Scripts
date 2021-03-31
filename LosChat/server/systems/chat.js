@@ -1,10 +1,9 @@
 /// <reference types="@altv/types-server" />
 import * as alt from 'alt-server';
-//import { logCommand } from 'LosDiscord';
 
 let commands = {};
 
-alt.onClient('chat:Send', chatSend);
+alt.onClient('command', command);
 
 /**
  * Register commands for players to use.
@@ -28,43 +27,23 @@ export function registerCmd(commandName, description, callback) {
 function invokeCmd(player, commandName, args) {
     commandName = commandName.toLowerCase();
     if (!commands[commandName]) {
-        player.send(`{FF0000} Unknown command /${commandName}`);
         return;
     }
 
     const callback = commands[commandName].callback;
     if (typeof callback !== 'function') {
-        player.send(`{FF0000} Unknown command /${commandName}`);
         return;
     }
 
     callback(player, args);
 }
 
-function chatSend(player, msg) {
-    if (msg[0] === '/') {
-        //logCommand(player.name, msg);
-        msg = msg.trim().slice(1);
+function command(player, msg) {
+    msg = msg.trim().slice(1);
 
-        if (msg.length > 0) {
-            let args = msg.split(' ');
-            let commandName = args.shift();
-            invokeCmd(player, commandName, args);
-        }
-
-    } else {
-
-        // Chat
-        msg = msg.trim();
-        if (msg.length <= 0) {
-            return;
-        }
-
-        alt.log(`[Message] ${player.name}: ${msg}`);
-
-        // Cleanse Message
-        msg = msg.replace(/</g, '&lt;').replace(/'/g, '&#39').replace(/"/g, '&#34');
-
-        alt.emitClient(null, 'chat:Send', `${player.name}: ${msg}`);
+    if (msg.length > 0) {
+        let args = msg.split(' ');
+        let commandName = args.shift();
+        invokeCmd(player, commandName, args);
     }
 }
