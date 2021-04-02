@@ -64,7 +64,9 @@ async function displayVehicleNotification(message) {
 
 alt.onServer('LockStateAnimation', () => {
     if (!native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
-        native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
+        if (!native.hasAnimDictLoaded("anim@mp_player_intmenu@key_fob@")) {
+            await native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
+        }
         native.taskPlayAnim(alt.Player.local.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 8.0, -1, 50, 0, false, false, false);
         alt.setTimeout(() => {
             native.stopAnimTask(alt.Player.local.scriptID, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0);
