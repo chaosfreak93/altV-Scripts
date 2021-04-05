@@ -12,6 +12,28 @@ let _engine;
 let _tank;
 let _engineOn;
 
+let webView;
+
+let electric = [
+    2445973230,// neon
+    1560980623,// airtug
+    1147287684,// caddy
+    3164157193,// dilettante
+    2400073108,// surge
+    544021352,// khamelion 
+    2672523198,// voltic
+    1031562256,// tezeract
+    1392481335,// cyclone
+    2765724541// raiden
+];
+
+let handbrakeActive = false;
+alt.on('keydown', (key) => {
+    if (key === 32) handbrakeActive = true; // space
+});
+alt.on('keyup', (key) => {
+    if (key === 32) handbrakeActive = false; // space
+});
 
 alt.onServer('playerEnteredVehicle', (vehicle, seat) => {
     native.displayRadar(true);
@@ -49,11 +71,26 @@ alt.onServer('playerEnteredVehicle', (vehicle, seat) => {
         }
     }, 7000);
     _display = alt.everyTick(() => {
-        let tank = _tank;
-        let engine = _engineOn ? "On" : "Off";
-        drawText2d(_speed + ' kmh', 0.85, 0.8, 1, 255, 255, 255, 255);
-        drawText2d('Tank: ' + tank + '%', 0.85, 0.85, 1, 255, 255, 255, 255);
-        drawText2d('Engine: ' + engine, 0.85, 0.9, 1, 255, 255, 255, 255);
+        if (!webView) {
+            webView = new alt.WebView('http://resource/client/html/speedometer.html');
+            webView.focus();
+        } else {
+            let lightsOn = native.getVehicleLightsState(vehicle.scriptID, false, false);
+            let lightState = 0;
+            if (lightsOn[1] && !lightsOn[2]) lightState = 1;
+            if (lightsOn[1] && lightsOn[2]) lightState = 2;
+            webView.emit('speedometer:data', {
+                gear: parseInt(vehicle.gear),
+                rpm: parseInt((vehicle.rpm * 10000).toFixed(0)),
+                speed: parseInt((native.getEntitySpeed(vehicle.scriptID) * 3.6).toFixed(0)),
+                isElectric: electric.includes(vehicle.model),
+                isEngineRunning: _engineOn,
+                isVehicleOnAllWheels: native.isVehicleOnAllWheels(vehicle.scriptID),
+                handbrakeActive,
+                lightState,
+                fuelPercentage: _tank
+            });
+        }
     });
 });
 
@@ -64,6 +101,8 @@ alt.onServer('playerLeftVehicle', (vehicle, seat) => {
     alt.clearInterval(_Tank);
     alt.clearEveryTick(_display);
     native.displayRadar(false);
+    webView.destroy();
+    webView = null;
 });
 
 alt.onServer('getTank', (tank) => {
@@ -73,33 +112,3 @@ alt.onServer('getTank', (tank) => {
 alt.onServer('isEngineRunning', (engineOn) => {
     _engineOn = engineOn;
 });
-
-function hexToRgb(hex) {
-    var bigint = parseInt(hex, 16);
-    var r = (bigint >> 16) & 255;
-    var g = (bigint >> 8) & 255;
-    var b = bigint & 255;
-    return [r, g, b];
-}
-
-function drawText2d(msg, x, y, scale, r, g, b, a) {
-    let hex = msg.match('{.*}');
-    if (hex) {
-        const rgb = hexToRgb(hex[0].replace('{', '').replace('}', ''));
-        r = rgb[0];
-        g = rgb[1];
-        b = rgb[2];
-        msg = msg.replace(hex[0], '');
-    }
-
-    native.beginTextCommandDisplayText('STRING');
-    native.addTextComponentSubstringPlayerName(msg);
-    native.setTextFont(4);
-    native.setTextScale(1, scale);
-    native.setTextWrap(0.0, 1.0);
-    native.setTextCentre(true);
-    native.setTextColour(r, g, b, a);
-    native.setTextOutline();
-    native.setTextDropShadow();
-    native.endTextCommandDisplayText(x, y, 0);
-}

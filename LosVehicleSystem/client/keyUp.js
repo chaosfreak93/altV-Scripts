@@ -50,9 +50,7 @@ alt.on('keyup', (key) => {
     }
 });
 
-alt.onServer('displayVehicleNotification', displayVehicleNotification);
-
-async function displayVehicleNotification(message) {
+alt.onServer('displayVehicleNotification', async (message) => {
     native.beginTextCommandThefeedPost('STRING');
     native.addTextComponentSubstringPlayerName(message);
     if (!native.hasStreamedTextureDictLoaded("DIA_DRIVER")) {
@@ -60,9 +58,9 @@ async function displayVehicleNotification(message) {
     }
     native.endTextCommandThefeedPostMessagetextTu("DIA_DRIVER", "DIA_DRIVER", false, 0, "Car System", "Vehicle Infos", 1);
     return native.endTextCommandThefeedPostTicker(false, true);
-}
+});
 
-alt.onServer('LockStateAnimation', () => {
+alt.onServer('LockStateAnimation', async () => {
     if (!native.isPedInVehicle(alt.Player.local.scriptID, alt.Player.local.getStreamSyncedMeta('lastVehicle').scriptID, false)) {
         if (!native.hasAnimDictLoaded("anim@mp_player_intmenu@key_fob@")) {
             await native.requestAnimDict("anim@mp_player_intmenu@key_fob@");
