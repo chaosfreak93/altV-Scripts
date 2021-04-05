@@ -32,7 +32,6 @@ alt.on('connectionComplete', () => {
 alt.everyTick(() => {
     native.drawRect(0, 0, 0, 0, 0, 0, 0, 0, 0);
     native.setPedConfigFlag(alt.Player.local.scriptID, 184, true);
-    native.setPedConfigFlag(alt.Player.local.scriptID, 423, true);
     native.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
     native.invalidateIdleCam();
     native.invalidateVehicleIdleCam();
