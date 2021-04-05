@@ -9,7 +9,7 @@ let controlAction = null;
 
 let contacts = [
 	{ id: 1, name: 'LSPD', phone: '110' },
-	{ id: 2, name: 'Mosley`s Cars', phone: '111' },
+	{ id: 2, name: 'Mosley`s Cars', phone: '935-5183' },
 	{ id: 3, name: 'LSMD', phone: '112' }
 ];
 
