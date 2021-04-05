@@ -13,10 +13,6 @@ alt.on('syncedMetaChange', (player, key, value) => {
             native.setVehicleEngineOn(player.scriptID, value, true, true);
         }
     } else if (key === 'sirenAudio') {
-        if (value) {
-            native.setVehicleHasMutedSirens(player.scriptID, value);
-        } else {
-            native.setVehicleHasMutedSirens(player.scriptID, value);
-        }
+        native.setVehicleHasMutedSirens(player.scriptID, value);
     }
 });
