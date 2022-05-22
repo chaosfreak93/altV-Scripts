@@ -1,5 +1,3 @@
-Dies ist die Client alt:V Script Repo von BeyondDark. Wird auch genutzt zum Bewerben bei Servern.
+**OUTDATED**
 
-Demo Server ist in der alt:V Server Liste unter dem Namen "BeyondDark" zu finden.
-
-Discord: Yan-Luca L.#8114
+[Server Script Repo](https://github.com/chaosfreak93/server.altv.beyonddark.de)
